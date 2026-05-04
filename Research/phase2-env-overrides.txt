@@ -1,0 +1,29 @@
+=== Env override experiments (process-start) ===
+Mon May  4 13:23:42 UTC 2026
+Repo: /Users/smo036/langtech/gut/divvun/macos-analyser
+
+[1] Baseline (no env vars)
+Northern Sami (se)          ✓         ·         ·         ·         ·         ✓         ✓       
+Languages with .lemma support (6): en, fr, de, pt, ru, sv
+  se  Northern Sami
+
+[2] NL_LANGUAGE_MODEL_PATH=/Users/smo036/langtech/gut/divvun/macos-analyser/Research/assets
+Northern Sami (se)          ✓         ·         ·         ·         ·         ✓         ✓       
+Languages with .lemma support (6): en, fr, de, pt, ru, sv
+  se  Northern Sami
+
+[3] LINGUISTIC_DATA_PATH=/Users/smo036/langtech/gut/divvun/macos-analyser/Research/assets
+Northern Sami (se)          ✓         ·         ·         ·         ·         ✓         ✓       
+Languages with .lemma support (6): en, fr, de, pt, ru, sv
+  se  Northern Sami
+
+[4] NL_LANGUAGE_MODEL_PATH + LINGUISTIC_DATA_PATH
+Northern Sami (se)          ✓         ·         ·         ·         ·         ✓         ✓       
+Languages with .lemma support (6): en, fr, de, pt, ru, sv
+  se  Northern Sami
+
+[5] LANGUAGEMODELING_ASSET_PATH + LD_ASSET_PATH
+Northern Sami (se)          ✓         ·         ·         ·         ·         ✓         ✓       
+Languages with .lemma support (6): en, fr, de, pt, ru, sv
+  se  Northern Sami
+

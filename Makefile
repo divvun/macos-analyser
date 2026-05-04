@@ -20,7 +20,7 @@ SWIFT_BIN ?= $(firstword $(wildcard .build/arm64-apple-macosx/release .build/rel
 APP_CONTENTS   := DivvunAnalyser.app/Contents
 APPEX_CONTENTS := $(APP_CONTENTS)/PlugIns/DivvunNLExtension.appex/Contents
 
-.PHONY: all rust swift build-app test test-rust test-swift test-e2e demo probe-nl research-phase1 research-phase2 clean install-app
+.PHONY: all rust swift build-app test test-rust test-swift test-e2e demo probe-nl research-phase1 research-phase2 research-phase2-env clean install-app
 
 all: rust swift
 
@@ -119,6 +119,35 @@ research-phase2:
 	@echo "--- Phase 2: Injection Testing ---" | tee -a Research/phase2-report.txt
 	swift run DivvunNLResearch phase2-inject Research/assets/se 2>&1 | tee -a Research/phase2-report.txt
 	@echo "Phase 2 complete. Report: Research/phase2-report.txt"
+
+## Phase 2 (env override): test process-start environment overrides against
+## both coverage and full injection runs. Outputs are written to:
+##   Research/phase2-env-overrides.txt
+##   Research/phase2-inject-env.txt
+research-phase2-env:
+	mkdir -p Research
+	@echo "=== Env override experiments (process-start) ===" | tee Research/phase2-env-overrides.txt
+	@date -u | tee -a Research/phase2-env-overrides.txt
+	@echo "Repo: $$PWD" | tee -a Research/phase2-env-overrides.txt
+	@echo | tee -a Research/phase2-env-overrides.txt
+	@echo "[1] Baseline (no env vars)" | tee -a Research/phase2-env-overrides.txt
+	swift run DivvunNLResearch phase1-coverage 2>&1 | grep -E "Northern Sami|Languages with \\.lemma support" | tee -a Research/phase2-env-overrides.txt
+	@echo | tee -a Research/phase2-env-overrides.txt
+	@echo "[2] NL_LANGUAGE_MODEL_PATH=$$PWD/Research/assets" | tee -a Research/phase2-env-overrides.txt
+	NL_LANGUAGE_MODEL_PATH="$$PWD/Research/assets" swift run DivvunNLResearch phase1-coverage 2>&1 | grep -E "Northern Sami|Languages with \\.lemma support" | tee -a Research/phase2-env-overrides.txt
+	@echo | tee -a Research/phase2-env-overrides.txt
+	@echo "[3] LINGUISTIC_DATA_PATH=$$PWD/Research/assets" | tee -a Research/phase2-env-overrides.txt
+	LINGUISTIC_DATA_PATH="$$PWD/Research/assets" swift run DivvunNLResearch phase1-coverage 2>&1 | grep -E "Northern Sami|Languages with \\.lemma support" | tee -a Research/phase2-env-overrides.txt
+	@echo | tee -a Research/phase2-env-overrides.txt
+	@echo "[4] NL_LANGUAGE_MODEL_PATH + LINGUISTIC_DATA_PATH" | tee -a Research/phase2-env-overrides.txt
+	NL_LANGUAGE_MODEL_PATH="$$PWD/Research/assets" LINGUISTIC_DATA_PATH="$$PWD/Research/assets" swift run DivvunNLResearch phase1-coverage 2>&1 | grep -E "Northern Sami|Languages with \\.lemma support" | tee -a Research/phase2-env-overrides.txt
+	@echo | tee -a Research/phase2-env-overrides.txt
+	@echo "[5] LANGUAGEMODELING_ASSET_PATH + LD_ASSET_PATH" | tee -a Research/phase2-env-overrides.txt
+	LANGUAGEMODELING_ASSET_PATH="$$PWD/Research/assets" LD_ASSET_PATH="$$PWD/Research/assets" swift run DivvunNLResearch phase1-coverage 2>&1 | grep -E "Northern Sami|Languages with \\.lemma support" | tee -a Research/phase2-env-overrides.txt
+	@echo | tee -a Research/phase2-env-overrides.txt
+	@echo "--- Full injection run with strongest override combo ---" | tee Research/phase2-inject-env.txt
+	NL_LANGUAGE_MODEL_PATH="$$PWD/Research/assets" LINGUISTIC_DATA_PATH="$$PWD/Research/assets" swift run DivvunNLResearch phase2-inject Research/assets/se 2>&1 | tee -a Research/phase2-inject-env.txt
+	@echo "Phase 2 env override tests complete. Reports: Research/phase2-env-overrides.txt and Research/phase2-inject-env.txt"
 
 ## Copy the assembled app to /Applications (requires build-app first).
 install-app: build-app

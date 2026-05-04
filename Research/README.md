@@ -45,6 +45,10 @@ Outputs:
   Build log for the generated `se` research asset bundle.
 - `phase2-inject.txt`:
   Strategy-by-strategy injection test results.
+- `phase2-env-overrides.txt`:
+  Process-start environment variable matrix (baseline vs override combinations).
+- `phase2-inject-env.txt`:
+  Full `phase2-inject` run with strongest env override combination enabled.
 
 ## Tooling map
 
@@ -91,6 +95,7 @@ From repository root:
 ```bash
 make research-phase1
 make research-phase2
+make research-phase2-env
 ```
 
 Or run subcommands directly:
@@ -115,6 +120,10 @@ Use this interpretation order:
    Shows private symbol surface and absence of third-party registration hooks.
 4. `phase2-inject.txt`
    Demonstrates practical failure of available injection strategies on stock macOS.
+5. `phase2-env-overrides.txt`
+  Shows that process-start env overrides still do not expose `.lemma` for `se`.
+6. `phase2-inject-env.txt`
+  Confirms no strategy success even when env overrides are pre-set at launch.
 
 ## Expected baseline findings
 
