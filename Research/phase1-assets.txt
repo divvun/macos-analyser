@@ -1,0 +1,308 @@
+Building for debugging...
+[0/3] Write swift-version--58304C5D6DBC2206.txt
+Build of product 'DivvunNLResearch' complete! (0.13s)
+=== Phase 1: Apple LinguisticData Asset Catalog Inspection ===
+macOS version: Version 26.4.1 (Build 25E253)
+Date: 2026-05-04T12:03:30Z
+
+--- System (read-only) ---
+Path: /System/Library/AssetsV2/com_apple_MobileAsset_LinguisticData
+Status: PRESENT, 12 asset bundle(s) found
+
+  Bundle: 0151aa4f52d4ce68065fe897a691b760c33900f8.asset
+  Language: fr
+  Content types: Lemmatizer, Events, SiriLexiconDelta, SiriLexiconDelta, SiriLexiconDelta, SiriLexiconDelta, SiriLexicon, SiriLexicon, SiriLexicon, SiriLexicon, SiriLexicon, SiriLexicon, SiriLanguageModel, Embedding, Embedding, Intents, Search, Search, Search, ContinuousPath, LanguageModel, LanguageModel, LanguageModel, LanguageModel, Tagging, Tagging, SearchQueryLanguageModel, Sentiment
+  Data files:
+    META-INF                       64 B       magic:(unreadable)
+  Subdir: AssetData/ (28 file(s))
+    AssetData/Lemmatizer-fr.dat            2.4 MB     magic:24 31 12 00 01 00 00 00
+    AssetData/Polarity-fr.lstm             1.3 MB     magic:04 00 00 00 06 00 00 00
+    AssetData/Siri-Delta-fr_CA.dat         1.9 MB     magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Delta-fr_CA.idx         4.3 MB     magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Delta-fr_FR.dat         1.4 MB     magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Delta-fr_FR.idx         2.5 MB     magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Phrases-fr_CA.dat       236.5 KB   magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Phrases-fr_CA.idx       385.0 KB   magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Phrases-fr_FR.dat       187.9 KB   magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Phrases-fr_FR.idx       264.6 KB   magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Unigrams-fr.dat         2.0 MB     magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Unigrams-fr.idx         3.1 MB     magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-fr.lm                   384 B      magic:(unreadable)
+    AssetData/bilm.dat                     14.4 MB    magic:e9 03 00 00 01 00 00 00
+    AssetData/embedding.dat                5.6 MB     magic:64 00 00 00 01 00 00 00
+    AssetData/fr-photosharing.lstm         942.9 KB   magic:04 00 00 00 06 00 00 00
+    AssetData/fr-search.cache              1.8 MB     magic:ba ab 00 00 38 00 00 00
+    AssetData/fr-search.cfg                54.2 KB    magic:fe ca ed 1c 02 00 00 00
+    AssetData/fr-search.plist              1001 B     magic:62 70 6c 69 73 74 30 30
+    AssetData/fr.cpml                      224 B      magic:(unreadable)
+    AssetData/fr.lm                        384 B      magic:(unreadable)
+    AssetData/fr_CA.lm                     160 B      magic:(unreadable)
+    AssetData/fr_CH.lm                     128 B      magic:(unreadable)
+    AssetData/fr_FR.lm                     128 B      magic:(unreadable)
+    AssetData/ner.dat                      8.1 MB     magic:c8 00 00 00 00 00 00 00
+    AssetData/pos.dat                      2.4 MB     magic:64 00 00 00 14 00 00 00
+    AssetData/searchquery.lm               192 B      magic:(unreadable)
+    AssetData/sentiment.bundle             256 B      magic:(unreadable)
+  Subdir: META-INF/ (0 file(s))
+
+  Bundle: 0ae6ee5ec6623e763b9554b001a3a58908985ff7.asset
+  Language: ru
+  Content types: Lemmatizer, Tagging, Tagging, ContinuousPath, LanguageModel
+  Data files:
+    META-INF                       64 B       magic:(unreadable)
+  Subdir: AssetData/ (5 file(s))
+    AssetData/Lemmatizer-ru.dat            8.1 MB     magic:24 31 12 00 01 00 00 00
+    AssetData/ner.dat                      9.2 MB     magic:c8 00 00 00 00 00 00 00
+    AssetData/pos.dat                      4.3 MB     magic:64 00 00 00 14 00 00 00
+    AssetData/ru.cpml                      224 B      magic:(unreadable)
+    AssetData/ru.lm                        224 B      magic:(unreadable)
+  Subdir: META-INF/ (0 file(s))
+
+  Bundle: 0e1716050086b674daa796a7e0a4863c1e3b6d51.asset
+  Language: sv
+  Content types: Lemmatizer, SiriLexicon, SiriLexicon, SiriLexicon, SiriLexicon, Search, Search, Search, LanguageModel
+  Data files:
+    META-INF                       64 B       magic:(unreadable)
+  Subdir: AssetData/ (9 file(s))
+    AssetData/Lemmatizer-sv.dat            2.7 MB     magic:24 31 12 00 01 00 00 00
+    AssetData/Siri-Phrases-sv.dat          68.8 KB    magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Phrases-sv.idx          63.0 KB    magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Unigrams-sv.dat         6.0 MB     magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Unigrams-sv.idx         10.9 MB    magic:00 00 00 01 00 00 00 03
+    AssetData/sv-search.cache              1.7 MB     magic:ba ab 00 00 38 00 00 00
+    AssetData/sv-search.cfg                54.5 KB    magic:fe ca ed 1c 02 00 00 00
+    AssetData/sv-search.plist              1001 B     magic:62 70 6c 69 73 74 30 30
+    AssetData/sv.lm                        192 B      magic:(unreadable)
+  Subdir: META-INF/ (0 file(s))
+
+  Bundle: 55075473faa2d9057750ad6fb023cad03f33baa7.asset
+  Language: mul_Latn
+  Content types: EventExtractionBERTClassifier, FoundInEventmBERTHead, Embedding, PersonExtractionBERTClassifier
+  Data files:
+    META-INF                       64 B       magic:(unreadable)
+  Subdir: AssetData/ (4 file(s))
+    AssetData/event-extraction-cls-latin.b 96 B       magic:(unreadable)
+    AssetData/found-in-event-head.bundle   224 B      magic:(unreadable)
+    AssetData/mBERT.bundle                 416 B      magic:(unreadable)
+    AssetData/person-extraction-cls-latin. 96 B       magic:(unreadable)
+  Subdir: META-INF/ (0 file(s))
+
+  Bundle: 923d0e9969d99e5135743fd93ff64d970ffb805e.asset
+  Language: mul_Hani
+  Content types: EventExtractionBERTClassifier, Embedding, PersonExtractionBERTClassifier
+  Data files:
+    META-INF                       64 B       magic:(unreadable)
+  Subdir: AssetData/ (3 file(s))
+    AssetData/event-extraction-cls-cjk.bun 96 B       magic:(unreadable)
+    AssetData/mBERT.bundle                 320 B      magic:(unreadable)
+    AssetData/person-extraction-cls-cjk.bu 96 B       magic:(unreadable)
+  Subdir: META-INF/ (0 file(s))
+
+  Bundle: 9e5af7e2cffff3cded5db21909fd7d3a58b4ed43.asset
+  Language: en
+  Content types: SentenceCorrection, Lemmatizer, Events, SiriLexiconDelta, SiriLexiconDelta, SiriLexiconDelta, SiriLexiconDelta, SiriLexiconDelta, SiriLexiconDelta, SiriLexiconDelta, SiriLexiconDelta, SiriLexiconDelta, SiriLexiconDelta, SiriLexiconDelta, SiriLexiconDelta, SiriLexicon, SiriLexicon, SiriLexicon, SiriLexicon, SiriLexicon, SiriLexicon, SiriLexicon, SiriLexicon, SiriLexicon, SiriLexicon, SiriLexicon, SiriLexicon, SiriLexicon, SiriLexicon, SiriLanguageModel, Embedding, Emotion, Intents, Search, Search, Search, LanguageModel, Tagging, Tagging, Tagging, SearchQueryLanguageModel, Embedding, Sentiment, Embedding, TopicModel
+  Data files:
+    META-INF                       64 B       magic:(unreadable)
+  Subdir: AssetData/ (45 file(s))
+    AssetData/GECModel                     192 B      magic:(unreadable)
+    AssetData/Lemmatizer-en.dat            1.4 MB     magic:24 31 12 00 01 00 00 00
+    AssetData/Polarity-en.lstm             1.4 MB     magic:04 00 00 00 06 00 00 00
+    AssetData/Siri-Delta-en_AU.dat         1.1 MB     magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Delta-en_AU.idx         2.6 MB     magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Delta-en_CA.dat         1.4 MB     magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Delta-en_CA.idx         3.3 MB     magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Delta-en_GB.dat         1.8 MB     magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Delta-en_GB.idx         4.3 MB     magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Delta-en_IN.dat         1.3 MB     magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Delta-en_IN.idx         3.2 MB     magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Delta-en_SG.dat         1.6 MB     magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Delta-en_SG.idx         3.8 MB     magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Delta-en_US.dat         1.4 MB     magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Delta-en_US.idx         3.3 MB     magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Phrases-en_AU.dat       333.6 KB   magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Phrases-en_AU.idx       535.0 KB   magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Phrases-en_CA.dat       244.3 KB   magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Phrases-en_CA.idx       353.6 KB   magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Phrases-en_GB.dat       460.1 KB   magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Phrases-en_GB.idx       742.4 KB   magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Phrases-en_IN.dat       117.3 KB   magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Phrases-en_IN.idx       138.4 KB   magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Phrases-en_SG.dat       125.0 KB   magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Phrases-en_SG.idx       158.7 KB   magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Phrases-en_US.dat       246.6 KB   magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Phrases-en_US.idx       352.1 KB   magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Unigrams-en.dat         643.2 KB   magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Unigrams-en.idx         814.3 KB   magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-en.lm                   576 B      magic:(unreadable)
+    AssetData/bilm.dat                     14.4 MB    magic:e9 03 00 00 00 00 00 00
+    AssetData/emotion.dat                  1.4 MB     magic:e9 03 00 00 00 00 00 00
+    AssetData/en-photosharing.lstm         1.6 MB     magic:04 00 00 00 06 00 00 00
+    AssetData/en-search.cache              2.5 MB     magic:ba ab 00 00 38 00 00 00
+    AssetData/en-search.cfg                54.1 KB    magic:fe ca ed 1c 02 00 00 00
+    AssetData/en-search.plist              1001 B     magic:62 70 6c 69 73 74 30 30
+    AssetData/en.lm                        224 B      magic:(unreadable)
+    AssetData/ner.dat                      1.4 MB     magic:64 00 00 00 14 00 00 00
+    AssetData/ner_v2.dat                   4.3 MB     magic:2c 01 00 00 0a 00 00 00
+    AssetData/pos.dat                      1.6 MB     magic:2c 01 00 00 0a 00 00 00
+    AssetData/searchquery.lm               128 B      magic:(unreadable)
+    AssetData/sentence.dat                 2.5 MB     magic:e9 03 00 00 00 00 00 00
+    AssetData/sentiment.bundle             256 B      magic:(unreadable)
+    AssetData/similarity.dat               17.3 KB    magic:e9 03 00 00 00 00 00 00
+    AssetData/topic.bundle                 224 B      magic:(unreadable)
+  Subdir: META-INF/ (0 file(s))
+
+  Bundle: b2e5cba836c70b2acdcf0ab0a1aecd992795f3cb.asset
+  Language: de
+  Content types: Lemmatizer, Events, SiriLexicon, SiriLexicon, SiriLexicon, SiriLexicon, SiriLanguageModel, Embedding, Search, Search, Search, ContinuousPath, LanguageModel, Embedding, Tagging, Tagging, SearchQueryLanguageModel, Sentiment
+  Data files:
+    META-INF                       64 B       magic:(unreadable)
+  Subdir: AssetData/ (18 file(s))
+    AssetData/Lemmatizer-de.dat            3.1 MB     magic:24 31 12 00 01 00 00 00
+    AssetData/Polarity-de.lstm             925.9 KB   magic:04 00 00 00 06 00 00 00
+    AssetData/Siri-Phrases-de.dat          122.0 KB   magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Phrases-de.idx          152.1 KB   magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Unigrams-de.dat         3.5 MB     magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Unigrams-de.idx         7.6 MB     magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-de.lm                   288 B      magic:(unreadable)
+    AssetData/bilm.dat                     14.4 MB    magic:e9 03 00 00 00 00 00 00
+    AssetData/de-search.cache              2.8 MB     magic:ba ab 00 00 38 00 00 00
+    AssetData/de-search.cfg                54.3 KB    magic:fe ca ed 1c 02 00 00 00
+    AssetData/de-search.plist              1001 B     magic:62 70 6c 69 73 74 30 30
+    AssetData/de.cpml                      224 B      magic:(unreadable)
+    AssetData/de.lm                        320 B      magic:(unreadable)
+    AssetData/embedding.dat                6.5 MB     magic:64 00 00 00 01 00 00 00
+    AssetData/ner.dat                      6.8 MB     magic:c8 00 00 00 00 00 00 00
+    AssetData/pos.dat                      4.8 MB     magic:64 00 00 00 14 00 00 00
+    AssetData/searchquery.lm               128 B      magic:(unreadable)
+    AssetData/sentiment.bundle             256 B      magic:(unreadable)
+  Subdir: META-INF/ (0 file(s))
+
+  Bundle: bed38dcc126fd15c6b31eea85c5d1e9a71742a56.asset
+  Language: nn
+  Content types: Lexicon, Lexicon, Spelling, Lexicon, Lexicon
+  Data files:
+    META-INF                       64 B       magic:(unreadable)
+  Subdir: AssetData/ (5 file(s))
+    AssetData/Phrases-nn.dat               44.6 KB    magic:00 00 00 01 00 00 00 03
+    AssetData/Phrases-nn.idx               16.2 KB    magic:00 00 00 01 00 00 00 03
+    AssetData/Spelling-nn.bundle           96 B       magic:(unreadable)
+    AssetData/Unigrams-nn.dat              8.2 MB     magic:00 00 00 01 00 00 00 03
+    AssetData/Unigrams-nn.idx              4.7 MB     magic:00 00 00 01 00 00 00 03
+  Subdir: META-INF/ (0 file(s))
+
+  Bundle: c0476110d9613f7db44dc96602a530d649811e2d.asset
+  Language: nb
+  Content types: SiriLexicon, SiriLexicon, SiriLexicon, SiriLexicon, Spelling
+  Data files:
+    META-INF                       64 B       magic:(unreadable)
+  Subdir: AssetData/ (5 file(s))
+    AssetData/Siri-Phrases-nb.dat          74.5 KB    magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Phrases-nb.idx          74.3 KB    magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Unigrams-nb.dat         3.8 MB     magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Unigrams-nb.idx         10.2 MB    magic:00 00 00 01 00 00 00 03
+    AssetData/Spelling-nb.bundle           96 B       magic:(unreadable)
+  Subdir: META-INF/ (0 file(s))
+
+  Bundle: ce368a49968b1e7c50777ebeac20ae4b4dbd49ae.asset
+  Language: fi
+  Content types: Lemmatizer, Spelling
+  Data files:
+    META-INF                       64 B       magic:(unreadable)
+  Subdir: AssetData/ (2 file(s))
+    AssetData/Lemmatizer-fi.dat            3.5 MB     magic:24 31 12 00 01 00 00 00
+    AssetData/Spelling-fi.bundle           192 B      magic:(unreadable)
+  Subdir: META-INF/ (0 file(s))
+
+  Bundle: d95008a7db1f940e3736bb65c720788d8c4a1b80.asset
+  Language: da
+  Content types: Lemmatizer, SiriLexicon, SiriLexicon, SiriLexicon, SiriLexicon, LanguageModel
+  Data files:
+    META-INF                       64 B       magic:(unreadable)
+  Subdir: AssetData/ (6 file(s))
+    AssetData/Lemmatizer-da.dat            1.8 MB     magic:24 31 12 00 01 00 00 00
+    AssetData/Siri-Phrases-da.dat          62.0 KB    magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Phrases-da.idx          46.3 KB    magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Unigrams-da.dat         2.9 MB     magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Unigrams-da.idx         7.2 MB     magic:00 00 00 01 00 00 00 03
+    AssetData/da.lm                        128 B      magic:(unreadable)
+  Subdir: META-INF/ (0 file(s))
+
+  Bundle: e455d830fc4c363e92825363afa88cdb24239e34.asset
+  Language: pt
+  Content types: Lemmatizer, SiriLexicon, SiriLexicon, SiriLexicon, SiriLexicon, SiriLexicon, SiriLexicon, SiriLexicon, SiriLexicon, SiriLexicon, SiriLexicon, SiriLanguageModel, Embedding, Embedding, Tagging, Tagging, Search, Search, Search, ContinuousPath, LanguageModel, Sentiment
+  Data files:
+    META-INF                       64 B       magic:(unreadable)
+  Subdir: AssetData/ (22 file(s))
+    AssetData/Lemmatizer-pt.dat            2.5 MB     magic:24 31 12 00 01 00 00 00
+    AssetData/Siri-Delta-pt_BR.dat         330.9 KB   magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Delta-pt_BR.idx         795.4 KB   magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Delta-pt_PT.dat         44.8 KB    magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Delta-pt_PT.idx         54.7 KB    magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Phrases-pt_BR.dat       142.8 KB   magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Phrases-pt_BR.idx       192.2 KB   magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Phrases-pt_PT.dat       142.8 KB   magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Phrases-pt_PT.idx       192.2 KB   magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Unigrams-pt.dat         1.9 MB     magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-Unigrams-pt.idx         4.0 MB     magic:00 00 00 01 00 00 00 03
+    AssetData/Siri-pt.lm                   256 B      magic:(unreadable)
+    AssetData/bilm.dat                     14.4 MB    magic:e9 03 00 00 01 00 00 00
+    AssetData/embedding.dat                7.9 MB     magic:64 00 00 00 01 00 00 00
+    AssetData/ner.dat                      7.1 MB     magic:c8 00 00 00 00 00 00 00
+    AssetData/pos.dat                      1.3 MB     magic:64 00 00 00 14 00 00 00
+    AssetData/pt-search.cache              1.2 MB     magic:ba ab 00 00 38 00 00 00
+    AssetData/pt-search.cfg                58.5 KB    magic:fe ca ed 1c 02 00 00 00
+    AssetData/pt-search.plist              1001 B     magic:62 70 6c 69 73 74 30 30
+    AssetData/pt.cpml                      224 B      magic:(unreadable)
+    AssetData/pt.lm                        288 B      magic:(unreadable)
+    AssetData/sentiment.bundle             256 B      magic:(unreadable)
+  Subdir: META-INF/ (0 file(s))
+
+
+Content type coverage summary:
+  ContinuousPath                 4 language(s): de, fr, pt, ru
+  Embedding                      11 language(s): de, de, en, en, en, fr, fr, mul_Hani, mul_Latn, pt ...
+  Emotion                        1 language(s): en
+  EventExtractionBERTClassifier  2 language(s): mul_Hani, mul_Latn
+  Events                         3 language(s): de, en, fr
+  FoundInEventmBERTHead          1 language(s): mul_Latn
+  Intents                        2 language(s): en, fr
+  LanguageModel                  10 language(s): da, de, en, fr, fr, fr, fr, pt, ru, sv
+  Lemmatizer                     8 language(s): da, de, en, fi, fr, pt, ru, sv
+  Lexicon                        4 language(s): nn, nn, nn, nn
+  PersonExtractionBERTClassifier 2 language(s): mul_Hani, mul_Latn
+  Search                         15 language(s): de, de, de, en, en, en, fr, fr, fr, pt ...
+  SearchQueryLanguageModel       3 language(s): de, en, fr
+  SentenceCorrection             1 language(s): en
+  Sentiment                      4 language(s): de, en, fr, pt
+  SiriLanguageModel              4 language(s): de, en, fr, pt
+  SiriLexicon                    46 language(s): da, da, da, da, de, de, de, de, en, en ...
+  SiriLexiconDelta               16 language(s): en, en, en, en, en, en, en, en, en, en ...
+  Spelling                       3 language(s): fi, nb, nn
+  Tagging                        11 language(s): de, de, en, en, en, fr, fr, pt, pt, ru ...
+  TopicModel                     1 language(s): en
+
+--- User (~/ override) ---
+Path: /Users/smo036/Library/Application Support/Apple/NLP
+Status: NOT PRESENT
+
+--- Local (/Library override) ---
+Path: /Library/Application Support/Apple/NLP
+Status: NOT PRESENT
+
+--- Environment Variables ---
+  NL_LANGUAGE_MODEL_PATH = (not set)
+  LINGUISTIC_DATA_PATH = (not set)
+  NL_ASSET_PATH = (not set)
+  MobileAssetOverridePath = (not set)
+  LANGUAGEMODELING_ASSET_PATH = (not set)
+  LD_ASSET_PATH = (not set)
+
+--- Writable Override Path Candidates ---
+  not present      read-only    /Users/smo036/Library/Application Support/Apple/NLP
+  not present      writable     /Users/smo036/Library/Application Support/com.apple.NaturalLanguage
+  not present      read-only    /Library/Application Support/Apple/NLP
+  not present      read-only    /private/var/MobileAsset/AssetsV2/com_apple_MobileAsset_LinguisticData
+  not present      writable     /Users/smo036/Library/Caches/com.apple.NaturalLanguage
+
+Note: If SIP is disabled, system paths become writable.
+Note: User-level override paths (if they exist) may be consulted before system paths.

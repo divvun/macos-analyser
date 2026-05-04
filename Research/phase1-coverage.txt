@@ -1,0 +1,190 @@
+Building for debugging...
+[0/3] Write swift-version--58304C5D6DBC2206.txt
+Build of product 'DivvunNLResearch' complete! (0.20s)
+=== Phase 1: NLTagger Language Coverage ===
+macOS version: Version 26.4.1 (Build 25E253)
+Date: 2026-05-04T12:03:05Z
+
+Language                  TokenTyp  LexicalC  NameType  NameType  Lemma     Language  Script    
+------------------------------------------------------------------------------------------------
+English (en)                ✓         ✓         ✓         ✓         ✓         ✓         ✓       
+French (fr)                 ✓         ✓         ✓         ✓         ✓         ✓         ✓       
+German (de)                 ✓         ✓         ✓         ✓         ✓         ✓         ✓       
+Spanish (es)                ✓         ·         ·         ·         ·         ✓         ✓       
+Italian (it)                ✓         ·         ·         ·         ·         ✓         ✓       
+Portuguese (pt)             ✓         ✓         ✓         ✓         ✓         ✓         ✓       
+Russian (ru)                ✓         ✓         ✓         ✓         ✓         ✓         ✓       
+Dutch (nl)                  ✓         ·         ·         ·         ·         ✓         ✓       
+Swedish (sv)                ✓         ·         ·         ·         ✓         ✓         ✓       
+Danish (da)                 ✓         ·         ·         ·         ·         ✓         ✓       
+Norwegian Bokmål (nb)       ✓         ·         ·         ·         ·         ✓         ✓       
+Norwegian Nynorsk (nn)      ✓         ·         ·         ·         ·         ✓         ✓       
+Finnish (fi)                ✓         ·         ·         ·         ·         ✓         ✓       
+Turkish (tr)                ✓         ·         ·         ·         ·         ✓         ✓       
+Polish (pl)                 ✓         ·         ·         ·         ·         ✓         ✓       
+Czech (cs)                  ✓         ·         ·         ·         ·         ✓         ✓       
+Slovak (sk)                 ✓         ·         ·         ·         ·         ✓         ✓       
+Romanian (ro)               ✓         ·         ·         ·         ·         ✓         ✓       
+Hungarian (hu)              ✓         ·         ·         ·         ·         ✓         ✓       
+Greek (el)                  ✓         ·         ·         ·         ·         ✓         ✓       
+Croatian (hr)               ✓         ·         ·         ·         ·         ✓         ✓       
+Ukrainian (uk)              ✓         ·         ·         ·         ·         ✓         ✓       
+Bulgarian (bg)              ✓         ·         ·         ·         ·         ✓         ✓       
+Catalan (ca)                ✓         ·         ·         ·         ·         ✓         ✓       
+Hebrew (he)                 ✓         ·         ·         ·         ·         ✓         ✓       
+Arabic (ar)                 ✓         ·         ·         ·         ·         ✓         ✓       
+Chinese Simplified (zh-Han  ✓         ✓         ·         ·         ·         ✓         ✓       
+Chinese Traditional (zh-Ha  ✓         ·         ·         ·         ·         ✓         ✓       
+Japanese (ja)               ✓         ·         ·         ·         ·         ✓         ✓       
+Korean (ko)                 ✓         ·         ·         ·         ·         ✓         ✓       
+Thai (th)                   ✓         ·         ·         ·         ·         ✓         ✓       
+Vietnamese (vi)             ✓         ·         ·         ·         ·         ✓         ✓       
+Indonesian (id)             ✓         ·         ·         ·         ·         ✓         ✓       
+Malay (ms)                  ✓         ·         ·         ·         ·         ✓         ✓       
+Northern Sami (se)          ✓         ·         ·         ·         ·         ✓         ✓       
+Inari Sami (smn)            ✓         ·         ·         ·         ·         ✓         ✓       
+Skolt Sami (sms)            ✓         ·         ·         ·         ·         ✓         ✓       
+Southern Sami (sma)         ✓         ·         ·         ·         ·         ✓         ✓       
+Lule Sami (smj)             ✓         ·         ·         ·         ·         ✓         ✓       
+Pite Sami (sje)             ✓         ·         ·         ·         ·         ✓         ✓       
+Akkala Sami (sia)           ✓         ·         ·         ·         ·         ✓         ✓       
+Kildin Sami (sjd)           ✓         ·         ·         ·         ·         ✓         ✓       
+Ume Sami (sju)              ✓         ·         ·         ·         ·         ✓         ✓       
+Ter Sami (sjt)              ✓         ·         ·         ·         ·         ✓         ✓       
+Estonian (et)               ✓         ·         ·         ·         ·         ✓         ✓       
+Latvian (lv)                ✓         ·         ·         ·         ·         ✓         ✓       
+Lithuanian (lt)             ✓         ·         ·         ·         ·         ✓         ✓       
+Erzya (myv)                 ✓         ·         ·         ·         ·         ✓         ✓       
+Moksha (mdf)                ✓         ·         ·         ·         ·         ✓         ✓       
+Udmurt (udm)                ✓         ·         ·         ·         ·         ✓         ✓       
+Komi-Zyrian (kpv)           ✓         ·         ·         ·         ·         ✓         ✓       
+Komi-Permyak (koi)          ✓         ·         ·         ·         ·         ✓         ✓       
+Meadow Mari (mhr)           ✓         ·         ·         ·         ·         ✓         ✓       
+Hill Mari (mrj)             ✓         ·         ·         ·         ·         ✓         ✓       
+Veps (vep)                  ✓         ·         ·         ·         ·         ✓         ✓       
+Karelian (krl)              ✓         ·         ·         ·         ·         ✓         ✓       
+Welsh (cy)                  ✓         ·         ·         ·         ·         ✓         ✓       
+Irish (ga)                  ✓         ·         ·         ·         ·         ✓         ✓       
+Scottish Gaelic (gd)        ✓         ·         ·         ·         ·         ✓         ✓       
+Breton (br)                 ✓         ·         ·         ·         ·         ✓         ✓       
+Frisian (fy)                ✓         ·         ·         ·         ·         ✓         ✓       
+Basque (eu)                 ✓         ·         ·         ·         ·         ✓         ✓       
+Galician (gl)               ✓         ·         ·         ·         ·         ✓         ✓       
+Occitan (oc)                ✓         ·         ·         ·         ·         ✓         ✓       
+Icelandic (is)              ✓         ·         ·         ·         ·         ✓         ✓       
+Faroese (fo)                ✓         ·         ·         ·         ·         ✓         ✓       
+Inuinnaqtun (ikt)           ✓         ·         ·         ·         ·         ✓         ✓       
+Inuktitut (iu)              ✓         ·         ·         ·         ·         ✓         ✓       
+Cree (cr)                   ✓         ·         ·         ·         ·         ✓         ✓       
+Ojibwe (oj)                 ✓         ·         ·         ·         ·         ✓         ✓       
+Mohawk (moh)                ✓         ·         ·         ·         ·         ✓         ✓       
+Navajo (nv)                 ✓         ·         ·         ·         ·         ✓         ✓       
+Cherokee (chr)              ✓         ·         ·         ·         ·         ✓         ✓       
+Maltese (mt)                ✓         ·         ·         ·         ·         ✓         ✓       
+Afrikaans (af)              ✓         ·         ·         ·         ·         ✓         ✓       
+Albanian (sq)               ✓         ·         ·         ·         ·         ✓         ✓       
+Georgian (ka)               ✓         ·         ·         ·         ·         ✓         ✓       
+Armenian (hy)               ✓         ·         ·         ·         ·         ✓         ✓       
+Azerbaijani (az)            ✓         ·         ·         ·         ·         ✓         ✓       
+Uzbek (uz)                  ✓         ·         ·         ·         ·         ✓         ✓       
+Kazakh (kk)                 ✓         ·         ·         ·         ·         ✓         ✓       
+Mongolian (mn)              ✓         ·         ·         ·         ·         ✓         ✓       
+Swahili (sw)                ✓         ·         ·         ·         ·         ✓         ✓       
+Zulu (zu)                   ✓         ·         ·         ·         ·         ✓         ✓       
+Xhosa (xh)                  ✓         ·         ·         ·         ·         ✓         ✓       
+Amharic (am)                ✓         ·         ·         ·         ·         ✓         ✓       
+
+=== Summary ===
+Languages with .lemma support (6): en, fr, de, pt, ru, sv
+
+Languages with minimal support only (Language/Script/TokenType) (79):
+  es  Spanish
+  it  Italian
+  nl  Dutch
+  da  Danish
+  nb  Norwegian Bokmål
+  nn  Norwegian Nynorsk
+  fi  Finnish
+  tr  Turkish
+  pl  Polish
+  cs  Czech
+  sk  Slovak
+  ro  Romanian
+  hu  Hungarian
+  el  Greek
+  hr  Croatian
+  uk  Ukrainian
+  bg  Bulgarian
+  ca  Catalan
+  he  Hebrew
+  ar  Arabic
+  zh-Hant  Chinese Traditional
+  ja  Japanese
+  ko  Korean
+  th  Thai
+  vi  Vietnamese
+  id  Indonesian
+  ms  Malay
+  se  Northern Sami
+  smn  Inari Sami
+  sms  Skolt Sami
+  sma  Southern Sami
+  smj  Lule Sami
+  sje  Pite Sami
+  sia  Akkala Sami
+  sjd  Kildin Sami
+  sju  Ume Sami
+  sjt  Ter Sami
+  et  Estonian
+  lv  Latvian
+  lt  Lithuanian
+  myv  Erzya
+  mdf  Moksha
+  udm  Udmurt
+  kpv  Komi-Zyrian
+  koi  Komi-Permyak
+  mhr  Meadow Mari
+  mrj  Hill Mari
+  vep  Veps
+  krl  Karelian
+  cy  Welsh
+  ga  Irish
+  gd  Scottish Gaelic
+  br  Breton
+  fy  Frisian
+  eu  Basque
+  gl  Galician
+  oc  Occitan
+  is  Icelandic
+  fo  Faroese
+  ikt  Inuinnaqtun
+  iu  Inuktitut
+  cr  Cree
+  oj  Ojibwe
+  moh  Mohawk
+  nv  Navajo
+  chr  Cherokee
+  mt  Maltese
+  af  Afrikaans
+  sq  Albanian
+  ka  Georgian
+  hy  Armenian
+  az  Azerbaijani
+  uz  Uzbek
+  kk  Kazakh
+  mn  Mongolian
+  sw  Swahili
+  zu  Zulu
+  xh  Xhosa
+  am  Amharic
+
+=== Key Finding ===
+North Sami (se) and all other Sami languages receive ONLY the three lowest
+tier schemes: Language, Script, TokenType.
+This means Dictionary.app and Spotlight cannot perform morphology-aware
+lookup for these languages via the standard NLTagger pipeline.
+
+Contrast: Japanese (ja), Chinese (zh), Korean (ko) have full tokenization
+support despite being morphologically complex languages.
+English, French, German, Portuguese, Russian and Swedish have .lemma support.
+All other languages—including Norwegian Nynorsk and most minority languages—do not.

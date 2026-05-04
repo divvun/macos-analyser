@@ -20,7 +20,7 @@ SWIFT_BIN ?= $(firstword $(wildcard .build/arm64-apple-macosx/release .build/rel
 APP_CONTENTS   := DivvunAnalyser.app/Contents
 APPEX_CONTENTS := $(APP_CONTENTS)/PlugIns/DivvunNLExtension.appex/Contents
 
-.PHONY: all rust swift build-app test test-rust test-swift test-e2e demo probe-nl clean install-app
+.PHONY: all rust swift build-app test test-rust test-swift test-e2e demo probe-nl research-phase1 research-phase2 clean install-app
 
 all: rust swift
 
@@ -93,6 +93,32 @@ build-app: swift
 	cp $(SWIFT_BIN)/DivvunNLExtension          $(APPEX_CONTENTS)/MacOS/DivvunNLExtension
 	cp Sources/DivvunNLExtension/Info.plist     $(APPEX_CONTENTS)/Info.plist
 	@echo "Done → DivvunAnalyser.app"
+
+## Phase 1 research: map NLTagger coverage, inspect asset bundles, enumerate private symbols.
+## Output is written to Research/phase1-report.txt
+research-phase1:
+	mkdir -p Research
+	swift build $(SWIFT_LINK_FLAGS) 2>&1 | tail -5
+	@echo "--- Phase 1: Language Coverage ---" | tee Research/phase1-report.txt
+	swift run DivvunNLResearch phase1-coverage 2>&1 | tee -a Research/phase1-report.txt
+	@echo | tee -a Research/phase1-report.txt
+	@echo "--- Phase 1: Asset Catalog ---" | tee -a Research/phase1-report.txt
+	swift run DivvunNLResearch phase1-assets 2>&1 | tee -a Research/phase1-report.txt
+	@echo | tee -a Research/phase1-report.txt
+	@echo "--- Phase 1: Private Symbols ---" | tee -a Research/phase1-report.txt
+	swift run DivvunNLResearch phase1-symbols 2>&1 | tee -a Research/phase1-report.txt
+	@echo "Phase 1 complete. Report: Research/phase1-report.txt"
+
+## Phase 2 research: build a 'se' test asset bundle and test injection strategies.
+## Output is written to Research/phase2-report.txt
+research-phase2:
+	mkdir -p Research
+	@echo "--- Phase 2: Building se asset bundle ---" | tee Research/phase2-report.txt
+	swift run DivvunNLResearch phase2-build Research/assets/se 2>&1 | tee -a Research/phase2-report.txt
+	@echo | tee -a Research/phase2-report.txt
+	@echo "--- Phase 2: Injection Testing ---" | tee -a Research/phase2-report.txt
+	swift run DivvunNLResearch phase2-inject Research/assets/se 2>&1 | tee -a Research/phase2-report.txt
+	@echo "Phase 2 complete. Report: Research/phase2-report.txt"
 
 ## Copy the assembled app to /Applications (requires build-app first).
 install-app: build-app

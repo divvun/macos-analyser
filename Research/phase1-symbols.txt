@@ -1,0 +1,138 @@
+Building for debugging...
+[0/3] Write swift-version--58304C5D6DBC2206.txt
+Build of product 'DivvunNLResearch' complete! (0.12s)
+=== Phase 1: Private Symbol Probing ===
+macOS version: Version 26.4.1 (Build 25E253)
+Date: 2026-05-04T12:03:36Z
+
+--- LinguisticData (private) ---
+Path: /System/Library/PrivateFrameworks/LinguisticData.framework/LinguisticData
+Status: opened successfully
+  ✓ LDCreateMobileAssetType
+    Creates a MobileAsset type handle for a LinguisticData content type
+    address: 0x000000018f1ddd30
+  ✓ LDCopyLocaleIdentifierOverrideForLocaleIdentifier
+    Returns an override locale identifier (may remap 'se' to another locale)
+    address: 0x000000018f1ddd9c
+  ✓ LDCreateSystemLexiconCompatibilityVersion
+    Returns a version token for system lexicon compatibility checking
+    address: 0x000000018f1da0c8
+  ✓ kLDAssetTypeLemmatizer
+    NSString constant: the asset type identifier for lemmatizer bundles
+    address: 0x00000001eacd00d0
+  ✓ kLDAssetTypeLanguageModel
+    NSString constant: the asset type identifier for language model bundles
+    address: 0x00000001eacd0018
+  ✓ kLDAssetTypeNaturalLanguageSearchModel
+    NSString constant: the asset type identifier for NL search model bundles
+    address: 0x00000001eacd0038
+  ✓ NLTaggerCreate
+    Internal tagger constructor
+    address: 0x000000018f0bb4fc
+  ✓ NLModelCreate
+    Internal model creation function
+    address: 0x000000018f116e30
+
+--- LanguageModeling (private) ---
+Path: /System/Library/PrivateFrameworks/LanguageModeling.framework/LanguageModeling
+Status: opened successfully
+  ✓ LDCreateMobileAssetType
+    Creates a MobileAsset type handle for a LinguisticData content type
+    address: 0x000000018f1ddd30
+  ✓ LDCopyLocaleIdentifierOverrideForLocaleIdentifier
+    Returns an override locale identifier (may remap 'se' to another locale)
+    address: 0x000000018f1ddd9c
+  ✓ LDCreateSystemLexiconCompatibilityVersion
+    Returns a version token for system lexicon compatibility checking
+    address: 0x000000018f1da0c8
+  ✓ kLDAssetTypeLemmatizer
+    NSString constant: the asset type identifier for lemmatizer bundles
+    address: 0x00000001eacd00d0
+  ✓ kLDAssetTypeLanguageModel
+    NSString constant: the asset type identifier for language model bundles
+    address: 0x00000001eacd0018
+  ✓ kLDAssetTypeNaturalLanguageSearchModel
+    NSString constant: the asset type identifier for NL search model bundles
+    address: 0x00000001eacd0038
+  ✓ NLTaggerCreate
+    Internal tagger constructor
+    address: 0x000000018f0bb4fc
+  ✓ NLModelCreate
+    Internal model creation function
+    address: 0x000000018f116e30
+
+--- NaturalLanguage (public) ---
+Path: /System/Library/Frameworks/NaturalLanguage.framework/NaturalLanguage
+Status: opened successfully
+  ✓ LDCreateMobileAssetType
+    Creates a MobileAsset type handle for a LinguisticData content type
+    address: 0x000000018f1ddd30
+  ✓ LDCopyLocaleIdentifierOverrideForLocaleIdentifier
+    Returns an override locale identifier (may remap 'se' to another locale)
+    address: 0x000000018f1ddd9c
+  ✓ LDCreateSystemLexiconCompatibilityVersion
+    Returns a version token for system lexicon compatibility checking
+    address: 0x000000018f1da0c8
+  ✓ kLDAssetTypeLemmatizer
+    NSString constant: the asset type identifier for lemmatizer bundles
+    address: 0x00000001eacd00d0
+  ✓ kLDAssetTypeLanguageModel
+    NSString constant: the asset type identifier for language model bundles
+    address: 0x00000001eacd0018
+  ✓ kLDAssetTypeNaturalLanguageSearchModel
+    NSString constant: the asset type identifier for NL search model bundles
+    address: 0x00000001eacd0038
+  ✓ NLTaggerCreate
+    Internal tagger constructor
+    address: 0x000000018f0bb4fc
+  ✓ NLModelCreate
+    Internal model creation function
+    address: 0x000000018f116e30
+
+--- Resolved symbol summary ---
+  LDCreateMobileAssetType                            [LinguisticData (private)] @ 0x000000018f1ddd30
+  LDCopyLocaleIdentifierOverrideForLocaleIdentifier  [LinguisticData (private)] @ 0x000000018f1ddd9c
+  LDCreateSystemLexiconCompatibilityVersion          [LinguisticData (private)] @ 0x000000018f1da0c8
+  kLDAssetTypeLemmatizer                             [LinguisticData (private)] @ 0x00000001eacd00d0
+  kLDAssetTypeLanguageModel                          [LinguisticData (private)] @ 0x00000001eacd0018
+  kLDAssetTypeNaturalLanguageSearchModel             [LinguisticData (private)] @ 0x00000001eacd0038
+  NLTaggerCreate                                     [LinguisticData (private)] @ 0x000000018f0bb4fc
+  NLModelCreate                                      [LinguisticData (private)] @ 0x000000018f116e30
+  LDCreateMobileAssetType                            [LanguageModeling (private)] @ 0x000000018f1ddd30
+  LDCopyLocaleIdentifierOverrideForLocaleIdentifier  [LanguageModeling (private)] @ 0x000000018f1ddd9c
+  LDCreateSystemLexiconCompatibilityVersion          [LanguageModeling (private)] @ 0x000000018f1da0c8
+  kLDAssetTypeLemmatizer                             [LanguageModeling (private)] @ 0x00000001eacd00d0
+  kLDAssetTypeLanguageModel                          [LanguageModeling (private)] @ 0x00000001eacd0018
+  kLDAssetTypeNaturalLanguageSearchModel             [LanguageModeling (private)] @ 0x00000001eacd0038
+  NLTaggerCreate                                     [LanguageModeling (private)] @ 0x000000018f0bb4fc
+  NLModelCreate                                      [LanguageModeling (private)] @ 0x000000018f116e30
+  LDCreateMobileAssetType                            [NaturalLanguage (public)] @ 0x000000018f1ddd30
+  LDCopyLocaleIdentifierOverrideForLocaleIdentifier  [NaturalLanguage (public)] @ 0x000000018f1ddd9c
+  LDCreateSystemLexiconCompatibilityVersion          [NaturalLanguage (public)] @ 0x000000018f1da0c8
+  kLDAssetTypeLemmatizer                             [NaturalLanguage (public)] @ 0x00000001eacd00d0
+  kLDAssetTypeLanguageModel                          [NaturalLanguage (public)] @ 0x00000001eacd0018
+  kLDAssetTypeNaturalLanguageSearchModel             [NaturalLanguage (public)] @ 0x00000001eacd0038
+  NLTaggerCreate                                     [NaturalLanguage (public)] @ 0x000000018f0bb4fc
+  NLModelCreate                                      [NaturalLanguage (public)] @ 0x000000018f116e30
+
+--- Calling safe probing functions ---
+  kLDAssetTypeLemmatizer = "Lemmatizer"
+  kLDAssetTypeLanguageModel = "LanguageModel"
+  kLDAssetTypeNaturalLanguageSearchModel = "Search"
+
+  LDCopyLocaleIdentifierOverrideForLocaleIdentifier("se") = nil
+  LDCopyLocaleIdentifierOverrideForLocaleIdentifier("smn") = nil
+  LDCopyLocaleIdentifierOverrideForLocaleIdentifier("sma") = nil
+  LDCopyLocaleIdentifierOverrideForLocaleIdentifier("nb") = nil
+  LDCopyLocaleIdentifierOverrideForLocaleIdentifier("en") = nil
+  LDCopyLocaleIdentifierOverrideForLocaleIdentifier("pt") = nil
+
+  LDCreateMobileAssetType("Lemmatizer") = com.apple.MobileAsset.LinguisticData
+  LDCreateMobileAssetType("LanguageModel") = com.apple.MobileAsset.LinguisticData
+
+--- LanguageModeling.framework exported symbols (via nm) ---
+Total exported symbols: 0
+NL/LM/Asset/Language-related (0):
+
+--- LinguisticData.framework exported symbols (via nm) ---
+Total exported symbols: 0

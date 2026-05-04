@@ -1,0 +1,31 @@
+Building for debugging...
+[0/3] Write swift-version--58304C5D6DBC2206.txt
+Build of product 'DivvunNLResearch' complete! (0.13s)
+=== Phase 2: LinguisticData Asset Builder for 'se' ===
+Output directory: Research/assets/se
+
+Created directory: Research/assets/se
+Created directory: Research/assets/se/se.lm
+Created Info.plist: Research/assets/se/Info.plist
+Created fst.dat: Research/assets/se/se.lm/fst.dat (65 bytes)
+  Note: This is a minimal empty OpenFST const FST (no states, no arcs).
+  A functional version would be compiled from Divvun's se.hfst analysis transducer.
+  OpenFST 'fstconvert --fst_type=const' produces this format.
+Created pos.dat: Research/assets/se/se.lm/pos.dat (118 bytes) [format unknown — placeholder only]
+Created lm.dat: Research/assets/se/se.lm/lm.dat (69 bytes) [placeholder only]
+Created Lemmatizer-se.dat: Research/assets/se/Lemmatizer-se.dat (197 bytes) [proprietary format placeholder]
+Created README.md: Research/assets/se/README.md
+
+=== Asset bundle created ===
+Bundle path: Research/assets/se
+
+IMPORTANT: This is a research/placeholder bundle.
+To create a functional lemmatizer:
+  1. fst.dat must be a valid OpenFST const-format transducer compiled
+     from Divvun's North Sami HFST analysis transducer (se.zhfst).
+     The OpenFST const format (magic d6 fd b2 7e) is used by Apple's
+     LanguageModel framework for tokenization and morphological analysis.
+  2. Lemmatizer-se.dat format (magic 24 31 12 00) is proprietary and
+     requires further reverse engineering to understand and produce.
+  3. The bundle must be placed in a path consulted by NLTagger.
+     Run 'phase2-inject' to test injection strategies.

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>MobileAssetProperties</key>
+	<dict>
+		<key>AssetDescription</key>
+		<string>North Sami (se) — Divvun research bundle</string>
+		<key>AssetLocale</key>
+		<string>se</string>
+		<key>AssetsVersion</key>
+		<integer>1</integer>
+		<key>ContentVersion</key>
+		<string>1.0</string>
+		<key>Contents</key>
+		<array>
+			<dict>
+				<key>ContentPath</key>
+				<string>se.lm</string>
+				<key>ContentType</key>
+				<string>LanguageModel</string>
+				<key>Locale</key>
+				<string>se</string>
+			</dict>
+			<dict>
+				<key>ContentPath</key>
+				<string>Lemmatizer-se.dat</string>
+				<key>ContentType</key>
+				<string>Lemmatizer</string>
+				<key>Locale</key>
+				<string>se</string>
+			</dict>
+		</array>
+		<key>Language</key>
+		<string>se</string>
+	</dict>
+</dict>
+</plist>

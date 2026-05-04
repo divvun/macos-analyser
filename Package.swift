@@ -13,6 +13,7 @@ let package = Package(
         .executable(name: "DivvunNLExtension",   targets: ["DivvunNLExtension"]),
         .executable(name: "DivvunHostApp",        targets: ["DivvunHostApp"]),
         .executable(name: "DivvunNLProbe",        targets: ["DivvunNLProbe"]),
+        .executable(name: "DivvunNLResearch",    targets: ["DivvunNLResearch"]),
     ],
     targets: [
         // C header bridge to the Rust library
@@ -83,6 +84,14 @@ let package = Package(
         .executableTarget(
             name: "DivvunNLProbe",
             path: "Sources/DivvunNLProbe"
+        ),
+
+        // Research tool for Phase 1 (language coverage, asset catalog, private symbols)
+        // and Phase 2 (asset building and injection testing).
+        // No dependency on DivvunAnalyser — pure Foundation + NaturalLanguage + Darwin.
+        .executableTarget(
+            name: "DivvunNLResearch",
+            path: "Sources/DivvunNLResearch"
         ),
 
         // Tests
