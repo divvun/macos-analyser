@@ -1,4 +1,4 @@
-SME_BUNDLE ?= /Users/smo036/langtech/gut/giellalt/lang-sme/bygg/analyse/tools/analysers/bundle.drb
+SME_BUNDLE ?= /usr/local/share/giella/sme/bundle.drb
 RUST_TARGET ?= aarch64-apple-darwin
 DIVVUN_RUNTIME ?= ../divvun-runtime
 ICU4C_PREFIX ?= /opt/homebrew/opt/icu4c

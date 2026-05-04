@@ -8,7 +8,7 @@ final class DivvunAnalyserTests: XCTestCase {
             return fromEnv
         }
 
-        let defaultPath = "/Users/smo036/langtech/gut/giellalt/lang-sme/bygg/analyse/tools/analysers/bundle.drb"
+        let defaultPath = "/usr/local/share/giella/sme/bundle.drb"
         guard FileManager.default.fileExists(atPath: defaultPath) else {
             throw XCTSkip("SME bundle not found. Set SME_BUNDLE to a valid bundle.drb path.")
         }

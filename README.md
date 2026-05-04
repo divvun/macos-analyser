@@ -44,7 +44,7 @@ The project is split into layers:
 - ICU (Homebrew `icu4c`) at:
   `/opt/homebrew/opt/icu4c`
 - A language analyzer bundle (`bundle.drb`), for example North Sami:
-  `/Users/smo036/langtech/gut/giellalt/lang-sme/bygg/analyse/tools/analysers/bundle.drb`
+  `/usr/local/share/giella/sme/bundle.drb` (installed by `make install` in the language repo)
 
 The default Makefile assumes those paths, but you can override variables.
 
