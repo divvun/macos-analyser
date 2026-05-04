@@ -5,7 +5,7 @@ let rustLibDir = "target/aarch64-apple-darwin/release"
 
 let package = Package(
     name: "DivvunAnalyser",
-    platforms: [.macOS(.v13)],
+    platforms: [.macOS(.v14)],
     products: [
         .library(name: "DivvunAnalyser", targets: ["DivvunAnalyser"]),
         .executable(name: "DivvunXPCService", targets: ["DivvunXPCService"]),

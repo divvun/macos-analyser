@@ -5,7 +5,9 @@ ICU4C_PREFIX ?= /opt/homebrew/opt/icu4c
 
 # Required for cg3/hfst native compilation on macOS.
 export CPLUS_INCLUDE_PATH ?= $(ICU4C_PREFIX)/include
-export RUSTFLAGS ?= -L native=$(ICU4C_PREFIX)/lib
+export RUSTFLAGS ?= -L native=$(ICU4C_PREFIX)/lib --cap-lints allow
+export MACOSX_DEPLOYMENT_TARGET ?= 14.0
+SWIFT_LINK_FLAGS ?= -Xlinker -w
 
 .PHONY: all rust swift test clean
 
@@ -19,7 +21,7 @@ rust:
 
 ## Build Swift package (requires Rust build first)
 swift: rust
-	swift build -c release
+	swift build -c release $(SWIFT_LINK_FLAGS)
 
 ## Run Rust tests (unit tests for the CG3 parser, etc.)
 test-rust:
@@ -29,7 +31,7 @@ test-rust:
 
 ## Run Swift tests
 test-swift: rust
-	swift test
+	swift test $(SWIFT_LINK_FLAGS)
 
 test: test-rust test-swift
 
