@@ -9,7 +9,7 @@ export RUSTFLAGS ?= -L native=$(ICU4C_PREFIX)/lib --cap-lints allow
 export MACOSX_DEPLOYMENT_TARGET ?= 14.0
 SWIFT_LINK_FLAGS ?= -Xlinker -w
 
-.PHONY: all rust swift test clean
+.PHONY: all rust swift test test-rust test-swift test-e2e demo clean
 
 all: rust swift
 
@@ -32,6 +32,11 @@ test-rust:
 ## Run Swift tests
 test-swift: rust
 	swift test $(SWIFT_LINK_FLAGS)
+
+## Run end-to-end Swift tests against a real bundle.drb.
+test-e2e: rust
+	swift test --filter DivvunAnalyserTests/testEndToEndLemmaLookup $(SWIFT_LINK_FLAGS)
+	swift test --filter DivvunAnalyserTests/testEndToEndNLTaggerTokenLemma $(SWIFT_LINK_FLAGS)
 
 test: test-rust test-swift
 
