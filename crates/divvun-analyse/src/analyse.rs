@@ -60,7 +60,8 @@ impl Analyser {
     /// Analyze a word and return all readings (lemma + tags).
     pub fn analyse(&self, word: &str) -> Result<Vec<Analysis>, AnalyserError> {
         let bundle = Arc::clone(&self.bundle);
-        let word = word.to_string();
+        let word_for_output = word.to_string();
+        let word_for_pipeline = word_for_output.clone();
 
         let raw = rt()
             .block_on(async move {
@@ -69,7 +70,7 @@ impl Analyser {
                     .await
                     .map_err(|e| AnalyserError::Pipeline(e.to_string()))?;
 
-                let mut stream = pipe.forward(Input::String(word)).await;
+                let mut stream = pipe.forward(Input::String(word_for_pipeline)).await;
 
                 use futures_util::StreamExt;
                 while let Some(Ok(input)) = stream.next().await {
@@ -85,7 +86,7 @@ impl Analyser {
                 Err(AnalyserError::EmptyOutput)
             })?;
 
-        Ok(cg3::parse_readings(&word_from_raw_input(word.as_str()), &raw))
+        Ok(cg3::parse_readings(&word_from_raw_input(word_for_output.as_str()), &raw))
     }
 
     /// Convenience method: return only the best lemma (first reading).

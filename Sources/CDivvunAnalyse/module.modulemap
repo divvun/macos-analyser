@@ -1,0 +1,4 @@
+module CDivvunAnalyse [system] {
+  header "include/divvun_analyse.h"
+  export *
+}

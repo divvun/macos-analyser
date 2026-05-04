@@ -10,7 +10,7 @@ use std::{
     ptr,
 };
 
-use crate::analyse::{Analyser, AnalyserError};
+use crate::analyse::Analyser;
 
 /// Opaque pointer to a loaded `Analyser`.
 pub struct DivvunAnalyserHandle(Analyser);

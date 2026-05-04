@@ -1,5 +1,6 @@
 /target/
 /.build/
+.vscode/
 *.xcuserstate
 *.xcworkspace/xcuserdata/
 DerivedData/

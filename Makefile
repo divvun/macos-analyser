@@ -1,6 +1,11 @@
 SME_BUNDLE ?= /Users/smo036/langtech/gut/giellalt/lang-sme/bygg/analyse/tools/analysers/bundle.drb
 RUST_TARGET ?= aarch64-apple-darwin
 DIVVUN_RUNTIME ?= ../divvun-runtime
+ICU4C_PREFIX ?= /opt/homebrew/opt/icu4c
+
+# Required for cg3/hfst native compilation on macOS.
+export CPLUS_INCLUDE_PATH ?= $(ICU4C_PREFIX)/include
+export RUSTFLAGS ?= -L native=$(ICU4C_PREFIX)/lib
 
 .PHONY: all rust swift test clean
 

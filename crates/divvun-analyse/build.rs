@@ -5,7 +5,7 @@ fn main() {
     // Point BUILD_ROOT to the divvun-runtime root so the sysroot path
     // .x/sysroot/{target} is found by divvun-runtime's build.rs.
     let runtime_root = std::path::Path::new(&manifest)
-        .join("../../../../divvun-runtime")
+        .join("../../../divvun-runtime")
         .canonicalize()
         .expect("Fann ikkje divvun-runtime-rota");
     std::env::set_var("BUILD_ROOT", runtime_root.to_str().unwrap());

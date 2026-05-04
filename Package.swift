@@ -1,7 +1,7 @@
 // swift-tools-version: 5.9
 import PackageDescription
 
-let rustLibDir = "crates/divvun-analyse/target/aarch64-apple-darwin/release"
+let rustLibDir = "target/aarch64-apple-darwin/release"
 
 let package = Package(
     name: "DivvunAnalyser",
@@ -25,7 +25,13 @@ let package = Package(
             linkerSettings: [
                 .unsafeFlags([
                     "-L", rustLibDir,
+                    "-L", "/opt/homebrew/opt/icu4c/lib",
                     "-ldivvun_analyse",
+                    "-lc++",
+                    "-llzma",
+                    "-licuuc",
+                    "-licui18n",
+                    "-licudata",
                 ])
             ]
         ),
@@ -34,7 +40,17 @@ let package = Package(
         .executableTarget(
             name: "DivvunXPCService",
             dependencies: ["DivvunAnalyser"],
-            path: "Sources/DivvunXPCService"
+            path: "Sources/DivvunXPCService",
+            linkerSettings: [
+                .unsafeFlags([
+                    "-L", "/opt/homebrew/opt/icu4c/lib",
+                    "-lc++",
+                    "-llzma",
+                    "-licuuc",
+                    "-licui18n",
+                    "-licudata",
+                ])
+            ]
         ),
 
         // Tests
