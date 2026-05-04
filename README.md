@@ -150,6 +150,35 @@ Planned/ongoing areas:
 - Hardening XPC integration and service lifecycle
 - Wider language/bundle configuration and distribution
 
+## Private API research (Phase 1 and Phase 2)
+
+The repository now includes a dedicated research track for documenting how
+Apple's internal NLP asset pipeline works, and what blocks third-party
+minority language providers from integrating with Dictionary.app/Spotlight.
+
+See:
+
+- `Research/README.md` for the full research plan, file map, and interpretation guide.
+- `Sources/DivvunNLResearch/` for the executable research tooling.
+
+Run the full research pipeline:
+
+```bash
+make research-phase1
+make research-phase2
+```
+
+The generated outputs are stored in:
+
+- `Research/phase1-coverage.txt`
+- `Research/phase1-assets.txt`
+- `Research/phase1-symbols.txt`
+- `Research/phase2-build.txt`
+- `Research/phase2-inject.txt`
+
+These reports are intended both as technical evidence and as basis material for
+Apple advocacy (Feedback Assistant / platform requests for minority language support).
+
 ## License
 
 This project is licensed under the MIT License.
