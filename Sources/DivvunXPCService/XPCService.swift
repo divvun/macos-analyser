@@ -1,5 +1,6 @@
 import Foundation
 import DivvunAnalyser
+import DivvunShared
 
 /// Implementation of the XPC service.
 /// Runs in a dedicated process space (LaunchDaemon or LaunchAgent).

@@ -1,5 +1,6 @@
 /target/
 /.build/
+DivvunAnalyser.app/
 .vscode/
 *.xcuserstate
 *.xcworkspace/xcuserdata/

@@ -8,8 +8,19 @@ export CPLUS_INCLUDE_PATH ?= $(ICU4C_PREFIX)/include
 export RUSTFLAGS ?= -L native=$(ICU4C_PREFIX)/lib --cap-lints allow
 export MACOSX_DEPLOYMENT_TARGET ?= 14.0
 SWIFT_LINK_FLAGS ?= -Xlinker -w
+DEMO_WORD ?= mánáid
+PROBE_LANG ?= se
+PROBE_TEXT ?= mánáid
 
-.PHONY: all rust swift test test-rust test-swift test-e2e demo clean
+# Directory where 'swift build -c release' writes its output.
+# SPM uses the host-arch variant on Apple Silicon; fall back to plain release.
+SWIFT_BIN ?= $(firstword $(wildcard .build/arm64-apple-macosx/release .build/release))
+
+# Bundle output paths
+APP_CONTENTS   := DivvunAnalyser.app/Contents
+APPEX_CONTENTS := $(APP_CONTENTS)/PlugIns/DivvunNLExtension.appex/Contents
+
+.PHONY: all rust swift build-app test test-rust test-swift test-e2e demo probe-nl clean install-app
 
 all: rust swift
 
@@ -42,12 +53,48 @@ test: test-rust test-swift
 
 ## Quick test: analyze a North Sami word with bundle.drb
 demo: rust
-	@echo "Analyserer 'mánáid' med nordsamisk bundle …"
+	@echo "Analyserer '$(DEMO_WORD)' med nordsamisk bundle …"
 	cd crates/divvun-analyse && \
 	  BUILD_ROOT=$(abspath $(DIVVUN_RUNTIME)) \
 	  cargo run --example analyse_word --target $(RUST_TARGET) -- \
-	    $(SME_BUNDLE) mánáid
+	    $(SME_BUNDLE) $(DEMO_WORD)
+
+## Probe whether NLTagger can resolve the Divvun lemma scheme from extension lookup.
+probe-nl: swift
+	swift run DivvunNLProbe --language "$(PROBE_LANG)" --text "$(PROBE_TEXT)"
 
 clean:
 	cargo clean
 	swift package clean
+	rm -rf DivvunAnalyser.app
+
+## Assemble DivvunAnalyser.app with the embedded NL App Extension.
+## The app bundle can then be copied to /Applications (see install-app).
+##
+## Bundle layout after build:
+##   DivvunAnalyser.app/
+##     Contents/
+##       Info.plist
+##       MacOS/DivvunHostApp          ← background agent binary
+##       PlugIns/
+##         DivvunNLExtension.appex/
+##           Contents/
+##             Info.plist
+##             MacOS/DivvunNLExtension ← extension binary
+##
+## Note: code-signing is required for the extension to activate system-wide.
+##       Use Xcode or 'codesign' for that step.
+build-app: swift
+	@echo "Assembling DivvunAnalyser.app …"
+	mkdir -p $(APP_CONTENTS)/MacOS
+	mkdir -p $(APPEX_CONTENTS)/MacOS
+	cp $(SWIFT_BIN)/DivvunHostApp       $(APP_CONTENTS)/MacOS/DivvunHostApp
+	cp Sources/DivvunHostApp/Info.plist  $(APP_CONTENTS)/Info.plist
+	cp $(SWIFT_BIN)/DivvunNLExtension          $(APPEX_CONTENTS)/MacOS/DivvunNLExtension
+	cp Sources/DivvunNLExtension/Info.plist     $(APPEX_CONTENTS)/Info.plist
+	@echo "Done → DivvunAnalyser.app"
+
+## Copy the assembled app to /Applications (requires build-app first).
+install-app: build-app
+	cp -R DivvunAnalyser.app /Applications/
+	@echo "Installed → /Applications/DivvunAnalyser.app"

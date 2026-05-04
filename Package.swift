@@ -8,7 +8,11 @@ let package = Package(
     platforms: [.macOS(.v14)],
     products: [
         .library(name: "DivvunAnalyser", targets: ["DivvunAnalyser"]),
-        .executable(name: "DivvunXPCService", targets: ["DivvunXPCService"]),
+        .library(name: "DivvunShared",   targets: ["DivvunShared"]),
+        .executable(name: "DivvunXPCService",    targets: ["DivvunXPCService"]),
+        .executable(name: "DivvunNLExtension",   targets: ["DivvunNLExtension"]),
+        .executable(name: "DivvunHostApp",        targets: ["DivvunHostApp"]),
+        .executable(name: "DivvunNLProbe",        targets: ["DivvunNLProbe"]),
     ],
     targets: [
         // C header bridge to the Rust library
@@ -36,10 +40,16 @@ let package = Package(
             ]
         ),
 
+        // Shared XPC protocol used by both the service and the extension
+        .target(
+            name: "DivvunShared",
+            path: "Sources/DivvunShared"
+        ),
+
         // Background XPC service
         .executableTarget(
             name: "DivvunXPCService",
-            dependencies: ["DivvunAnalyser"],
+            dependencies: ["DivvunAnalyser", "DivvunShared"],
             path: "Sources/DivvunXPCService",
             linkerSettings: [
                 .unsafeFlags([
@@ -51,6 +61,28 @@ let package = Package(
                     "-licudata",
                 ])
             ]
+        ),
+
+        // NL App Extension – lightweight handler, delegates to XPC service
+        .executableTarget(
+            name: "DivvunNLExtension",
+            dependencies: ["DivvunShared"],
+            path: "Sources/DivvunNLExtension",
+            exclude: ["Info.plist"]
+        ),
+
+        // Minimal host app that contains the NL App Extension bundle
+        .executableTarget(
+            name: "DivvunHostApp",
+            dependencies: ["DivvunShared"],
+            path: "Sources/DivvunHostApp",
+            exclude: ["Info.plist"]
+        ),
+
+        // Small command-line probe for validating NLTagger extension lookup.
+        .executableTarget(
+            name: "DivvunNLProbe",
+            path: "Sources/DivvunNLProbe"
         ),
 
         // Tests

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+    "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleIdentifier</key>
+    <string>no.divvun.DivvunAnalyser.NLExtension</string>
+    <key>CFBundleName</key>
+    <string>DivvunNLExtension</string>
+    <key>CFBundleVersion</key>
+    <string>1</string>
+    <key>CFBundleShortVersionString</key>
+    <string>1.0</string>
+    <key>CFBundleExecutable</key>
+    <string>DivvunNLExtension</string>
+    <!-- App Extension bundle type -->
+    <key>CFBundlePackageType</key>
+    <string>XPC!</string>
+
+    <!-- NL Extension registration -->
+    <key>NSExtension</key>
+    <dict>
+        <!-- Registers with the NaturalLanguage framework extension point -->
+        <key>NSExtensionPointIdentifier</key>
+        <string>com.apple.natural-language</string>
+        <key>NSExtensionPrincipalClass</key>
+        <string>DivvunExtensionHandler</string>
+        <!-- Languages this extension provides analysis for (BCP-47) -->
+        <key>NLSupportedLanguages</key>
+        <array>
+            <!-- North Sami -->
+            <string>se</string>
+        </array>
+        <!-- Custom tag scheme exposed to NLTagger clients -->
+        <key>NLTagScheme</key>
+        <string>no.divvun.lemma</string>
+    </dict>
+</dict>
+</plist>
