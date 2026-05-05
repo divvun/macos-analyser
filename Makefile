@@ -20,7 +20,7 @@ SWIFT_BIN ?= $(firstword $(wildcard .build/arm64-apple-macosx/release .build/rel
 APP_CONTENTS   := DivvunAnalyser.app/Contents
 APPEX_CONTENTS := $(APP_CONTENTS)/PlugIns/DivvunNLExtension.appex/Contents
 
-.PHONY: all rust swift build-app test test-rust test-swift test-e2e demo probe-nl research-phase1 research-phase2 research-phase2-env clean install-app
+.PHONY: all rust swift build-app test test-rust test-swift test-e2e demo probe-nl research-phase1 research-phase2 research-phase2-env research-phase2-real-fst clean install-app
 
 all: rust swift
 
@@ -148,6 +148,24 @@ research-phase2-env:
 	@echo "--- Full injection run with strongest override combo ---" | tee Research/phase2-inject-env.txt
 	NL_LANGUAGE_MODEL_PATH="$$PWD/Research/assets" LINGUISTIC_DATA_PATH="$$PWD/Research/assets" swift run DivvunNLResearch phase2-inject Research/assets/se 2>&1 | tee -a Research/phase2-inject-env.txt
 	@echo "Phase 2 env override tests complete. Reports: Research/phase2-env-overrides.txt and Research/phase2-inject-env.txt"
+
+## Phase 2 (real FST): replace placeholder fst.dat with a real OpenFST const file
+## converted from lang-sme analyser-gt-norm.hfstol, then run phase2-inject.
+## Output is written to Research/phase2-inject-real-fst.txt
+research-phase2-real-fst:
+	mkdir -p Research/assets/se/se.lm
+	hfst-fst2fst -b -t \
+	  -i /Users/smo036/langtech/gut/giellalt/lang-sme/bygg/analyse/src/fst/analyser-gt-norm.hfstol \
+	  -o Research/assets/se/se.lm/analyser-gt-norm.openfst
+	fstconvert --fst_type=const \
+	  Research/assets/se/se.lm/analyser-gt-norm.openfst \
+	  Research/assets/se/se.lm/fst.dat
+	@echo "--- Generated fst.dat header ---" | tee Research/phase2-inject-real-fst.txt
+	xxd -l 64 Research/assets/se/se.lm/fst.dat | tee -a Research/phase2-inject-real-fst.txt
+	@echo | tee -a Research/phase2-inject-real-fst.txt
+	@echo "--- Running phase2-inject with real converted fst.dat ---" | tee -a Research/phase2-inject-real-fst.txt
+	swift run DivvunNLResearch phase2-inject Research/assets/se 2>&1 | tee -a Research/phase2-inject-real-fst.txt
+	@echo "Phase 2 real-fst test complete. Report: Research/phase2-inject-real-fst.txt"
 
 ## Copy the assembled app to /Applications (requires build-app first).
 install-app: build-app

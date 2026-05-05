@@ -49,6 +49,9 @@ Outputs:
   Process-start environment variable matrix (baseline vs override combinations).
 - `phase2-inject-env.txt`:
   Full `phase2-inject` run with strongest env override combination enabled.
+- `phase2-inject-real-fst.txt`:
+  Full `phase2-inject` run after replacing placeholder `fst.dat` with a real
+  OpenFST const transducer converted from North Sami `analyser-gt-norm.hfstol`.
 
 ## Tooling map
 
@@ -88,6 +91,35 @@ Important note:
 - `fst.dat` uses OpenFST constant format (magic `d6 fd b2 7e`, type `const`).
 - `Lemmatizer-*.dat` appears proprietary Apple format (magic `24 31 12 00`).
 
+### Step 2 conversion (HFST -> OpenFST const)
+
+Source transducer used:
+
+- `/Users/smo036/langtech/gut/giellalt/lang-sme/bygg/analyse/src/fst/analyser-gt-norm.hfstol`
+
+Commands used:
+
+```bash
+hfst-fst2fst -b -t \
+  -i /Users/smo036/langtech/gut/giellalt/lang-sme/bygg/analyse/src/fst/analyser-gt-norm.hfstol \
+  -o Research/assets/se/se.lm/analyser-gt-norm.openfst
+
+fstconvert --fst_type=const \
+  Research/assets/se/se.lm/analyser-gt-norm.openfst \
+  Research/assets/se/se.lm/fst.dat
+```
+
+Header verification:
+
+- Generated `fst.dat` starts with `d6 fd b2 7e` + `const` + `standard`
+- Apple `pt.lm/fst.dat` starts with the same OpenFST signature
+
+Interpretation:
+
+- Format-level compatibility for `fst.dat` is confirmed.
+- Even with this real converted `fst.dat`, `.lemma` for `se` remains unavailable
+  in stock macOS tests (`phase2-inject-real-fst.txt`).
+
 ## How to run
 
 From repository root:
@@ -124,6 +156,9 @@ Use this interpretation order:
   Shows that process-start env overrides still do not expose `.lemma` for `se`.
 6. `phase2-inject-env.txt`
   Confirms no strategy success even when env overrides are pre-set at launch.
+7. `phase2-inject-real-fst.txt`
+  Confirms that a real converted North Sami OpenFST const model still does not
+  unlock `.lemma` without additional Apple-internal registration/format pieces.
 
 ## Expected baseline findings
 
