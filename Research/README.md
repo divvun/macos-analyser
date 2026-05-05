@@ -61,6 +61,9 @@ Outputs:
 - `phase2-sidecar-probe.txt`:
   Sidecar file probe for `sp.dat`/`model.dat`/`overrides.dat` plus namespace
   analysis of Apple FST numeric labels.
+- `phase2-token-id-correlation.txt`:
+  Correlation probe between Apple FST label IDs and raw 32-bit values in sidecar
+  binaries to test whether ID tables are stored directly.
 
 ## Tooling map
 
@@ -140,6 +143,7 @@ make research-phase2-env
 make research-phase2-fst-io
 make research-phase2-label-probe
 make research-phase2-sidecar-probe
+make research-phase2-token-id-correlation
 ```
 
 Or run subcommands directly:
@@ -183,6 +187,10 @@ Use this interpretation order:
   Shows that Apple output labels are mostly namespaced IDs (`0x200xxxxx`) and
   that `sp.dat`/`model.dat` are non-protobuf custom binaries, likely carrying
   the token vocabulary/state used around `fst.dat`.
+11. `phase2-token-id-correlation.txt`
+  Shows sparse direct overlap between FST labels and raw sidecar u32 values,
+  supporting the hypothesis that mapping is encoded/packed, not stored as plain
+  little-endian ID tables.
 
 ## Expected baseline findings
 

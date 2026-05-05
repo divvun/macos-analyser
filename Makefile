@@ -20,7 +20,7 @@ SWIFT_BIN ?= $(firstword $(wildcard .build/arm64-apple-macosx/release .build/rel
 APP_CONTENTS   := DivvunAnalyser.app/Contents
 APPEX_CONTENTS := $(APP_CONTENTS)/PlugIns/DivvunNLExtension.appex/Contents
 
-.PHONY: all rust swift build-app test test-rust test-swift test-e2e demo probe-nl research-phase1 research-phase2 research-phase2-env research-phase2-real-fst research-phase2-fst-io research-phase2-label-probe research-phase2-sidecar-probe clean install-app
+.PHONY: all rust swift build-app test test-rust test-swift test-e2e demo probe-nl research-phase1 research-phase2 research-phase2-env research-phase2-real-fst research-phase2-fst-io research-phase2-label-probe research-phase2-sidecar-probe research-phase2-token-id-correlation clean install-app
 
 all: rust swift
 
@@ -298,6 +298,13 @@ research-phase2-sidecar-probe:
 	echo "- sp.dat/model.dat are custom binary blobs (not raw protobuf), likely carrying the ID vocabulary/model state used with fst.dat." | tee -a $$REPORT; \
 	echo "- Together with step 2c (no raw-word composition paths), this supports an upstream token-ID protocol mismatch vs analyser-gt-norm." | tee -a $$REPORT
 	@echo "Phase 2 sidecar probe complete. Report: Research/phase2-sidecar-probe.txt"
+
+## Phase 2 (token-ID correlation): correlate Apple fst input/output IDs with
+## raw u32 values in sidecar files to test whether ID mapping is stored directly.
+## Output is written to Research/phase2-token-id-correlation.txt
+research-phase2-token-id-correlation:
+	python3 Research/tools/token_id_correlation.py
+	@echo "Phase 2 token-ID correlation complete. Report: Research/phase2-token-id-correlation.txt"
 
 ## Copy the assembled app to /Applications (requires build-app first).
 install-app: build-app

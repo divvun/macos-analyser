@@ -1,0 +1,54 @@
+=== Step 2e: Token-ID correlation probe ===
+Tue May  5 12:37:51 UTC 2026
+
+[A] Apple FST label inventory
+input labels: total=6438 unique=485 min=0 max=610118
+output labels: total=6438 unique=66 min=87 max=536913453
+
+[B] Output namespace breakdown
+label>>20 = 0 (0x0): 2 labels
+label>>20 = 512 (0x200): 64 labels
+Top output labels by arc frequency:
+  87 (0x57) => 6040 arcs
+  88 (0x58) => 164 arcs
+  536870914 (0x20000002) => 29 arcs
+  536871426 (0x20000202) => 29 arcs
+  536903721 (0x20008029) => 15 arcs
+  536879122 (0x20002012) => 8 arcs
+  536913453 (0x2000a62d) => 6 arcs
+  536903713 (0x20008021) => 6 arcs
+  536879125 (0x20002015) => 6 arcs
+  536903715 (0x20008023) => 5 arcs
+  536903719 (0x20008027) => 5 arcs
+  536888328 (0x20004408) => 5 arcs
+  536903720 (0x20008028) => 5 arcs
+  536903718 (0x20008026) => 5 arcs
+  536888584 (0x20004508) => 5 arcs
+  536870921 (0x20000009) => 5 arcs
+  536903723 (0x2000802b) => 5 arcs
+  536870920 (0x20000008) => 4 arcs
+  536879124 (0x20002014) => 4 arcs
+  536895516 (0x2000601c) => 4 arcs
+
+[C] Direct U32 overlap with sidecar binaries
+sp.dat: u32_unique=73760 in_overlap=7 out_overlap=2
+  in overlap sample: [0, 1, 22, 68, 37901, 346338, 480353]
+  out overlap sample: [87, 88]
+model.dat: u32_unique=3409480 in_overlap=11 out_overlap=3
+  in overlap sample: [0, 1, 22, 333591, 334073, 336642, 337173, 339965, 460046, 528676, 585987]
+  out overlap sample: [88, 536870914, 536871425]
+overrides.dat: u32_unique=27 in_overlap=2 out_overlap=0
+  in overlap sample: [0, 1]
+  out overlap sample: []
+
+[D] Input-label distribution sanity checks
+labels within Unicode scalar range: 485/485
+labels above Unicode scalar range: 0
+contiguous runs (len>=8): 1
+  336635-336645 (len 11)
+
+[E] Interpretation
+- Output labels are overwhelmingly namespaced IDs (0x200xxxxx), indicating internal class/token signaling.
+- Direct U32 overlap between FST labels and sidecar blobs is sparse, suggesting sidecars do not store plain ID tables as raw little-endian integers.
+- Together with step 2c (no paths for raw Unicode word composition), this supports an internal tokenizer/ID protocol before FST composition.
+- Most probable: sp.dat/model.dat encode the vocabulary and neural state in custom packed formats.
