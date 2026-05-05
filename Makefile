@@ -20,7 +20,7 @@ SWIFT_BIN ?= $(firstword $(wildcard .build/arm64-apple-macosx/release .build/rel
 APP_CONTENTS   := DivvunAnalyser.app/Contents
 APPEX_CONTENTS := $(APP_CONTENTS)/PlugIns/DivvunNLExtension.appex/Contents
 
-.PHONY: all rust swift build-app test test-rust test-swift test-e2e demo probe-nl research-phase1 research-phase2 research-phase2-env research-phase2-real-fst research-phase2-fst-io clean install-app
+.PHONY: all rust swift build-app test test-rust test-swift test-e2e demo probe-nl research-phase1 research-phase2 research-phase2-env research-phase2-real-fst research-phase2-fst-io research-phase2-label-probe clean install-app
 
 all: rust swift
 
@@ -222,6 +222,33 @@ research-phase2-fst-io:
 	echo "- APPLE output labels are mostly numeric class/token IDs, not readable lemma/tag symbols." | tee -a $$REPORT; \
 	echo "- This indicates analyser-gt-norm and Apple fst.dat likely operate on different alphabets/protocols." | tee -a $$REPORT
 	@echo "Phase 2 FST I/O probe complete. Report: Research/phase2-fst-io-compat.txt"
+
+## Phase 2 (label probe): test whether Apple's fst.dat accepts raw Unicode word
+## codepoints as input labels by composing word acceptors against the Apple FST.
+## Output is written to Research/phase2-fst-label-probe.txt
+research-phase2-label-probe:
+	mkdir -p Research/tmp
+	APP_FST=/System/Library/AssetsV2/com_apple_MobileAsset_LinguisticData/e455d830fc4c363e92825363afa88cdb24239e34.asset/AssetData/pt.lm/fst.dat; \
+	REPORT=Research/phase2-fst-label-probe.txt; \
+	: > $$REPORT; \
+	echo "=== Step 2c: Apple label probe via composition ===" | tee -a $$REPORT; \
+	date -u | tee -a $$REPORT; \
+	echo | tee -a $$REPORT; \
+	for w in de a o que não portugal casa menino menina ação coração; do \
+	  echo "[word=$$w]" | tee -a $$REPORT; \
+	  perl -CS -e '$$w=$$ARGV[0]; @c=unpack("U*", $$w); $$s=0; for $$cp (@c){$$n=$$s+1; print "$$s $$n $$cp $$cp\n"; $$s=$$n;} print "$$s\n";' "$$w" > Research/tmp/query.txt; \
+	  fstcompile Research/tmp/query.txt > Research/tmp/query.fst; \
+	  fstcompose Research/tmp/query.fst $$APP_FST > Research/tmp/composed.fst; \
+	  if fstinfo Research/tmp/composed.fst | grep -q "# of states[[:space:]]*0"; then \
+	    echo "  no_path" | tee -a $$REPORT; \
+	  else \
+	    echo "  has_path" | tee -a $$REPORT; \
+	    fstshortestpath Research/tmp/composed.fst | fstprint | head -40 | sed 's/^/    /' | tee -a $$REPORT; \
+	  fi; \
+	  echo | tee -a $$REPORT; \
+	done; \
+	echo "Interpretation: if all probes are no_path, Apple fst.dat is likely expecting pre-tokenized IDs (or another encoding) rather than raw Unicode codepoint sequences." | tee -a $$REPORT
+	@echo "Phase 2 label probe complete. Report: Research/phase2-fst-label-probe.txt"
 
 ## Copy the assembled app to /Applications (requires build-app first).
 install-app: build-app

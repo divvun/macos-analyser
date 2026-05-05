@@ -55,6 +55,9 @@ Outputs:
 - `phase2-fst-io-compat.txt`:
   Direct comparison of what our converted FST and Apple FST appear to accept and
   emit (header, fstinfo properties, sample arcs, label stats, random path samples).
+- `phase2-fst-label-probe.txt`:
+  Composition-based probe that tests whether Apple's FST accepts raw Unicode
+  codepoint sequences for common Portuguese words.
 
 ## Tooling map
 
@@ -132,6 +135,7 @@ make research-phase1
 make research-phase2
 make research-phase2-env
 make research-phase2-fst-io
+make research-phase2-label-probe
 ```
 
 Or run subcommands directly:
@@ -167,6 +171,10 @@ Use this interpretation order:
   Shows likely protocol mismatch: analyser-gt-norm uses a readable morphology
   alphabet (symbols/tags), while Apple's `fst.dat` uses dense numeric IDs with
   no symbol tables.
+9. `phase2-fst-label-probe.txt`
+  Shows that composing raw Unicode word sequences against Apple `fst.dat`
+  yields no paths in tested examples, suggesting Apple's model expects a
+  different upstream encoding/token-ID protocol.
 
 ## Expected baseline findings
 

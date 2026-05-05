@@ -1,0 +1,37 @@
+=== Step 2c: Apple label probe via composition ===
+Tue May  5 12:14:49 UTC 2026
+
+[word=de]
+  no_path
+
+[word=a]
+  no_path
+
+[word=o]
+  no_path
+
+[word=que]
+  no_path
+
+[word=não]
+  no_path
+
+[word=portugal]
+  no_path
+
+[word=casa]
+  no_path
+
+[word=menino]
+  no_path
+
+[word=menina]
+  no_path
+
+[word=ação]
+  no_path
+
+[word=coração]
+  no_path
+
+Interpretation: if all probes are no_path, Apple fst.dat is likely expecting pre-tokenized IDs (or another encoding) rather than raw Unicode codepoint sequences.
