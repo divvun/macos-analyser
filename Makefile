@@ -20,7 +20,7 @@ SWIFT_BIN ?= $(firstword $(wildcard .build/arm64-apple-macosx/release .build/rel
 APP_CONTENTS   := DivvunAnalyser.app/Contents
 APPEX_CONTENTS := $(APP_CONTENTS)/PlugIns/DivvunNLExtension.appex/Contents
 
-.PHONY: all rust swift build-app test test-rust test-swift test-e2e demo probe-nl research-phase1 research-phase2 research-phase2-env research-phase2-real-fst research-phase2-fst-io research-phase2-label-probe clean install-app
+.PHONY: all rust swift build-app test test-rust test-swift test-e2e demo probe-nl research-phase1 research-phase2 research-phase2-env research-phase2-real-fst research-phase2-fst-io research-phase2-label-probe research-phase2-sidecar-probe clean install-app
 
 all: rust swift
 
@@ -249,6 +249,55 @@ research-phase2-label-probe:
 	done; \
 	echo "Interpretation: if all probes are no_path, Apple fst.dat is likely expecting pre-tokenized IDs (or another encoding) rather than raw Unicode codepoint sequences." | tee -a $$REPORT
 	@echo "Phase 2 label probe complete. Report: Research/phase2-fst-label-probe.txt"
+
+## Phase 2 (sidecar probe): inspect sp.dat/model.dat/overrides.dat and analyze
+## Apple fst label namespaces to map probable token-ID protocol boundaries.
+## Output is written to Research/phase2-sidecar-probe.txt
+research-phase2-sidecar-probe:
+	mkdir -p Research
+	PTLM=/System/Library/AssetsV2/com_apple_MobileAsset_LinguisticData/e455d830fc4c363e92825363afa88cdb24239e34.asset/AssetData/pt.lm; \
+	APP_FST=$$PTLM/fst.dat; \
+	REPORT=Research/phase2-sidecar-probe.txt; \
+	: > $$REPORT; \
+	echo "=== Step 2d: Sidecar/token-ID probe (sp.dat + model.dat) ===" | tee -a $$REPORT; \
+	date -u | tee -a $$REPORT; \
+	echo | tee -a $$REPORT; \
+	echo "[A] pt.lm contents and file signatures" | tee -a $$REPORT; \
+	ls -lh $$PTLM | tee -a $$REPORT; \
+	file $$PTLM/* | tee -a $$REPORT; \
+	echo | tee -a $$REPORT; \
+	echo "[B] Raw headers" | tee -a $$REPORT; \
+	echo "sp.dat:" | tee -a $$REPORT; \
+	xxd -l 128 $$PTLM/sp.dat | tee -a $$REPORT; \
+	echo "model.dat:" | tee -a $$REPORT; \
+	xxd -l 128 $$PTLM/model.dat | tee -a $$REPORT; \
+	echo "overrides.dat:" | tee -a $$REPORT; \
+	xxd -l 128 $$PTLM/overrides.dat | tee -a $$REPORT; \
+	echo | tee -a $$REPORT; \
+	echo "[C] Protobuf raw decode attempt" | tee -a $$REPORT; \
+	echo "sp.dat:" | tee -a $$REPORT; \
+	(protoc --decode_raw < $$PTLM/sp.dat 2>&1 | head -5) | tee -a $$REPORT; \
+	echo "overrides.dat:" | tee -a $$REPORT; \
+	(protoc --decode_raw < $$PTLM/overrides.dat 2>&1 | head -5) | tee -a $$REPORT; \
+	echo | tee -a $$REPORT; \
+	echo "[D] Apple fst output-label namespace analysis" | tee -a $$REPORT; \
+	fstprint $$APP_FST | awk 'NF>=4{aout[$$4]++} END{small=0; big=0; for(k in aout){if(k==87||k==88)small++; else big++; p[int(k/1048576)]++;} print "unique_output_labels=" length(aout); print "small_labels(87/88)=" small; print "namespaced_labels(~0x200xxxxx)=" big; print "prefix_counts(label>>20):"; for(x in p) printf "  %d (0x%x): %d\\n", x, x, p[x]; }' | tee -a $$REPORT; \
+	echo | tee -a $$REPORT; \
+	echo "Top-20 output labels by frequency:" | tee -a $$REPORT; \
+	fstprint $$APP_FST | awk 'NF>=4{aout[$$4]++} END{for(k in aout) printf "%d\\t%d\\t0x%x\\n", aout[k], k, k}' | sort -nr | head -20 | tee -a $$REPORT; \
+	echo | tee -a $$REPORT; \
+	echo "[E] Input-label range and sample" | tee -a $$REPORT; \
+	fstprint $$APP_FST | awk 'NF>=4{ain[$$3]=1} END{first=1; for(k in ain){n=k+0; if(first){min=n; max=n; first=0} if(n<min)min=n; if(n>max)max=n; if(n<=1114111)u++; else nu++;} print "unique_input_labels=" length(ain); print "min=" min " max=" max; print "unicode_range_labels=" u " non_unicode=" (nu+0); }' | tee -a $$REPORT; \
+	echo | tee -a $$REPORT; \
+	echo "First 60 input labels (sorted):" | tee -a $$REPORT; \
+	fstprint $$APP_FST | awk 'NF>=4{ain[$$3]=1} END{for(k in ain) print (k+0)}' | sort -n | head -60 | tee -a $$REPORT; \
+	echo | tee -a $$REPORT; \
+	echo "[F] Interpretation" | tee -a $$REPORT; \
+	echo "- Apple fst output labels are mostly in namespace 0x20000000+ (bitflag/ID space), plus two small labels 0x57/0x58." | tee -a $$REPORT; \
+	echo "- This strongly suggests output is internal token/class IDs, not direct lemma strings or tag symbols." | tee -a $$REPORT; \
+	echo "- sp.dat/model.dat are custom binary blobs (not raw protobuf), likely carrying the ID vocabulary/model state used with fst.dat." | tee -a $$REPORT; \
+	echo "- Together with step 2c (no raw-word composition paths), this supports an upstream token-ID protocol mismatch vs analyser-gt-norm." | tee -a $$REPORT
+	@echo "Phase 2 sidecar probe complete. Report: Research/phase2-sidecar-probe.txt"
 
 ## Copy the assembled app to /Applications (requires build-app first).
 install-app: build-app

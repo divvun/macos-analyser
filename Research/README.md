@@ -58,6 +58,9 @@ Outputs:
 - `phase2-fst-label-probe.txt`:
   Composition-based probe that tests whether Apple's FST accepts raw Unicode
   codepoint sequences for common Portuguese words.
+- `phase2-sidecar-probe.txt`:
+  Sidecar file probe for `sp.dat`/`model.dat`/`overrides.dat` plus namespace
+  analysis of Apple FST numeric labels.
 
 ## Tooling map
 
@@ -136,6 +139,7 @@ make research-phase2
 make research-phase2-env
 make research-phase2-fst-io
 make research-phase2-label-probe
+make research-phase2-sidecar-probe
 ```
 
 Or run subcommands directly:
@@ -175,6 +179,10 @@ Use this interpretation order:
   Shows that composing raw Unicode word sequences against Apple `fst.dat`
   yields no paths in tested examples, suggesting Apple's model expects a
   different upstream encoding/token-ID protocol.
+10. `phase2-sidecar-probe.txt`
+  Shows that Apple output labels are mostly namespaced IDs (`0x200xxxxx`) and
+  that `sp.dat`/`model.dat` are non-protobuf custom binaries, likely carrying
+  the token vocabulary/state used around `fst.dat`.
 
 ## Expected baseline findings
 
