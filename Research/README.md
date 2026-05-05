@@ -52,6 +52,9 @@ Outputs:
 - `phase2-inject-real-fst.txt`:
   Full `phase2-inject` run after replacing placeholder `fst.dat` with a real
   OpenFST const transducer converted from North Sami `analyser-gt-norm.hfstol`.
+- `phase2-fst-io-compat.txt`:
+  Direct comparison of what our converted FST and Apple FST appear to accept and
+  emit (header, fstinfo properties, sample arcs, label stats, random path samples).
 
 ## Tooling map
 
@@ -128,6 +131,7 @@ From repository root:
 make research-phase1
 make research-phase2
 make research-phase2-env
+make research-phase2-fst-io
 ```
 
 Or run subcommands directly:
@@ -159,6 +163,10 @@ Use this interpretation order:
 7. `phase2-inject-real-fst.txt`
   Confirms that a real converted North Sami OpenFST const model still does not
   unlock `.lemma` without additional Apple-internal registration/format pieces.
+8. `phase2-fst-io-compat.txt`
+  Shows likely protocol mismatch: analyser-gt-norm uses a readable morphology
+  alphabet (symbols/tags), while Apple's `fst.dat` uses dense numeric IDs with
+  no symbol tables.
 
 ## Expected baseline findings
 

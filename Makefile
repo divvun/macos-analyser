@@ -20,7 +20,7 @@ SWIFT_BIN ?= $(firstword $(wildcard .build/arm64-apple-macosx/release .build/rel
 APP_CONTENTS   := DivvunAnalyser.app/Contents
 APPEX_CONTENTS := $(APP_CONTENTS)/PlugIns/DivvunNLExtension.appex/Contents
 
-.PHONY: all rust swift build-app test test-rust test-swift test-e2e demo probe-nl research-phase1 research-phase2 research-phase2-env research-phase2-real-fst clean install-app
+.PHONY: all rust swift build-app test test-rust test-swift test-e2e demo probe-nl research-phase1 research-phase2 research-phase2-env research-phase2-real-fst research-phase2-fst-io clean install-app
 
 all: rust swift
 
@@ -166,6 +166,62 @@ research-phase2-real-fst:
 	@echo "--- Running phase2-inject with real converted fst.dat ---" | tee -a Research/phase2-inject-real-fst.txt
 	swift run DivvunNLResearch phase2-inject Research/assets/se 2>&1 | tee -a Research/phase2-inject-real-fst.txt
 	@echo "Phase 2 real-fst test complete. Report: Research/phase2-inject-real-fst.txt"
+
+## Phase 2 (FST I/O): compare the I/O alphabet/protocol used by our converted
+## analyser-gt-norm fst.dat and Apple's pt.lm/fst.dat.
+## Output is written to Research/phase2-fst-io-compat.txt
+research-phase2-fst-io:
+	mkdir -p Research
+	APP_FST=/System/Library/AssetsV2/com_apple_MobileAsset_LinguisticData/e455d830fc4c363e92825363afa88cdb24239e34.asset/AssetData/pt.lm/fst.dat; \
+	OUR_FST=Research/assets/se/se.lm/fst.dat; \
+	REPORT=Research/phase2-fst-io-compat.txt; \
+	: > $$REPORT; \
+	echo "=== Step 2b: FST I/O compatibility probe ===" | tee -a $$REPORT; \
+	date -u | tee -a $$REPORT; \
+	echo | tee -a $$REPORT; \
+	echo "[A] Header signatures" | tee -a $$REPORT; \
+	echo "OUR:" | tee -a $$REPORT; \
+	xxd -l 64 $$OUR_FST | tee -a $$REPORT; \
+	echo "APPLE:" | tee -a $$REPORT; \
+	xxd -l 64 $$APP_FST | tee -a $$REPORT; \
+	echo | tee -a $$REPORT; \
+	echo "[B] fstinfo summary" | tee -a $$REPORT; \
+	echo "OUR:" | tee -a $$REPORT; \
+	fstinfo $$OUR_FST | tee -a $$REPORT; \
+	echo "APPLE:" | tee -a $$REPORT; \
+	fstinfo $$APP_FST | tee -a $$REPORT; \
+	echo | tee -a $$REPORT; \
+	echo "[C] First 80 arcs from start region (fstprint)" | tee -a $$REPORT; \
+	echo "OUR:" | tee -a $$REPORT; \
+	fstprint $$OUR_FST | head -80 | tee -a $$REPORT; \
+	echo "APPLE:" | tee -a $$REPORT; \
+	fstprint $$APP_FST | head -80 | tee -a $$REPORT; \
+	echo | tee -a $$REPORT; \
+	echo "[D] Label statistics" | tee -a $$REPORT; \
+	OUR_ARCS=$$(fstprint $$OUR_FST | awk 'NF>=4{c++} END{print c+0}'); \
+	APP_ARCS=$$(fstprint $$APP_FST | awk 'NF>=4{c++} END{print c+0}'); \
+	OUR_UIN=$$(fstprint $$OUR_FST | awk 'NF>=4{print $$3}' | sort -u | wc -l | tr -d ' '); \
+	OUR_UOUT=$$(fstprint $$OUR_FST | awk 'NF>=4{print $$4}' | sort -u | wc -l | tr -d ' '); \
+	APP_UIN=$$(fstprint $$APP_FST | awk 'NF>=4{print $$3}' | sort -u | wc -l | tr -d ' '); \
+	APP_UOUT=$$(fstprint $$APP_FST | awk 'NF>=4{print $$4}' | sort -u | wc -l | tr -d ' '); \
+	echo "OUR: arcs=$$OUR_ARCS unique_in=$$OUR_UIN unique_out=$$OUR_UOUT" | tee -a $$REPORT; \
+	echo "APPLE: arcs=$$APP_ARCS unique_in=$$APP_UIN unique_out=$$APP_UOUT" | tee -a $$REPORT; \
+	echo | tee -a $$REPORT; \
+	echo "APPLE top-20 output labels (frequency):" | tee -a $$REPORT; \
+	fstprint $$APP_FST | awk 'NF>=4{out[$$4]++} END{for (k in out) print out[k], k}' | sort -nr | head -20 | tee -a $$REPORT; \
+	echo | tee -a $$REPORT; \
+	echo "[E] Random path samples (OpenFST fstrandgen)" | tee -a $$REPORT; \
+	echo "OUR random samples:" | tee -a $$REPORT; \
+	fstrandgen --npath=10 --max_length=20 $$OUR_FST | fstprint | head -120 | tee -a $$REPORT; \
+	echo "APPLE random samples:" | tee -a $$REPORT; \
+	fstrandgen --npath=10 --max_length=20 $$APP_FST | fstprint | head -120 | tee -a $$REPORT; \
+	echo | tee -a $$REPORT; \
+	echo "[F] Initial interpretation" | tee -a $$REPORT; \
+	echo "- OUR fst.dat contains human-readable symbol labels/tags (HFST morphology alphabet)." | tee -a $$REPORT; \
+	echo "- APPLE fst.dat has no symbol tables and uses dense numeric label IDs." | tee -a $$REPORT; \
+	echo "- APPLE output labels are mostly numeric class/token IDs, not readable lemma/tag symbols." | tee -a $$REPORT; \
+	echo "- This indicates analyser-gt-norm and Apple fst.dat likely operate on different alphabets/protocols." | tee -a $$REPORT
+	@echo "Phase 2 FST I/O probe complete. Report: Research/phase2-fst-io-compat.txt"
 
 ## Copy the assembled app to /Applications (requires build-app first).
 install-app: build-app
