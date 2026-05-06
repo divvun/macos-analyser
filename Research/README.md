@@ -98,6 +98,9 @@ Outputs:
 - `phase2-lm-private-roundtrip-probe.txt`:
   Step 2n direct private API roundtrip attempt (string -> tokenID -> string)
   using crash-isolated dynamic calls into LanguageModeling exports.
+- `phase2-lm-private-signature-probe.txt`:
+  Step 2o signature-recovery matrix for private LanguageModeling create/get-id/
+  to-string calls, executed per candidate signature in isolated subprocesses.
 
 ## Tooling map
 
@@ -187,6 +190,7 @@ make research-phase2-lm-launch-override-probe
 make research-phase2-lm-token-id-path-probe
 make research-phase2-lm-token-id-path-probe-strict
 make research-phase2-lm-private-roundtrip-probe
+make research-phase2-lm-private-signature-probe
 ```
 
 Or run subcommands directly:
@@ -269,6 +273,10 @@ Use this interpretation order:
   Attempts direct private `LanguageModeling` roundtrip calls under subprocess
   crash isolation, reporting whether a usable model handle and exact
   string<->tokenID<->string cycles can be observed with current signatures.
+21. `phase2-lm-private-signature-probe.txt`
+  Expands 2n into a signature matrix where each create candidate executes
+  create+roundtrip in the same subprocess, reducing false negatives from
+  cross-process pointer invalidation and identifying any working prototypes.
 
 ## Expected baseline findings
 
