@@ -1,0 +1,202 @@
+=== Step 2h: LM bundle role-correlation probe ===
+Wed May 06 05:56:23 UTC 2026
+
+bundle_count=17
+
+[A] Bundle-role matrix
+name	role	states	arcs	weighted	cyclic	in_det	out_det	sp	model	montreal	unilm	inline	morph	stlm	supplm	note
+Siri-fr.lm	siri,inline_completion,ngram_sidecars,montreal_nn	1153	3355	n	n	y	n	0	0	1	1	1	0	0	1	ok
+fr.lm	inline_completion,ngram_sidecars,montreal_nn	1153	3355	n	n	y	n	0	0	1	1	1	0	0	1	ok
+fr_CA.lm	ngram_sidecars	?	?	?	?	?	?	0	0	0	0	0	0	1	0	no fst.dat
+fr_CH.lm	ngram_sidecars	?	?	?	?	?	?	0	0	0	0	0	0	1	0	no fst.dat
+fr_FR.lm	ngram_sidecars	?	?	?	?	?	?	0	0	0	0	0	0	1	0	no fst.dat
+searchquery.lm	searchquery,ngram_sidecars	?	?	?	?	?	?	0	0	0	0	0	0	1	0	no fst.dat
+ru.lm	subword_nn	?	?	?	?	?	?	1	1	0	0	0	0	0	0	no fst.dat
+sv.lm	base_lm	639	2071	n	n	y	n	0	0	0	0	0	0	0	0	ok
+Siri-en.lm	siri,inline_completion,morphology,ngram_sidecars,montreal_nn	516	1367	n	n	y	n	0	0	1	1	1	1	0	0	ok
+en.lm	morphology	516	1367	n	n	y	n	0	0	0	0	0	1	0	0	ok
+searchquery.lm	searchquery	?	?	?	?	?	?	0	0	0	0	0	0	0	0	no fst.dat
+Siri-de.lm	siri,inline_completion,morphology	?	?	?	?	?	?	0	0	0	1	0	1	0	0	FATAL: FstInfo: Verify: FST not well-formed
+de.lm	morphology,subword_nn	?	?	?	?	?	?	1	1	0	0	0	1	0	0	FATAL: FstInfo: Verify: FST not well-formed
+searchquery.lm	searchquery	?	?	?	?	?	?	0	0	0	0	0	0	0	0	no fst.dat
+da.lm	base_lm	?	?	?	?	?	?	0	0	0	0	0	0	0	0	no fst.dat
+Siri-pt.lm	siri,inline_completion	1779	6438	n	n	y	n	0	0	0	1	0	0	0	0	ok
+pt.lm	subword_nn	1779	6438	n	n	y	n	1	1	0	0	0	0	0	0	ok
+
+[B] Role distribution
+ 3 ngram_sidecars
+ 2 subword_nn
+ 2 base_lm
+ 2 searchquery
+ 1 siri,inline_completion,ngram_sidecars,montreal_nn
+ 1 inline_completion,ngram_sidecars,montreal_nn
+ 1 searchquery,ngram_sidecars
+ 1 siri,inline_completion,morphology,ngram_sidecars,montreal_nn
+ 1 morphology
+ 1 siri,inline_completion,morphology
+ 1 morphology,subword_nn
+ 1 siri,inline_completion
+
+[C] File prevalence (all bundles)
+17 Info.plist
+11 blocklist.bundle
+ 9 fst.dat
+ 9 params.dat
+ 5 normalization.dat
+ 5 unilm.bundle
+ 4 stlm.dat
+ 3 inline_completion_params.plist
+ 3 montreal.dat
+ 3 montrealidmap.dat
+ 3 model.dat
+ 3 sp.dat
+ 3 overrides.dat
+ 2 supplm.dat
+ 2 morphology-v2.dat
+ 2 qp_blocklist.bundle
+ 2 lm.dat
+ 2 morphology.dat
+ 1 blocklist.dat
+ 1 sflm.dat
+ 1 stsfmap.dat
+ 1 adaptation-overrides.dat
+ 1 classmodel.dat
+ 1 coder_params.dat
+ 1 lm_gram3.dat
+
+[D] Role->file fingerprints
+role=base_lm
+   2 Info.plist
+   2 blocklist.bundle
+   1 fst.dat
+   1 params.dat
+
+role=inline_completion,ngram_sidecars,montreal_nn
+   1 Info.plist
+   1 blocklist.bundle
+   1 fst.dat
+   1 inline_completion_params.plist
+   1 montreal.dat
+   1 montrealidmap.dat
+   1 normalization.dat
+   1 params.dat
+   1 supplm.dat
+   1 unilm.bundle
+
+role=morphology
+   1 Info.plist
+   1 blocklist.bundle
+   1 fst.dat
+   1 morphology-v2.dat
+   1 qp_blocklist.bundle
+
+role=morphology,subword_nn
+   1 Info.plist
+   1 blocklist.bundle
+   1 fst.dat
+   1 model.dat
+   1 morphology.dat
+   1 normalization.dat
+   1 params.dat
+   1 sp.dat
+
+role=ngram_sidecars
+   3 Info.plist
+   3 stlm.dat
+   1 blocklist.dat
+
+role=searchquery
+   2 Info.plist
+   2 lm.dat
+
+role=searchquery,ngram_sidecars
+   1 Info.plist
+   1 sflm.dat
+   1 stlm.dat
+   1 stsfmap.dat
+
+role=siri,inline_completion
+   1 Info.plist
+   1 blocklist.bundle
+   1 fst.dat
+   1 overrides.dat
+   1 params.dat
+   1 unilm.bundle
+
+role=siri,inline_completion,morphology
+   1 Info.plist
+   1 blocklist.bundle
+   1 fst.dat
+   1 morphology.dat
+   1 normalization.dat
+   1 params.dat
+   1 unilm.bundle
+
+role=siri,inline_completion,morphology,ngram_sidecars,montreal_nn
+   1 Info.plist
+   1 adaptation-overrides.dat
+   1 blocklist.bundle
+   1 classmodel.dat
+   1 coder_params.dat
+   1 fst.dat
+   1 inline_completion_params.plist
+   1 lm_gram3.dat
+   1 montreal.dat
+   1 montrealidmap.dat
+   1 morphology-v2.dat
+   1 normalization.dat
+   1 overrides.dat
+   1 params.dat
+   1 qp_blocklist.bundle
+   1 unilm.bundle
+
+role=siri,inline_completion,ngram_sidecars,montreal_nn
+   1 Info.plist
+   1 blocklist.bundle
+   1 fst.dat
+   1 inline_completion_params.plist
+   1 montreal.dat
+   1 montrealidmap.dat
+   1 normalization.dat
+   1 params.dat
+   1 supplm.dat
+   1 unilm.bundle
+
+role=subword_nn
+   2 Info.plist
+   2 blocklist.bundle
+   2 model.dat
+   2 params.dat
+   2 sp.dat
+   1 fst.dat
+   1 overrides.dat
+
+[E] Runtime API anchors for role interpretation
+pattern=_LMLanguageModelCreatePredictionEnumerator
+          0x0004B7B0  _LMLanguageModelCreatePredictionEnumerator
+pattern=_LMLanguageModelEnumeratePredictionsWithBlock
+          0x0004B614  _LMLanguageModelEnumeratePredictionsWithBlock
+pattern=_LMLanguageModelConditionalProbability
+          0x0004AD98  _LMLanguageModelConditionalProbability
+          0x0004B350  _LMLanguageModelConditionalProbabilityVector
+          0x0004B358  _LMLanguageModelConditionalProbabilityVectorWithEffectiveOrders
+          0x0004B064  _LMLanguageModelConditionalProbabilityWithEffectiveOrder
+          0x0004B100  _LMLanguageModelConditionalProbabilityWithFlags
+          0x0004B1A0  _LMLanguageModelConditionalProbabilityWithFlagsAndLogs
+pattern=_LMVocabularyGetPriorProbabilityForTokenID
+          0x000521D0  _LMVocabularyGetPriorProbabilityForTokenID
+pattern=_LMVocabularyGetTokenIDForLemma
+          0x000521AC  _LMVocabularyGetTokenIDForLemma
+pattern=_NLMorphologicalAnalyzerEnumerateLemmasForToken
+          0x000B9188  _NLMorphologicalAnalyzerEnumerateLemmasForToken
+pattern=_MRLModelTrainBatch
+          0x00007E04  _MRLModelTrainBatch
+pattern=_NLEmbeddingSubwordVocabCopyTokenIdsForText
+          0x000AF3B4  _NLEmbeddingSubwordVocabCopyTokenIdsForText
+
+[F] Interpretation
+- 2h confirms multiple bundle profiles rather than one monolithic format (base, Siri, searchquery, inline-completion, morphology-augmented).
+- fst.dat is structurally consistent where present (usually deterministic + unweighted), while behavior likely comes from profile-specific sidecars.
+- subword/neural indicators (sp.dat, model.dat, montreal*.dat, unilm.bundle) cluster with prediction/completion-oriented profiles.
+- morphology files appear only in a subset of profiles, supporting separation between lemma/morph analysis and generic next-token prediction.
+- implication for Divvun: compatibility probably requires profile-level asset semantics, not only an OpenFST-compatible fst.dat.
