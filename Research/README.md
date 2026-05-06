@@ -95,6 +95,9 @@ Outputs:
   Step 2m strict validation of 2l using diacritic Portuguese words and
   shortest-path output-ID traces, to verify whether path observability remains
   consistent under stricter lexical inputs.
+- `phase2-lm-private-roundtrip-probe.txt`:
+  Step 2n direct private API roundtrip attempt (string -> tokenID -> string)
+  using crash-isolated dynamic calls into LanguageModeling exports.
 
 ## Tooling map
 
@@ -183,6 +186,7 @@ make research-phase2-se-subword-profile
 make research-phase2-lm-launch-override-probe
 make research-phase2-lm-token-id-path-probe
 make research-phase2-lm-token-id-path-probe-strict
+make research-phase2-lm-private-roundtrip-probe
 ```
 
 Or run subcommands directly:
@@ -261,6 +265,10 @@ Use this interpretation order:
   Re-checks the 2l signal with stricter word inputs (including diacritics) and
   shortest-path traces, to confirm or reject strict path observability before
   proceeding to direct private API roundtrip experiments.
+20. `phase2-lm-private-roundtrip-probe.txt`
+  Attempts direct private `LanguageModeling` roundtrip calls under subprocess
+  crash isolation, reporting whether a usable model handle and exact
+  string<->tokenID<->string cycles can be observed with current signatures.
 
 ## Expected baseline findings
 

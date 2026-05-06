@@ -1,0 +1,39 @@
+=== Step 2n: Private API roundtrip probe ===
+Wed May 06 07:59:51 UTC 2026
+
+[A] Export/symbol presence
+probe_exit=0
+LMLanguageModelCreate=1
+LMLanguageModelCreateStringForTokenID=1
+LMLanguageModelGetTokenIDForString=1
+LMLanguageModelGetTokenIDForUTF8String=1
+LMLanguageModelRelease=1
+_LMLanguageModelCreate=0
+_LMLanguageModelCreateStringForTokenID=0
+_LMLanguageModelGetTokenIDForString=0
+_LMLanguageModelGetTokenIDForUTF8String=0
+_LMLanguageModelRelease=0
+
+[B] Model create signature attempts (isolated)
+variant=v0 exit=0 model_ptr=0 symbol=LMLanguageModelCreate
+variant=v1 exit=0 model_ptr=0 symbol=LMLanguageModelCreate
+variant=v2 exit=0 model_ptr=0 symbol=LMLanguageModelCreate
+variant=v3 exit=-11 raw=
+
+[C] Roundtrip calls on selected model
+selected_model_ptr=0 (no create variant produced a model handle)
+
+[D] Decision signal
+create_nonzero_model=0
+roundtrip_exact_matches=0
+any_token_nonzero=0
+observed_result=ROUNDTRIP_BLOCKED
+
+[E] Interpretation
+- This step attempts direct private API roundtrip calls under crash isolation.
+- ROUNDTRIP_OBSERVED means at least one exact string -> tokenID -> string cycle succeeded.
+- ROUNDTRIP_BLOCKED means we could not obtain a usable model handle from probed create signatures.
+- A blocked result still narrows unknowns: next step is signature recovery from disassembly/prototypes.
+
+[F] JSON appendix
+{"symbols": {"_LMLanguageModelCreate": 0, "LMLanguageModelCreate": 1, "_LMLanguageModelRelease": 0, "LMLanguageModelRelease": 1, "_LMLanguageModelGetTokenIDForUTF8String": 0, "LMLanguageModelGetTokenIDForUTF8String": 1, "_LMLanguageModelGetTokenIDForString": 0, "LMLanguageModelGetTokenIDForString": 1, "_LMLanguageModelCreateStringForTokenID": 0, "LMLanguageModelCreateStringForTokenID": 1}, "create_results": [{"variant": "v0", "exit": 0, "raw": "{\"variant\": \"v0\", \"model_ptr\": 0, \"symbol\": \"LMLanguageModelCreate\"}", "model_ptr": 0, "symbol": "LMLanguageModelCreate"}, {"variant": "v1", "exit": 0, "raw": "{\"variant\": \"v1\", \"model_ptr\": 0, \"symbol\": \"LMLanguageModelCreate\"}", "model_ptr": 0, "symbol": "LMLanguageModelCreate"}, {"variant": "v2", "exit": 0, "raw": "{\"variant\": \"v2\", \"model_ptr\": 0, \"symbol\": \"LMLanguageModelCreate\"}", "model_ptr": 0, "symbol": "LMLanguageModelCreate"}, {"variant": "v3", "exit": -11, "raw": ""}], "selected_model_ptr": 0, "selected_variant": "", "selected_symbol": "", "roundtrip_rows": []}
