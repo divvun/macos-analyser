@@ -104,6 +104,9 @@ Outputs:
 - `phase2-lm-create-callsite-probe.txt`:
   Step 2p call-site guided probe that combines dyld import/export hints with
   NSDictionary-oriented create signature candidates in isolated Swift runs.
+- `phase2-lm-create-key-recovery-probe.txt`:
+  Step 2q key-recovery probe that resolves LM option-key constants at runtime
+  and tests create dictionaries built from those keys and value-shape variants.
 
 ## Tooling map
 
@@ -195,6 +198,7 @@ make research-phase2-lm-token-id-path-probe-strict
 make research-phase2-lm-private-roundtrip-probe
 make research-phase2-lm-private-signature-probe
 make research-phase2-lm-create-callsite-probe
+make research-phase2-lm-create-key-recovery-probe
 ```
 
 Or run subcommands directly:
@@ -285,6 +289,10 @@ Use this interpretation order:
   Uses call-site hints from `NaturalLanguage` imports plus focused
   NSDictionary-style create candidates to narrow likely `LMLanguageModelCreate`
   prototype expectations before deeper disassembly work.
+23. `phase2-lm-create-key-recovery-probe.txt`
+  Extends 2p by resolving `kLMLanguageModel*Key` constants dynamically and
+  testing structured option dictionaries (locale/app context/adaptation/siri)
+  to reduce key-name uncertainty in `LMLanguageModelCreate` calls.
 
 ## Expected baseline findings
 
