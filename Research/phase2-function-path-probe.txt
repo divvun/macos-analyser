@@ -1,0 +1,320 @@
+=== Step 2f: Framework function/call-path probe ===
+Tue May  5 12:56:47 UTC 2026
+
+[A] Framework executables on current macOS
+Note: binaries are dyld-cache-backed on macOS 26 (symlink targets absent on disk).
+total 0
+drwxr-xr-x     5 root  wheel    160 Apr  6 11:10 .
+drwxr-xr-x  2230 root  wheel  71360 Apr  6 11:10 ..
+lrwxr-xr-x     1 root  wheel     33 Apr  6 11:10 LanguageModeling -> Versions/Current/LanguageModeling
+lrwxr-xr-x     1 root  wheel     26 Apr  6 11:10 Resources -> Versions/Current/Resources
+drwxr-xr-x     4 root  wheel    128 Apr  6 11:10 Versions
+total 0
+drwxr-xr-x     5 root  wheel    160 Apr  6 11:10 .
+drwxr-xr-x  2230 root  wheel  71360 Apr  6 11:10 ..
+lrwxr-xr-x     1 root  wheel     31 Apr  6 11:10 LinguisticData -> Versions/Current/LinguisticData
+lrwxr-xr-x     1 root  wheel     26 Apr  6 11:10 Resources -> Versions/Current/Resources
+drwxr-xr-x     4 root  wheel    128 Apr  6 11:10 Versions
+total 0
+drwxr-xr-x    5 root  wheel   160 Apr  6 11:10 .
+drwxr-xr-x  307 root  wheel  9824 Apr  6 11:10 ..
+lrwxr-xr-x    1 root  wheel    32 Apr  6 11:10 NaturalLanguage -> Versions/Current/NaturalLanguage
+lrwxr-xr-x    1 root  wheel    26 Apr  6 11:10 Resources -> Versions/Current/Resources
+drwxr-xr-x    4 root  wheel   128 Apr  6 11:10 Versions
+
+[B] Exported symbols (dyld cache)
+NaturalLanguage lemma/token APIs:
+        0x000B8F70  _NLMorphologicalAnalyzerCreate
+        0x000B9188  _NLMorphologicalAnalyzerEnumerateLemmasForToken
+        0x000B92C4  _NLMorphologicalAnalyzerEnumerateVariantsForToken
+        0x00035F8C  _NLTransliteratorAcceptCandidate
+        0x00036194  _NLTransliteratorAssetsAvailable
+        0x00035764  _NLTransliteratorCopyCandidates
+        0x000350A4  _NLTransliteratorCreate
+        0x00036050  _NLTransliteratorFlushDynamicLanguageModel
+        0x000360C0  _NLTransliteratorResetDynamicLanguageModel
+        0x00001420  _NLTaggerCopyAvailableTagSchemes
+        0x000293AC  _NLTaggerCopyHypothesesAtIndex
+        0x00029314  _NLTaggerCopyHypothesesForCurrentToken
+        0x00029470  _NLTaggerCopyLanguageMapAtIndex
+        0x00029354  _NLTaggerCopyTagAtIndex
+        0x0000B69C  _NLTaggerCopyTagForCurrentToken
+        0x000024FC  _NLTaggerCreate
+        0x0002940C  _NLTaggerEnumerateSubTokens
+        0x000053E8  _NLTaggerEnumerateTokens
+        0x0000C780  _NLTaggerGetTokenAtIndex
+        0x000294B8  _NLTaggerSetGazetteers
+        0x00029264  _NLTaggerSetLocaleForRange
+        0x000052F0  _NLTaggerSetString
+        0x000292BC  _NLTaggerSetStringEditedInRange
+        0x0003CB84  _NLTaggerTestModel
+        0x0003B178  _NLTaggerTrainModel
+        0x00058590  _NLTokenizerCopyLemmaOfCurrentToken
+        0x00058530  _NLTokenizerCopyTranscriptionOfCurrentToken
+        0x0000D738  _NLTokenizerCreate
+        0x000102E4  _NLTokenizerEnumerateDerivedSubTokensOfToken
+        0x000584CC  _NLTokenizerEnumeratePossibleTokenSequences
+        0x0000FA7C  _NLTokenizerEnumerateSubTokensOfToken
+        0x00058460  _NLTokenizerEnumerateTokens
+        0x000584F8  _NLTokenizerEnumerateTokensOfCurrentTokenSequence
+        0x0000E734  _NLTokenizerGetNextToken
+        0x00058560  _NLTokenizerGetPartOfSpeechOfCurrentToken
+        0x0000F8FC  _NLTokenizerGetTranscriptionCharactersPtrOfCurrentToken
+        0x00058494  _NLTokenizerGoToTokenAtIndex
+        0x0000E95C  _NLTokenizerRelease
+        0x0000F8A4  _NLTokenizerReset
+        0x00013DFC  _NLTokenizerSetLocale
+        0x00058420  _NLTokenizerSetLocaleConstraints
+        0x00013A9C  _NLTokenizerSetMetadata
+        0x0000EB10  _NLTokenizerSetOptions
+        0x0000E228  _NLTokenizerSetString
+        0x0005844C  _NLTokenizerSetStringType
+        0x395FF740  _NLTagSchemeLemma
+
+LanguageModeling token-ID/model APIs:
+        0x0004C43C  _LMCreateMontrealIDsFromLMTokenIDSequence
+        0x0004EC9C  _LMLanguageModelConvertToExternalTokenIDs
+        0x0004EC4C  _LMLanguageModelConvertToInternalTokenIDs
+        0x0004BAF4  _LMLanguageModelCreateStringForTokenID
+        0x0004B9C4  _LMLanguageModelGetTokenIDForString
+        0x0004B9DC  _LMLanguageModelGetTokenIDForUTF8String
+        0x000521C0  _LMVocabularyGetClassForTokenID
+        0x000521AC  _LMVocabularyGetTokenIDForLemma
+
+LinguisticData asset APIs:
+        0x00004D9C  _LDCopyLocaleIdentifierOverrideForLocaleIdentifier
+        0x00004D30  _LDCreateMobileAssetType
+        0x000010C8  _LDCreateSystemLexiconCompatibilityVersion
+        0x00000D60  _LDEnumerateAssetDataItems
+
+[C] Import edges between frameworks
+NaturalLanguage imports from private frameworks:
+      _CoreLMCopyConditionalProbabilities  (from CoreNLP)
+      _CoreLMCopyPredictions  (from CoreNLP)
+      _CoreLMCopyTokenIdsForText  (from CoreNLP)
+      _CoreLMCreate  (from CoreNLP)
+      _CoreLMCreateCopy  (from CoreNLP)
+      _CoreLMReset  (from CoreNLP)
+      _CoreLMUpdateWithContext  (from CoreNLP)
+      _HTTuneParameters  (from Montreal)
+      _LDEnumerateAssetDataItems  (from LinguisticData)
+      _LMLanguageModelAddTokenForString  (from LanguageModeling)
+      _LMLanguageModelApplyExponentialDecay  (from LanguageModeling)
+      _LMLanguageModelConditionalProbability  (from LanguageModeling)
+      _LMLanguageModelCreate  (from LanguageModeling)
+      _LMLanguageModelCreateStringForTokenID  (from LanguageModeling)
+      _LMLanguageModelDecrementUsageCount  (from LanguageModeling)
+      _LMLanguageModelEnumeratePredictionsWithBlock  (from LanguageModeling)
+      _LMLanguageModelFlushDynamicData  (from LanguageModeling)
+      _LMLanguageModelGetDynamicTokenIDRange  (from LanguageModeling)
+      _LMLanguageModelGetTokenIDForUTF8String  (from LanguageModeling)
+      _LMLanguageModelGetUsageCount  (from LanguageModeling)
+      _LMLanguageModelIncrementUsageCount  (from LanguageModeling)
+      _LMLanguageModelPerformMaintenance  (from LanguageModeling)
+      _LMLanguageModelPrune  (from LanguageModeling)
+      _LMLanguageModelRecordTokenUsageWithDifferentialPrivacy  (from LanguageModeling)
+      _LMLanguageModelRelease  (from LanguageModeling)
+      _LMLanguageModelReset  (from LanguageModeling)
+      _LMLanguageModelSetLogLevel  (from LanguageModeling)
+      _LMLanguageModelShouldAdaptToTokenSequence  (from LanguageModeling)
+      _LMLanguageModelTokenSequenceIsBlocklisted  (from LanguageModeling)
+      _LXCursorCopyTraversedCharacters  (from Lexicon)
+      _LXCursorCreateByAdvancing  (from Lexicon)
+      _LXCursorEnumerateChildren  (from Lexicon)
+      _LXCursorEnumerateEntries  (from Lexicon)
+      _LXCursorEnumerateEntriesRecursively  (from Lexicon)
+      _LXCursorHasChildren  (from Lexicon)
+      _LXCursorHasEntries  (from Lexicon)
+      _LXCursorPrefixProbability  (from Lexicon)
+      _LXCursorTerminationProbability  (from Lexicon)
+      _LXEntryCopyString  (from Lexicon)
+      _LXEntryGetMetaFlags  (from Lexicon)
+      _LXEntryGetProbability  (from Lexicon)
+      _LXEntryGetTokenID  (from Lexicon)
+      _LXLexiconCopyEntryForTokenID  (from Lexicon)
+      _LXLexiconCreate  (from Lexicon)
+      _LXLexiconCreateRootCursor  (from Lexicon)
+      _MLPModelSampleDataFeatureValuesKey  (from Montreal)
+      _MLPModelSampleDataLabelsKey  (from Montreal)
+      _MLPModelTrainerBatchSizeKey  (from Montreal)
+      _MLPModelTrainerCreate  (from Montreal)
+      _MLPModelTrainerEvaluateModel  (from Montreal)
+      _MLPModelTrainerEvaluationBatchSizeKey  (from Montreal)
+      _MLPModelTrainerInputChannelsKey  (from Montreal)
+      _MLPModelTrainerInputHeightKey  (from Montreal)
+      _MLPModelTrainerInputLengthKey  (from Montreal)
+      _MLPModelTrainerLearningRateKey  (from Montreal)
+      _MLPModelTrainerNumberOfEpochsKey  (from Montreal)
+      _MLPModelTrainerNumberOfLabelsKey  (from Montreal)
+      _MLPModelTrainerOverallAccuracyKey  (from Montreal)
+      _MLPModelTrainerTrainModel  (from Montreal)
+      _MRLModelCompile  (from Montreal)
+      _MRLModelCopyQuantizedSerializedData  (from Montreal)
+      _MRLModelCreate  (from Montreal)
+      _MRLModelEvaluate  (from Montreal)
+      _MRLModelGetOutputSize  (from Montreal)
+      _MRLModelInitEpoch  (from Montreal)
+      _MRLModelRecognize  (from Montreal)
+      _MRLModelRelease  (from Montreal)
+      _MRLModelSetMaxSequenceLength  (from Montreal)
+      _MRLModelTrainBatch  (from Montreal)
+      _MRLNeuralNetworkCreate  (from Montreal)
+      _MRLNeuralNetworkGetOutput  (from Montreal)
+      _MRLNeuralNetworkPredict  (from Montreal)
+      _MRLNeuralNetworkSetInput  (from Montreal)
+      _NLEmbeddingSubwordVocabCopyTextForTokenIds  (from CoreNLP)
+      _NLEmbeddingSubwordVocabCopyTokenIdsForText  (from CoreNLP)
+      _NLEmbeddingSubwordVocabCreate  (from CoreNLP)
+      _NLGazetteerCopyAvailableLabels  (from CoreNLP)
+      _NLGazetteerCopyCompressedModel  (from CoreNLP)
+      _NLGazetteerCopyLabel  (from CoreNLP)
+      _NLGazetteerCreate  (from CoreNLP)
+      _NLLanguageIdentifierConsumeString  (from CoreNLP)
+      _NLLanguageIdentifierCreate  (from CoreNLP)
+      _NLLanguageIdentifierGetTopHypotheses  (from CoreNLP)
+      _NLLanguageIdentifierGetTopHypothesis  (from CoreNLP)
+      _NLLanguageIdentifierGetTopLanguage  (from CoreNLP)
+      _NLLanguageIdentifierRelease  (from CoreNLP)
+      _NLLanguageIdentifierReset  (from CoreNLP)
+      _NLLanguageIdentifierSetLanguageConstraints  (from CoreNLP)
+      _NLLanguageIdentifierSetLanguageHints  (from CoreNLP)
+      _NLLanguageIdentifierSetModelID  (from CoreNLP)
+      _NLModelContainerCopyContainerData  (from CoreNLP)
+      _NLModelContainerCopyInfoDictionary  (from CoreNLP)
+      _NLModelContainerCopyModelDataAtIndex  (from CoreNLP)
+      _NLModelContainerCreate  (from CoreNLP)
+      _NLModelContainerCreateWithContainerData  (from CoreNLP)
+      _NLModelContainerGetModelDataCount  (from CoreNLP)
+      _NLModelContainerGetRevision  (from CoreNLP)
+      _NLModelContainerGetSubtype  (from CoreNLP)
+      _NLModelContainerGetType  (from CoreNLP)
+      _NLModelCopyContainer  (from CoreNLP)
+      _NLModelCopyPredictedLabels  (from CoreNLP)
+      _NLModelCopyPredictedLabelsAndProbabilities  (from CoreNLP)
+      _NLModelCreateWithContainer  (from CoreNLP)
+      _NLModelTrainerCreate  (from CoreNLP)
+      _NLModelTrainerTrainAndCopyContainer  (from CoreNLP)
+      _NLStringEmbeddingCopyCurrentVersion  (from CoreNLP)
+      _NLStringEmbeddingCopyData  (from CoreNLP)
+      _NLStringEmbeddingCopyModelLocale  (from CoreNLP)
+      _NLStringEmbeddingCopyNeighborsForVectorWithDistances  (from CoreNLP)
+      _NLStringEmbeddingCopyNeighborsWithDistances  (from CoreNLP)
+      _NLStringEmbeddingCopySupportedVersions  (from CoreNLP)
+      _NLStringEmbeddingCopyVector  (from CoreNLP)
+      _NLStringEmbeddingCopyVersion  (from CoreNLP)
+      _NLStringEmbeddingCreateWithOptions  (from CoreNLP)
+      _NLStringEmbeddingFillTokenVectorsWithShape  (from CoreNLP)
+      _NLStringEmbeddingFillWordVectors  (from CoreNLP)
+      _NLStringEmbeddingGetDimension  (from CoreNLP)
+      _NLStringEmbeddingGetDistance  (from CoreNLP)
+      _NLStringEmbeddingGetVocabularySize  (from CoreNLP)
+      _NLStringEmbeddingSaveCompressedModel  (from CoreNLP)
+
+LanguageModeling imports from LinguisticData:
+      _LDCreateSystemLexiconCompatibilityVersion  (from LinguisticData)
+      _LDEnumerateAssetDataItems  (from LinguisticData)
+      _kLDAssetTypeDeltaLexicon  (from LinguisticData)
+      _kLDAssetTypeLanguageModel  (from LinguisticData)
+      _kLDAssetTypeLexicon  (from LinguisticData)
+      _kLDAssetTypeMorphemeLexicon  (from LinguisticData)
+      _kLDAssetTypeMultilingualLanguageModel  (from LinguisticData)
+      _kLDAssetTypeMultilingualModel  (from LinguisticData)
+      _kLDAssetTypeSearchQueryLanguageModel  (from LinguisticData)
+      _kLDAssetTypeSiriLanguageModel  (from LinguisticData)
+      _kLDAssetTypeSiriLexicon  (from LinguisticData)
+      _kLDAssetTypeSiriLexiconDelta  (from LinguisticData)
+      _kLDAssetTypeSiriMorphemeLexicon  (from LinguisticData)
+      _kLDAssetTypeSiriMultilingualLanguageModel  (from LinguisticData)
+      _kLDAssetTypeTransliterationLexicon  (from LinguisticData)
+
+[D] Sidecar signatures and quick content hints
+/System/Library/AssetsV2/com_apple_MobileAsset_LinguisticData/e455d830fc4c363e92825363afa88cdb24239e34.asset/AssetData/pt.lm/fst.dat:       OpenFst binary FST data, fst type: const, arc type: standard, version: 1, num states: 1779, num arcs: 6438
+/System/Library/AssetsV2/com_apple_MobileAsset_LinguisticData/e455d830fc4c363e92825363afa88cdb24239e34.asset/AssetData/pt.lm/sp.dat:        data
+/System/Library/AssetsV2/com_apple_MobileAsset_LinguisticData/e455d830fc4c363e92825363afa88cdb24239e34.asset/AssetData/pt.lm/model.dat:     DOS executable (COM)
+/System/Library/AssetsV2/com_apple_MobileAsset_LinguisticData/e455d830fc4c363e92825363afa88cdb24239e34.asset/AssetData/pt.lm/overrides.dat: data
+
+sp.dat first strings:
+<unk>
+</s>
+<pad>
+<pad>
+</s>
+<unk>
+_U_CAP_
+_U_PRE0_
+_U_PRE1_
+_U_PRE2_
+_U_PRE3_
+_U_PRE4_
+_U_PRE5_
+_U_PRE6_
+_U_PRE7_
+_U_PRE8_
+_U_PRE9_
+_U_PRE10_
+_U_PRE11_
+_U_PRE12_
+_U_PRE13_
+_U_PRE14_
+_U_PRE15_
+_U_PRE16_
+_U_PRE17_
+_U_PRE18_
+_U_PRE19_
+_U_NT00
+_U_NT01
+_U_NT02
+_U_NT03
+_U_NT04
+_U_NT05
+_U_NT06
+_U_NT07
+_U_NT08
+_U_NT09
+_U_NT10
+_U_NT11
+_U_NT12
+
+model.dat first strings:
+model
+input
+embedding
+lstm_0
+lstm_1
+lstm_2
+dense
+output
+I%@`
+6+V>#
+/G?f
+t{i?&
+>.<7
+T@^;^
+|d-?
+(;2=
+Y?`Pk
+>R?z
+>.+b
+=iO?
+LYR?z
+zBc?
+?v9a
+@4ef
+}E@j
+.F@c
+?m!K
+@wRK
+!?b
+ m?d
+
+[E] Inference (evidence-backed hypotheses)
+1. NaturalLanguage sits above LanguageModeling/LinguisticData and calls both directly.
+2. LanguageModeling exposes explicit text<->token-ID conversion and lemma-linked vocabulary lookups.
+3. LinguisticData appears to own asset discovery/type routing for language-model resources.
+4. sp.dat contains special token strings (<unk>, </s>, _U_PRE*), consistent with subword/token-ID vocabulary.
+5. model.dat contains NN layer names (embedding/lstm/dense/output), indicating neural side-model state around fst.dat.
+6. Combined with steps 2b-2e, likely runtime chain is: text -> tokenizer/subword IDs -> LM internal token IDs -> fst.dat transitions -> namespaced output IDs -> lemma/class decoding.
+
+[F] Web cross-check pointers used in this step
+- OpenFST binary FST labels are integer IDs; symbol tables are optional metadata: https://openfst.org
+- SentencePiece models map text to integer piece IDs (binary model format): https://github.com/google/sentencepiece
