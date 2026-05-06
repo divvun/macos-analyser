@@ -91,6 +91,10 @@ Outputs:
   combining runtime API anchors, FST label profiling, sidecar byte correlation,
   and raw-codepoint composition checks to test whether string<->ID inversion is
   directly recoverable from available artifacts.
+- `phase2-lm-token-id-path-probe-strict.txt`:
+  Step 2m strict validation of 2l using diacritic Portuguese words and
+  shortest-path output-ID traces, to verify whether path observability remains
+  consistent under stricter lexical inputs.
 
 ## Tooling map
 
@@ -178,6 +182,7 @@ make research-phase2-lm-gap-analysis
 make research-phase2-se-subword-profile
 make research-phase2-lm-launch-override-probe
 make research-phase2-lm-token-id-path-probe
+make research-phase2-lm-token-id-path-probe-strict
 ```
 
 Or run subcommands directly:
@@ -252,6 +257,10 @@ Use this interpretation order:
   Tests whether the private token-ID bridge can be operationally inverted from
   available files and probes; reports either partial observable path or
   inversion blocked when no stable string<->ID roundtrip signal is found.
+19. `phase2-lm-token-id-path-probe-strict.txt`
+  Re-checks the 2l signal with stricter word inputs (including diacritics) and
+  shortest-path traces, to confirm or reject strict path observability before
+  proceeding to direct private API roundtrip experiments.
 
 ## Expected baseline findings
 

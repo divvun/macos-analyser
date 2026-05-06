@@ -1,0 +1,62 @@
+=== Step 2m: Strict token-ID path validation ===
+Wed May 06 07:55:00 UTC 2026
+
+[A] Word-by-word shortest-path trace
+word=de status=has_path
+  arc_count=0
+  uniq_output_count=0
+  namespace_labels(>=0x20000000)=0
+  outputs_preview=
+word=que status=has_path
+  arc_count=0
+  uniq_output_count=0
+  namespace_labels(>=0x20000000)=0
+  outputs_preview=
+word=casa status=has_path
+  arc_count=0
+  uniq_output_count=0
+  namespace_labels(>=0x20000000)=0
+  outputs_preview=
+word=menina status=has_path
+  arc_count=0
+  uniq_output_count=0
+  namespace_labels(>=0x20000000)=0
+  outputs_preview=
+word=portugal status=has_path
+  arc_count=0
+  uniq_output_count=0
+  namespace_labels(>=0x20000000)=0
+  outputs_preview=
+word=não status=has_path
+  arc_count=0
+  uniq_output_count=0
+  namespace_labels(>=0x20000000)=0
+  outputs_preview=
+word=ação status=has_path
+  arc_count=0
+  uniq_output_count=0
+  namespace_labels(>=0x20000000)=0
+  outputs_preview=
+word=coração status=has_path
+  arc_count=0
+  uniq_output_count=0
+  namespace_labels(>=0x20000000)=0
+  outputs_preview=
+
+[B] Diacritic subset summary
+diacritic_words=3
+has_path=3 no_path=0 error=0
+
+[C] Output-label namespace summary
+
+[D] Decision signal
+total_has_path=8 total_no_path=0 total_error=0
+diacritic_all_path=1
+any_namespace_labels=0
+strict_observable_path=0
+observed_result=STRICT_PATH_NOT_CONFIRMED
+
+[E] Interpretation
+- This step validates whether 2l path observability also holds for diacritic Portuguese words.
+- If STRICT_PATH_CONFIRMED, raw-codepoint composition reaches shortest paths even for diacritics and yields namespaced output IDs.
+- Even with strict path confirmation, stable string<->ID inversion is still unproven without direct LM API roundtrip calls.
