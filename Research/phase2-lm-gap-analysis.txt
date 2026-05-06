@@ -1,0 +1,39 @@
+=== Step 2i: Gap analysis for minimal se.lm compatibility ===
+Wed May 06 06:11:15 UTC 2026
+
+[A] Scope
+Goal: derive a minimum viable compatibility profile for se.lm based on 2f/2g/2h evidence.
+Question: what has to be emulated beyond fst.dat for NL lemma pipeline parity?
+
+[B] Evidence checkpoints
+token_id_roundtrip_apis=1
+lemma_vocab_api=1
+prediction_probability_apis=1
+subword_sidecars_present=1
+hybrid_profile_family_evidence=1
+fst_unweighted_evidence=1
+
+[C] Gap table (minimum viable se.lm profile)
+component	why_needed	current_divvun_status	gap	risk	next_probe
+profile_selection	Apple has multiple profile families (base/siri/searchquery/subword)	unknown	high	high	choose one target profile and replicate file-set skeleton
+token_id_protocol	NL/LM APIs operate on token IDs, not raw lemma strings	absent	high	high	map text->IDs->FST->IDs using synthetic sidecar experiments
+lemma_id_mapping	LMVocabularyGetTokenIDForLemma indicates dedicated lemma vocabulary bridge	absent	high	high	reverse-map output namespace to lemma IDs on one known language
+subword_vocab	sp.dat/model.dat and subword APIs suggest required upstream encoding	absent	high	high	test whether minimal sp.dat/model.dat stubs alter call behavior
+neural_or_montreal_sidecars	MRL/CoreLM imports imply model scoring outside fst.dat	absent	medium-high	medium-high	compare profile variants with/without montreal*.dat
+fst_semantics	Apple fst.dat appears unweighted deterministic transduction/index	format-only match	medium	medium	construct ID-domain FST toy model and trace acceptance
+asset_registration	LinguisticData asset typing/routing gatekeeps model loading	no registration path	high	high	test profile placement and metadata spoofing boundaries
+
+[D] Candidate minimum profile baselines
+1. subword_nn baseline (pt.lm-like): Info.plist + fst.dat + sp.dat + model.dat + params.dat + blocklist.bundle
+2. morphology baseline (en.lm-like): Info.plist + fst.dat + morphology*.dat + blocklist.bundle
+3. siri-inline baseline (Siri-pt.lm-like): Info.plist + fst.dat + unilm.bundle + overrides.dat + params.dat
+Recommendation: start from baseline 1 for lemma experiments because it aligns best with token-ID + subword evidence.
+
+[E] Acceptance criteria for step 3 entry
+- Can trigger a deterministic token-ID path for se text (observable via side effects/logs/probe output).
+- Can map at least one known se token to a stable internal ID and back (or prove where inversion fails).
+- Can show any measurable runtime delta between bare-fst profile and subword_nn profile.
+
+[F] Decision
+Current confidence: fst.dat-only replacement is insufficient.
+Go/No-go for next stage: GO, but only with profile-level emulation (file-set + ID protocol), not format-only conversion.
