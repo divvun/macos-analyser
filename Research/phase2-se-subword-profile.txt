@@ -1,0 +1,184 @@
+=== Step 2j: se-subword profile experiment ===
+Wed May  6 06:45:48 UTC 2026
+
+[A] Build profile
+=== Step 2j: Build minimal se-subword profile ===
+Source se bundle: /Users/smo036/langtech/gut/divvun/macos-analyser/Research/assets/se
+Destination:      /Users/smo036/langtech/gut/divvun/macos-analyser/Research/assets/se-subword
+Template pt.lm:   /System/Library/AssetsV2/com_apple_MobileAsset_LinguisticData/e455d830fc4c363e92825363afa88cdb24239e34.asset/AssetData/pt.lm
+Copied base se bundle
+Copied sidecars:
+  - sp.dat
+  - model.dat
+  - params.dat
+  - overrides.dat
+  - blocklist.bundle
+Resulting se.lm contents:
+  - analyser-gt-norm.openfst (file)
+  - blocklist.bundle (dir)
+  - fst.dat (file)
+  - lm.dat (file)
+  - model.dat (file)
+  - overrides.dat (file)
+  - params.dat (file)
+  - pos.dat (file)
+  - sp.dat (file)
+Build complete
+
+[B] Run phase2-inject on Research/assets/se-subword
+Building for debugging...
+[0/3] Write swift-version--58304C5D6DBC2206.txt
+Build of product 'DivvunNLResearch' complete! (0.22s)
+=== Phase 2: Asset Injection Testing ===
+Asset bundle: Research/assets/se-subword
+macOS version: Version 26.4.1 (Build 25E253)
+Date: 2026-05-06T06:45:50Z
+
+Pre-injection baseline:
+NLTagger.availableTagSchemes for 'se' [baseline (before any injection)]:
+  schemes: Language, Script, TokenType
+  .lemma available: NO ✗
+  NLTagger .lemma for 'mánáid': (no tag)
+
+--- Strategy A: NLTagger.requestAssets + setModels ---
+A1: Calling NLTagger.requestAssets(for: 'se', tagScheme: .lemma)
+  WARNING: requestAssets callback timed out after 15 seconds
+  Result: timeout
+  No error
+
+A2: NLTagger.setModels for .lemma scheme
+  Status: SKIPPED — requires a compiled CoreML .mlmodelc NLModel
+  To test: create a CoreML sequence labeling model that maps tokens to lemma forms,
+  compile with 'coremlcompiler compile model.mlmodel outdir/',
+  then call tagger.setModels([NLModel(contentsOf: url)], forTagScheme: .lemma)
+  Note: setModels requires macOS 15+ and is still experimental.
+
+A3: Schemes for 'se' after requestAssets:
+  Language, Script, TokenType
+  .lemma now available: NO ✗
+
+--- Strategy B: Environment Variable Overrides ---
+Note: environment variables must be set BEFORE process launch.
+This strategy cannot be tested dynamically from within the same process.
+
+  NL_LANGUAGE_MODEL_PATH              = (not set)
+                                       Override path for NL language model assets
+  LINGUISTIC_DATA_PATH                = (not set)
+                                       Redirect LinguisticData asset loading
+  NL_ASSET_PATH                       = (not set)
+                                       Override NL asset base path
+  LANGUAGEMODELING_ASSET_PATH         = (not set)
+                                       Override LanguageModeling asset path
+  LD_ASSET_PATH                       = (not set)
+                                       Override LinguisticData asset path
+  DYLD_LIBRARY_PATH                   = (not set)
+                                       Inject replacement frameworks (SIP disabled required)
+  DYLD_INSERT_LIBRARIES               = (not set)
+                                       Inject library for asset path hooking (SIP disabled)
+
+To test NL_LANGUAGE_MODEL_PATH:
+  NL_LANGUAGE_MODEL_PATH=/path/to/research/assets swift run DivvunNLResearch phase1-coverage
+
+--- Strategy C: Private LinguisticData API injection ---
+C1: Searching for asset registration functions:
+  not found: LDRegisterAssetBundleAtURL
+  not found: LDRegisterAssetBundle
+  not found: LDAddAssetBundle
+  not found: LDInstallAssetBundle
+  not found: LDSetAssetBundlePath
+  not found: LDRegisterLanguageData
+  not found: LDAddLocaleBundle
+  No registration functions found — Apple does not expose a public registration API.
+
+C2: Probing LDCreateMobileAssetType:
+  LDCreateMobileAssetType("Lemmatizer") = __NSCFString: com.apple.MobileAsset.LinguisticData
+  LDCreateMobileAssetType("LanguageModel") = __NSCFString: com.apple.MobileAsset.LinguisticData
+  LDCreateMobileAssetType("Tagging") = __NSCFString: com.apple.MobileAsset.LinguisticData
+  LDCreateMobileAssetType("Search") = __NSCFString: com.apple.MobileAsset.LinguisticData
+
+C3: Searching for path setter functions:
+  not found: LDSetAssetSearchPath
+  not found: LDSetAssetBasePath
+  not found: LDAddAssetSearchPath
+
+--- Strategy D: User-level asset path drop ---
+Trying path: /Users/smo036/Library/Application Support/Apple/NLP
+  Notes: User NLP support dir — may be consulted before system
+  Copied asset bundle to: /Users/smo036/Library/Application Support/Apple/NLP/se
+  .lemma available after drop: NO ✗
+  Cleaned up test copy
+
+Trying path: /Users/smo036/Library/Application Support/com.apple.NaturalLanguage
+  Notes: Per-app NL support dir
+  Copied asset bundle to: /Users/smo036/Library/Application Support/com.apple.NaturalLanguage/se
+  .lemma available after drop: NO ✗
+  Cleaned up test copy
+
+Trying path: /Library/Application Support/Apple/NLP
+  Notes: System-wide NLP support (requires admin)
+  Could not create: Error Domain=NSCocoaErrorDomain Code=513 "You don’t have permission to save the file “NLP” in the folder “Apple”." UserInfo={NSFilePath=/Library/Application Support/Apple/NLP, NSURL=file:///Library/Application%20Support/Apple/NLP, NSUnderlyingError=0x71d045650 {Error Domain=NSPOSIXErrorDomain Code=13 "Permission denied"}}
+Trying path: /Users/smo036/Library/Caches/com.apple.NaturalLanguage
+  Notes: NL cache dir — might be writable
+  Copied asset bundle to: /Users/smo036/Library/Caches/com.apple.NaturalLanguage/se
+  .lemma available after drop: NO ✗
+  Cleaned up test copy
+
+--- Strategy E: SIP-disabled system path injection (documentation only) ---
+If System Integrity Protection (SIP) is disabled:
+  1. Copy se bundle to:
+     /System/Library/AssetsV2/com_apple_MobileAsset_LinguisticData/se/
+  2. Reboot (to flush asset caches)
+  3. NLTagger should then pick up 'se' assets automatically
+
+To check SIP status: csrutil status
+  csrutil status: System Integrity Protection status: enabled.
+
+=== Post-injection final check ===
+NLTagger.availableTagSchemes for 'se' [final (after all strategies)]:
+  schemes: Language, Script, TokenType
+  .lemma available: NO ✗
+  NLTagger .lemma for 'mánáid': (no tag)
+
+
+=== Injection Strategy Summary ===
+
+Strategy A: ✗ FAILED   
+  requestAssets returned timeout. .lemma still not available after call.
+
+Strategy B: ~ ATTEMPTED
+  Cannot test dynamically. Requires relaunching with env var set. Most promising: NL_LANGUAGE_MODEL_PATH and LINGUISTIC_DATA_PATH. DYLD_* vars require SIP disabled.
+
+Strategy C: ✗ FAILED   
+  No asset registration or path setter functions found in LinguisticData.framework. Apple does not provide any internal hook for third-party asset registration.
+
+Strategy D: ~ ATTEMPTED
+  Attempted to drop bundle to known user-writable candidate paths. NLTagger cache is likely loaded at process start and does not hot-reload. Would need to test by relaunching with bundle in place.
+
+Strategy E: ~ ATTEMPTED
+  Documented only. Requires SIP disabled and reboot. Not suitable for end-user deployment.
+
+CONCLUSION: No injection strategy succeeded in this session.
+
+This demonstrates the core technical finding of this research:
+Apple's NLTagger/LinguisticData pipeline has NO supported mechanism
+for third-party language providers to add lemma support for new languages.
+
+The only viable paths are:
+  1. Apple provides a documented API (Feature Request via Feedback Assistant)
+  2. SIP disabled + system path injection (not viable for end users)
+  3. Process-launch env var override (viable for testing, not deployment)
+  4. Reverse-engineer the full asset format and find an undocumented hook
+
+[C] Quick post-check
+total 151256
+drwxr-xr-x@ 11 smo036  staff   352B May  6 09:45 .
+drwxr-xr-x@  7 smo036  staff   224B May  6 09:45 ..
+-rw-r--r--@  1 smo036  staff    22M May  5 14:55 analyser-gt-norm.openfst
+drwxr-xr-x@  5 smo036  staff   160B May  6 09:45 blocklist.bundle
+-rw-r--r--@  1 smo036  staff    26M May  5 14:55 fst.dat
+-rw-r--r--@  1 smo036  staff    69B May  4 15:04 lm.dat
+-rw-r--r--@  1 smo036  staff    25M May  6 09:45 model.dat
+-rw-r--r--@  1 smo036  staff   231B May  6 09:45 overrides.dat
+-rw-r--r--@  1 smo036  staff   110B May  6 09:45 params.dat
+-rw-r--r--@  1 smo036  staff   118B May  4 15:04 pos.dat
+-rw-r--r--@  1 smo036  staff   615K May  6 09:45 sp.dat
