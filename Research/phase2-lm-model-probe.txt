@@ -1,0 +1,230 @@
+=== Step 2g: LM model/training/usage probe ===
+Tue May 05 13:11:36 UTC 2026
+
+[A] .lm bundle inventory (all assets)
+bundle_count=17
+/System/Library/AssetsV2/com_apple_MobileAsset_LinguisticData/0151aa4f52d4ce68065fe897a691b760c33900f8.asset/AssetData/Siri-fr.lm
+/System/Library/AssetsV2/com_apple_MobileAsset_LinguisticData/0151aa4f52d4ce68065fe897a691b760c33900f8.asset/AssetData/fr.lm
+/System/Library/AssetsV2/com_apple_MobileAsset_LinguisticData/0151aa4f52d4ce68065fe897a691b760c33900f8.asset/AssetData/fr_CA.lm
+/System/Library/AssetsV2/com_apple_MobileAsset_LinguisticData/0151aa4f52d4ce68065fe897a691b760c33900f8.asset/AssetData/fr_CH.lm
+/System/Library/AssetsV2/com_apple_MobileAsset_LinguisticData/0151aa4f52d4ce68065fe897a691b760c33900f8.asset/AssetData/fr_FR.lm
+/System/Library/AssetsV2/com_apple_MobileAsset_LinguisticData/0151aa4f52d4ce68065fe897a691b760c33900f8.asset/AssetData/searchquery.lm
+/System/Library/AssetsV2/com_apple_MobileAsset_LinguisticData/0ae6ee5ec6623e763b9554b001a3a58908985ff7.asset/AssetData/ru.lm
+/System/Library/AssetsV2/com_apple_MobileAsset_LinguisticData/0e1716050086b674daa796a7e0a4863c1e3b6d51.asset/AssetData/sv.lm
+/System/Library/AssetsV2/com_apple_MobileAsset_LinguisticData/9e5af7e2cffff3cded5db21909fd7d3a58b4ed43.asset/AssetData/Siri-en.lm
+/System/Library/AssetsV2/com_apple_MobileAsset_LinguisticData/9e5af7e2cffff3cded5db21909fd7d3a58b4ed43.asset/AssetData/en.lm
+/System/Library/AssetsV2/com_apple_MobileAsset_LinguisticData/9e5af7e2cffff3cded5db21909fd7d3a58b4ed43.asset/AssetData/searchquery.lm
+/System/Library/AssetsV2/com_apple_MobileAsset_LinguisticData/b2e5cba836c70b2acdcf0ab0a1aecd992795f3cb.asset/AssetData/Siri-de.lm
+/System/Library/AssetsV2/com_apple_MobileAsset_LinguisticData/b2e5cba836c70b2acdcf0ab0a1aecd992795f3cb.asset/AssetData/de.lm
+/System/Library/AssetsV2/com_apple_MobileAsset_LinguisticData/b2e5cba836c70b2acdcf0ab0a1aecd992795f3cb.asset/AssetData/searchquery.lm
+/System/Library/AssetsV2/com_apple_MobileAsset_LinguisticData/d95008a7db1f940e3736bb65c720788d8c4a1b80.asset/AssetData/da.lm
+/System/Library/AssetsV2/com_apple_MobileAsset_LinguisticData/e455d830fc4c363e92825363afa88cdb24239e34.asset/AssetData/Siri-pt.lm
+/System/Library/AssetsV2/com_apple_MobileAsset_LinguisticData/e455d830fc4c363e92825363afa88cdb24239e34.asset/AssetData/pt.lm
+
+file_presence_counts:
+  17 Info.plist
+  11 blocklist.bundle
+   9 params.dat
+   9 fst.dat
+   5 unilm.bundle
+   5 normalization.dat
+   4 stlm.dat
+   3 montreal.dat
+   3 inline_completion_params.plist
+   3 montrealidmap.dat
+   3 model.dat
+   3 sp.dat
+   3 overrides.dat
+   2 supplm.dat
+   2 qp_blocklist.bundle
+   2 morphology-v2.dat
+   2 lm.dat
+   2 morphology.dat
+   1 blocklist.dat
+   1 stsfmap.dat
+   1 sflm.dat
+   1 adaptation-overrides.dat
+   1 classmodel.dat
+   1 coder_params.dat
+   1 lm_gram3.dat
+
+[B] FST structural summary across .lm bundles
+bundle	states	arcs	weighted	in_det	out_det	cyclic	notes
+Siri-fr.lm	1153	3355	n	y	n	n	ok
+fr.lm	1153	3355	n	y	n	n	ok
+sv.lm	639	2071	n	y	n	n	ok
+Siri-en.lm	516	1367	n	y	n	n	ok
+en.lm	516	1367	n	y	n	n	ok
+Siri-de.lm	?	?	?	?	?	?	FATAL: FstInfo: Verify: FST not well-formed
+de.lm	?	?	?	?	?	?	FATAL: FstInfo: Verify: FST not well-formed
+Siri-pt.lm	1779	6438	n	y	n	n	ok
+pt.lm	1779	6438	n	y	n	n	ok
+
+[C] Arc-line shape probe (pt.lm)
+arc_lines_4_fields=6438
+arc_lines_5plus_fields=0
+sample_arcs:
+0	136	1	87
+0	135	68	88
+0	134	21254	87
+0	133	37901	87
+0	25	46895	87
+0	132	150000	87
+0	15	150001	87
+0	22	180729	87
+0	22	180764	87
+0	131	229805	87
+0	23	296318	87
+0	130	333234	87
+0	129	333235	87
+0	128	333236	87
+0	127	333237	87
+0	12	333277	87
+0	41	333366	87
+0	12	333577	87
+0	12	333731	87
+0	126	333782	87
+0	125	333838	87
+0	49	333967	87
+0	124	334073	87
+0	92	334119	87
+0	123	335249	87
+0	122	336635	87
+0	121	336637	87
+0	120	336638	87
+0	119	336639	87
+0	118	336640	87
+0	117	336645	87
+0	116	336647	87
+0	115	336650	87
+0	114	336651	87
+0	113	336653	87
+0	112	336660	87
+0	111	336672	87
+0	110	336673	87
+0	74	336677	87
+0	45	336678	87
+
+[D] Sidecar signatures from pt.lm
+/System/Library/AssetsV2/com_apple_MobileAsset_LinguisticData/e455d830fc4c363e92825363afa88cdb24239e34.asset/AssetData/pt.lm/fst.dat:       OpenFst binary FST data, fst type: const, arc type: standard, version: 1, num states: 1779, num arcs: 6438
+/System/Library/AssetsV2/com_apple_MobileAsset_LinguisticData/e455d830fc4c363e92825363afa88cdb24239e34.asset/AssetData/pt.lm/sp.dat:        data
+/System/Library/AssetsV2/com_apple_MobileAsset_LinguisticData/e455d830fc4c363e92825363afa88cdb24239e34.asset/AssetData/pt.lm/model.dat:     DOS executable (COM)
+/System/Library/AssetsV2/com_apple_MobileAsset_LinguisticData/e455d830fc4c363e92825363afa88cdb24239e34.asset/AssetData/pt.lm/overrides.dat: data
+sp.dat strings (head):
+<unk>
+</s>
+<pad>
+<pad>
+</s>
+<unk>
+_U_CAP_
+_U_PRE0_
+_U_PRE1_
+_U_PRE2_
+_U_PRE3_
+_U_PRE4_
+_U_PRE5_
+_U_PRE6_
+_U_PRE7_
+_U_PRE8_
+_U_PRE9_
+_U_PRE10_
+_U_PRE11_
+_U_PRE12_
+_U_PRE13_
+_U_PRE14_
+_U_PRE15_
+_U_PRE16_
+_U_PRE17_
+_U_PRE18_
+_U_PRE19_
+_U_NT00
+_U_NT01
+_U_NT02
+model.dat strings (head):
+model
+input
+embedding
+lstm_0
+lstm_1
+lstm_2
+dense
+output
+I%@`
+6+V>#
+/G?f
+t{i?&
+>.<7
+T@^;^
+|d-?
+(;2=
+Y?`Pk
+>R?z
+>.+b
+=iO?
+
+[E] Runtime API evidence for prediction/completion and training
+LanguageModeling exports (probability/prediction):
+        0x0004AD98  _LMLanguageModelConditionalProbability
+        0x0004B350  _LMLanguageModelConditionalProbabilityVector
+        0x0004B358  _LMLanguageModelConditionalProbabilityVectorWithEffectiveOrders
+        0x0004B064  _LMLanguageModelConditionalProbabilityWithEffectiveOrder
+        0x0004B100  _LMLanguageModelConditionalProbabilityWithFlags
+        0x0004B1A0  _LMLanguageModelConditionalProbabilityWithFlagsAndLogs
+        0x0004B7B0  _LMLanguageModelCreatePredictionEnumerator
+        0x0004B614  _LMLanguageModelEnumeratePredictionsWithBlock
+        0x0004DC60  _LMLanguageModelGetOrder
+        0x0004B30C  _LMLanguageModelJointProbability
+        0x0004B4B8  _LMLanguageModelJointProbabilityVector
+        0x0004AFD4  _LMLanguageModelStaticConditionalProbability
+        0x0004D854  _LMStreamTokenizerCreate
+        0x0004D934  _LMStreamTokenizerPopBytes
+        0x0004D924  _LMStreamTokenizerPushBytes
+        0x000521D0  _LMVocabularyGetPriorProbabilityForTokenID
+
+NaturalLanguage imports showing LM + neural/subword stack:
+      _CoreLMCopyConditionalProbabilities  (from CoreNLP)
+      _CoreLMCopyPredictions  (from CoreNLP)
+      _CoreLMCopyTokenIdsForText  (from CoreNLP)
+      _CoreLMCreate  (from CoreNLP)
+      _CoreLMCreateCopy  (from CoreNLP)
+      _CoreLMReset  (from CoreNLP)
+      _CoreLMUpdateWithContext  (from CoreNLP)
+      _LMLanguageModelConditionalProbability  (from LanguageModeling)
+      _LMLanguageModelEnumeratePredictionsWithBlock  (from LanguageModeling)
+      _LMLanguageModelGetTokenIDForUTF8String  (from LanguageModeling)
+      _MRLModelCompile  (from Montreal)
+      _MRLModelCopyQuantizedSerializedData  (from Montreal)
+      _MRLModelCreate  (from Montreal)
+      _MRLModelEvaluate  (from Montreal)
+      _MRLModelGetOutputSize  (from Montreal)
+      _MRLModelInitEpoch  (from Montreal)
+      _MRLModelRecognize  (from Montreal)
+      _MRLModelRelease  (from Montreal)
+      _MRLModelSetMaxSequenceLength  (from Montreal)
+      _MRLModelTrainBatch  (from Montreal)
+      _NLEmbeddingSubwordVocabCopyTextForTokenIds  (from CoreNLP)
+      _NLEmbeddingSubwordVocabCopyTokenIdsForText  (from CoreNLP)
+      _NLEmbeddingSubwordVocabCreate  (from CoreNLP)
+      _kCoreLMArchitectureKey  (from CoreNLP)
+      _kCoreLMArchitectureLSTM  (from CoreNLP)
+      _kCoreLMArchitectureTransformer  (from CoreNLP)
+      _kCoreLMLocaleKey  (from CoreNLP)
+      _kCoreLMSamplingMaxLengthKey  (from CoreNLP)
+      _kCoreLMSamplingMethodGREEDY  (from CoreNLP)
+      _kCoreLMSamplingMethodKey  (from CoreNLP)
+      _kCoreLMSamplingNumberKey  (from CoreNLP)
+      _kCoreLMVocabularyTypeCharacter  (from CoreNLP)
+      _kCoreLMVocabularyTypeFragment  (from CoreNLP)
+      _kCoreLMVocabularyTypeKey  (from CoreNLP)
+      _kMRLModelDataKey  (from Montreal)
+      _kMRLModelErrorRateKey  (from Montreal)
+      _kMRLModelFileLocationKey  (from Montreal)
+      _kMRLModelModelConfigKey  (from Montreal)
+
+[F] Interpretation
+- Across available language bundles, fst.dat is generally unweighted and acyclic; pt/en/fr/sv all report weighted=n.
+- This suggests fst.dat is likely a deterministic transduction/index component, not the sole probabilistic LM carrier.
+- Sidecars (sp.dat, model.dat, montreal*.dat, unilm.bundle, params.dat) indicate subword + neural LM components in .lm bundles.
+- Runtime APIs expose prediction/probability and training/adaptation calls (ConditionalProbability, EnumeratePredictions, MRLModelTrainBatch).
+- Working hypothesis: Apple .lm pipeline is hybrid (tokenization/neural scoring + FST mapping), so replacing only fst.dat cannot reproduce Apple behavior.
