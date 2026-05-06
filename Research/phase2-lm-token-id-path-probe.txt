@@ -1,0 +1,111 @@
+=== Step 2l: Token-ID path observability probe ===
+Wed May 06 07:47:50 UTC 2026
+
+[A] Runtime token-ID API anchors (dyld cache)
+_LMLanguageModelGetTokenIDForUTF8String=1
+_LMLanguageModelCreateStringForTokenID=1
+_LMVocabularyGetTokenIDForLemma=1
+_NLEmbeddingSubwordVocabCopyTokenIdsForText=1
+_NLEmbeddingSubwordVocabCopyTextForTokenIds=1
+
+[B] Apple fst label profile (pt.lm)
+arc_count=6438
+unique_input_labels=485
+unique_output_labels=66
+min_input=0 max_input=610118
+min_output=87 max_output=536913453
+top_output_labels:
+  87 (0x57) freq=6040
+  88 (0x58) freq=164
+  536870914 (0x20000002) freq=29
+  536871426 (0x20000202) freq=29
+  536903721 (0x20008029) freq=15
+  536879122 (0x20002012) freq=8
+  536913453 (0x2000a62d) freq=6
+  536903713 (0x20008021) freq=6
+  536879125 (0x20002015) freq=6
+  536903715 (0x20008023) freq=5
+  536903719 (0x20008027) freq=5
+  536888328 (0x20004408) freq=5
+  536903720 (0x20008028) freq=5
+  536903718 (0x20008026) freq=5
+  536888584 (0x20004508) freq=5
+  536870921 (0x20000009) freq=5
+  536903723 (0x2000802b) freq=5
+  536870920 (0x20000008) freq=4
+  536879124 (0x20002014) freq=4
+  536895516 (0x2000601c) freq=4
+
+[C] Sidecar ID-byte correlation for top output labels
+sidecar_files=model.dat, overrides.dat, params.dat, sp.dat
+label=87 (0x57)
+  model.dat: le_hits=0 be_hits=0
+  overrides.dat: le_hits=0 be_hits=0
+  params.dat: le_hits=0 be_hits=0
+  sp.dat: le_hits=4 be_hits=3
+label=88 (0x58)
+  model.dat: le_hits=1 be_hits=1
+  overrides.dat: le_hits=0 be_hits=0
+  params.dat: le_hits=0 be_hits=0
+  sp.dat: le_hits=5 be_hits=3
+label=536870914 (0x20000002)
+  model.dat: le_hits=1 be_hits=0
+  overrides.dat: le_hits=0 be_hits=0
+  params.dat: le_hits=0 be_hits=0
+  sp.dat: le_hits=0 be_hits=0
+label=536871426 (0x20000202)
+  model.dat: le_hits=0 be_hits=1
+  overrides.dat: le_hits=0 be_hits=0
+  params.dat: le_hits=0 be_hits=0
+  sp.dat: le_hits=0 be_hits=0
+label=536903721 (0x20008029)
+  model.dat: le_hits=0 be_hits=0
+  overrides.dat: le_hits=0 be_hits=0
+  params.dat: le_hits=0 be_hits=0
+  sp.dat: le_hits=0 be_hits=0
+label=536879122 (0x20002012)
+  model.dat: le_hits=0 be_hits=0
+  overrides.dat: le_hits=0 be_hits=0
+  params.dat: le_hits=0 be_hits=0
+  sp.dat: le_hits=0 be_hits=0
+label=536913453 (0x2000a62d)
+  model.dat: le_hits=0 be_hits=0
+  overrides.dat: le_hits=0 be_hits=0
+  params.dat: le_hits=0 be_hits=0
+  sp.dat: le_hits=0 be_hits=0
+label=536903713 (0x20008021)
+  model.dat: le_hits=0 be_hits=0
+  overrides.dat: le_hits=0 be_hits=0
+  params.dat: le_hits=0 be_hits=0
+  sp.dat: le_hits=0 be_hits=0
+label=536879125 (0x20002015)
+  model.dat: le_hits=0 be_hits=0
+  overrides.dat: le_hits=0 be_hits=0
+  params.dat: le_hits=0 be_hits=0
+  sp.dat: le_hits=0 be_hits=0
+label=536903715 (0x20008023)
+  model.dat: le_hits=0 be_hits=0
+  overrides.dat: le_hits=0 be_hits=0
+  params.dat: le_hits=0 be_hits=0
+  sp.dat: le_hits=0 be_hits=0
+
+[D] Raw-codepoint composition check (known PT words)
+word=de status=has_path
+word=a status=has_path
+word=que status=has_path
+word=nao status=has_path
+word=casa status=has_path
+word=menina status=has_path
+word=portugal status=has_path
+no_path_count=0 / 7
+
+[E] Decision signal
+token_id_string_roundtrip_observed=1
+observed_result=PARTIAL_PATH
+
+[F] Interpretation
+- Runtime exports still indicate a token-ID bridge exists in Apple's private stack.
+- Top fst output labels remain high numeric IDs, not direct lexical symbols.
+- Sidecar byte hits exist but are not sufficient to recover a stable string<->ID mapping.
+- Raw-codepoint composition for sampled Portuguese words does yield paths (partial observable path).
+- Current evidence: path observability is partial, but stable string<->ID inversion remains unproven with available artifacts.

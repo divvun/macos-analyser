@@ -20,7 +20,7 @@ SWIFT_BIN ?= $(firstword $(wildcard .build/arm64-apple-macosx/release .build/rel
 APP_CONTENTS   := DivvunAnalyser.app/Contents
 APPEX_CONTENTS := $(APP_CONTENTS)/PlugIns/DivvunNLExtension.appex/Contents
 
-.PHONY: all rust swift build-app test test-rust test-swift test-e2e demo probe-nl research-phase1 research-phase2 research-phase2-env research-phase2-real-fst research-phase2-fst-io research-phase2-label-probe research-phase2-sidecar-probe research-phase2-token-id-correlation research-phase2-function-probe research-phase2-lm-model-probe research-phase2-lm-role-correlation research-phase2-lm-gap-analysis research-phase2-se-subword-profile research-phase2-lm-launch-override-probe clean install-app
+.PHONY: all rust swift build-app test test-rust test-swift test-e2e demo probe-nl research-phase1 research-phase2 research-phase2-env research-phase2-real-fst research-phase2-fst-io research-phase2-label-probe research-phase2-sidecar-probe research-phase2-token-id-correlation research-phase2-function-probe research-phase2-lm-model-probe research-phase2-lm-role-correlation research-phase2-lm-gap-analysis research-phase2-se-subword-profile research-phase2-lm-launch-override-probe research-phase2-lm-token-id-path-probe clean install-app
 
 all: rust swift
 
@@ -413,6 +413,14 @@ research-phase2-lm-launch-override-probe:
 	mkdir -p Research
 	python3 Research/tools/lm_launch_override_probe.py
 	@echo "Phase 2 launch-time override probe complete. Report: Research/phase2-lm-launch-override-probe.txt"
+
+## Phase 2 (2l): probe token-ID path observability and whether any practical
+## string<->ID inversion can be demonstrated with available artifacts.
+## Output is written to Research/phase2-lm-token-id-path-probe.txt
+research-phase2-lm-token-id-path-probe:
+	mkdir -p Research
+	python3 Research/tools/lm_token_id_path_probe.py > Research/phase2-lm-token-id-path-probe.txt
+	@echo "Phase 2 token-ID path probe complete. Report: Research/phase2-lm-token-id-path-probe.txt"
 
 ## Copy the assembled app to /Applications (requires build-app first).
 install-app: build-app

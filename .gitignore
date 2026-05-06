@@ -6,3 +6,8 @@ DivvunAnalyser.app/
 *.xcworkspace/xcuserdata/
 DerivedData/
 .DS_Store
+
+# Research temporary outputs (not source artifacts)
+Research/assets-2k-launch/
+Research/assets/se-subword/
+Research/phase2k_probe_tmp.txt

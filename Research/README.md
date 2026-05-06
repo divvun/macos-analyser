@@ -86,6 +86,11 @@ Outputs:
   Step 2k matrix that stages `se-subword` as locale folder `se` and tests
   process-launch environment overrides (`NL_LANGUAGE_MODEL_PATH`,
   `LINGUISTIC_DATA_PATH`, plus related path vars) for measurable lemma changes.
+- `phase2-lm-token-id-path-probe.txt`:
+  Step 2l probe of token-ID path observability on a known Apple bundle (`pt.lm`),
+  combining runtime API anchors, FST label profiling, sidecar byte correlation,
+  and raw-codepoint composition checks to test whether string<->ID inversion is
+  directly recoverable from available artifacts.
 
 ## Tooling map
 
@@ -172,6 +177,7 @@ make research-phase2-lm-role-correlation
 make research-phase2-lm-gap-analysis
 make research-phase2-se-subword-profile
 make research-phase2-lm-launch-override-probe
+make research-phase2-lm-token-id-path-probe
 ```
 
 Or run subcommands directly:
@@ -242,6 +248,10 @@ Use this interpretation order:
   Runs launch-time override tests against a staged `se` locale folder backed by
   the 2j `se-subword` profile to determine whether path-based process startup
   configuration alone can unlock `.lemma` for North Sami.
+18. `phase2-lm-token-id-path-probe.txt`
+  Tests whether the private token-ID bridge can be operationally inverted from
+  available files and probes; reports either partial observable path or
+  inversion blocked when no stable string<->ID roundtrip signal is found.
 
 ## Expected baseline findings
 
