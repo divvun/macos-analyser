@@ -1,0 +1,74 @@
+=== Step 2k: Launch-time override probe (se-subword) ===
+Wed May 06 07:29:47 UTC 2026
+
+[A] Probe setup
+source_profile=/Users/smo036/langtech/gut/divvun/macos-analyser/Research/assets/se-subword
+staged_assets_root=/Users/smo036/langtech/gut/divvun/macos-analyser/Research/assets-2k-launch
+staged_locale_dir_name=se
+note=se-subword is staged under locale key 'se' for launch-time lookup tests
+
+[B] Launch-time environment matrix
+case=baseline
+  env <none>
+  phase1_exit=0
+  phase1_lemma_line=Languages with .lemma support (6): en, fr, de, pt, ru, sv
+  phase1_sami_line=North Sami (se) and all other Sami languages receive ONLY the three lowest
+  phase2_exit=0
+  phase2_baseline=.lemma available: NO ✗
+  phase2_final=.lemma available: NO ✗
+  phase2_request_assets=Result: timeout
+
+case=NL_LANGUAGE_MODEL_PATH
+  env NL_LANGUAGE_MODEL_PATH=/Users/smo036/langtech/gut/divvun/macos-analyser/Research/assets-2k-launch
+  phase1_exit=0
+  phase1_lemma_line=Languages with .lemma support (6): en, fr, de, pt, ru, sv
+  phase1_sami_line=North Sami (se) and all other Sami languages receive ONLY the three lowest
+  phase2_exit=0
+  phase2_baseline=.lemma available: NO ✗
+  phase2_final=.lemma available: NO ✗
+  phase2_request_assets=Result: timeout
+
+case=LINGUISTIC_DATA_PATH
+  env LINGUISTIC_DATA_PATH=/Users/smo036/langtech/gut/divvun/macos-analyser/Research/assets-2k-launch
+  phase1_exit=0
+  phase1_lemma_line=Languages with .lemma support (6): en, fr, de, pt, ru, sv
+  phase1_sami_line=North Sami (se) and all other Sami languages receive ONLY the three lowest
+  phase2_exit=0
+  phase2_baseline=.lemma available: NO ✗
+  phase2_final=.lemma available: NO ✗
+  phase2_request_assets=Result: timeout
+
+case=both_paths
+  env LINGUISTIC_DATA_PATH=/Users/smo036/langtech/gut/divvun/macos-analyser/Research/assets-2k-launch
+  env NL_LANGUAGE_MODEL_PATH=/Users/smo036/langtech/gut/divvun/macos-analyser/Research/assets-2k-launch
+  phase1_exit=0
+  phase1_lemma_line=Languages with .lemma support (6): en, fr, de, pt, ru, sv
+  phase1_sami_line=North Sami (se) and all other Sami languages receive ONLY the three lowest
+  phase2_exit=0
+  phase2_baseline=.lemma available: NO ✗
+  phase2_final=.lemma available: NO ✗
+  phase2_request_assets=Result: timeout
+
+case=all_known_paths
+  env LANGUAGEMODELING_ASSET_PATH=/Users/smo036/langtech/gut/divvun/macos-analyser/Research/assets-2k-launch
+  env LD_ASSET_PATH=/Users/smo036/langtech/gut/divvun/macos-analyser/Research/assets-2k-launch
+  env LINGUISTIC_DATA_PATH=/Users/smo036/langtech/gut/divvun/macos-analyser/Research/assets-2k-launch
+  env NL_ASSET_PATH=/Users/smo036/langtech/gut/divvun/macos-analyser/Research/assets-2k-launch
+  env NL_LANGUAGE_MODEL_PATH=/Users/smo036/langtech/gut/divvun/macos-analyser/Research/assets-2k-launch
+  phase1_exit=0
+  phase1_lemma_line=Languages with .lemma support (6): en, fr, de, pt, ru, sv
+  phase1_sami_line=North Sami (se) and all other Sami languages receive ONLY the three lowest
+  phase2_exit=0
+  phase2_baseline=.lemma available: NO ✗
+  phase2_final=.lemma available: NO ✗
+  phase2_request_assets=Result: timeout
+
+[C] Decision signal
+success_condition=any_case_phase2_baseline_or_final_contains_' .lemma available: YES '
+yes_hits=0
+observed_result=NO_CHANGE
+
+[D] Interpretation
+- This probe tests process-launch overrides with a staged se-subword profile mapped to locale folder 'se'.
+- If NO_CHANGE across all cases, launch-time path overrides are insufficient (or not honored) for enabling se lemma in current pipeline.
+- Next focus should remain ID-protocol and asset-registration boundaries rather than path-only configuration.

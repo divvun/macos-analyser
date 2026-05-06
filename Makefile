@@ -20,7 +20,7 @@ SWIFT_BIN ?= $(firstword $(wildcard .build/arm64-apple-macosx/release .build/rel
 APP_CONTENTS   := DivvunAnalyser.app/Contents
 APPEX_CONTENTS := $(APP_CONTENTS)/PlugIns/DivvunNLExtension.appex/Contents
 
-.PHONY: all rust swift build-app test test-rust test-swift test-e2e demo probe-nl research-phase1 research-phase2 research-phase2-env research-phase2-real-fst research-phase2-fst-io research-phase2-label-probe research-phase2-sidecar-probe research-phase2-token-id-correlation clean install-app
+.PHONY: all rust swift build-app test test-rust test-swift test-e2e demo probe-nl research-phase1 research-phase2 research-phase2-env research-phase2-real-fst research-phase2-fst-io research-phase2-label-probe research-phase2-sidecar-probe research-phase2-token-id-correlation research-phase2-function-probe research-phase2-lm-model-probe research-phase2-lm-role-correlation research-phase2-lm-gap-analysis research-phase2-se-subword-profile research-phase2-lm-launch-override-probe clean install-app
 
 all: rust swift
 
@@ -305,6 +305,114 @@ research-phase2-sidecar-probe:
 research-phase2-token-id-correlation:
 	python3 Research/tools/token_id_correlation.py
 	@echo "Phase 2 token-ID correlation complete. Report: Research/phase2-token-id-correlation.txt"
+
+## Phase 2 (function path probe): mine dyld-cache exports/imports and sidecar
+## signatures to infer the text -> token-ID -> FST -> output-ID call path.
+## Output is written to Research/phase2-function-path-probe.txt
+research-phase2-function-probe:
+	mkdir -p Research
+	PTLM=/System/Library/AssetsV2/com_apple_MobileAsset_LinguisticData/e455d830fc4c363e92825363afa88cdb24239e34.asset/AssetData/pt.lm; \
+	REPORT=Research/phase2-function-path-probe.txt; \
+	: > $$REPORT; \
+	echo "=== Step 2f: Framework function/call-path probe ===" | tee -a $$REPORT; \
+	date -u | tee -a $$REPORT; \
+	echo | tee -a $$REPORT; \
+	echo "[A] Framework executables on current macOS" | tee -a $$REPORT; \
+	echo "Note: binaries are dyld-cache-backed on macOS 26 (symlink targets absent on disk)." | tee -a $$REPORT; \
+	ls -la /System/Library/PrivateFrameworks/LanguageModeling.framework | tee -a $$REPORT; \
+	ls -la /System/Library/PrivateFrameworks/LinguisticData.framework | tee -a $$REPORT; \
+	ls -la /System/Library/Frameworks/NaturalLanguage.framework | tee -a $$REPORT; \
+	echo | tee -a $$REPORT; \
+	echo "[B] Exported symbols (dyld cache)" | tee -a $$REPORT; \
+	echo "NaturalLanguage lemma/token APIs:" | tee -a $$REPORT; \
+	dyld_info -all_dyld_cache -exports 2>/dev/null | grep -E '[[:space:]]+0x[0-9A-Fa-f]+[[:space:]]+_NL(MorphologicalAnalyzer|Tokenizer|Tagger|Transliterator)[A-Za-z0-9_]*|[[:space:]]+0x[0-9A-Fa-f]+[[:space:]]+_NLTagSchemeLemma' | head -80 | tee -a $$REPORT; \
+	echo | tee -a $$REPORT; \
+	echo "LanguageModeling token-ID/model APIs:" | tee -a $$REPORT; \
+	dyld_info -all_dyld_cache -exports 2>/dev/null | grep -E '[[:space:]]+0x[0-9A-Fa-f]+[[:space:]]+_LM(LanguageModel(GetTokenIDForUTF8String|CreateStringForTokenID|ConvertToInternalTokenIDs|ConvertToExternalTokenIDs|GetTokenIDForString)|VocabularyGet(TokenIDForLemma|ClassForTokenID)|CreateMontrealIDsFromLMTokenIDSequence)[A-Za-z0-9_]*' | head -120 | tee -a $$REPORT; \
+	echo | tee -a $$REPORT; \
+	echo "LinguisticData asset APIs:" | tee -a $$REPORT; \
+	dyld_info -all_dyld_cache -exports 2>/dev/null | grep -E '[[:space:]]+0x[0-9A-Fa-f]+[[:space:]]+_LD(EnumerateAssetDataItems|CreateMobileAssetType|CopyLocaleIdentifierOverrideForLocaleIdentifier|CreateSystemLexiconCompatibilityVersion)[A-Za-z0-9_]*' | head -80 | tee -a $$REPORT; \
+	echo | tee -a $$REPORT; \
+	echo "[C] Import edges between frameworks" | tee -a $$REPORT; \
+	echo "NaturalLanguage imports from private frameworks:" | tee -a $$REPORT; \
+	dyld_info -imports /System/Library/Frameworks/NaturalLanguage.framework/Versions/A/NaturalLanguage 2>/dev/null | grep -E 'from (LanguageModeling|LinguisticData|CoreNLP|Lexicon|Montreal)' | head -120 | tee -a $$REPORT; \
+	echo | tee -a $$REPORT; \
+	echo "LanguageModeling imports from LinguisticData:" | tee -a $$REPORT; \
+	dyld_info -imports /System/Library/PrivateFrameworks/LanguageModeling.framework/Versions/A/LanguageModeling 2>/dev/null | grep -E 'from LinguisticData' | head -120 | tee -a $$REPORT; \
+	echo | tee -a $$REPORT; \
+	echo "[D] Sidecar signatures and quick content hints" | tee -a $$REPORT; \
+	file $$PTLM/fst.dat $$PTLM/sp.dat $$PTLM/model.dat $$PTLM/overrides.dat | tee -a $$REPORT; \
+	echo | tee -a $$REPORT; \
+	echo "sp.dat first strings:" | tee -a $$REPORT; \
+	strings $$PTLM/sp.dat | head -40 | tee -a $$REPORT; \
+	echo | tee -a $$REPORT; \
+	echo "model.dat first strings:" | tee -a $$REPORT; \
+	strings $$PTLM/model.dat | head -30 | tee -a $$REPORT; \
+	echo | tee -a $$REPORT; \
+	echo "[E] Inference (evidence-backed hypotheses)" | tee -a $$REPORT; \
+	echo "1. NaturalLanguage sits above LanguageModeling/LinguisticData and calls both directly." | tee -a $$REPORT; \
+	echo "2. LanguageModeling exposes explicit text<->token-ID conversion and lemma-linked vocabulary lookups." | tee -a $$REPORT; \
+	echo "3. LinguisticData appears to own asset discovery/type routing for language-model resources." | tee -a $$REPORT; \
+	echo "4. sp.dat contains special token strings (<unk>, </s>, _U_PRE*), consistent with subword/token-ID vocabulary." | tee -a $$REPORT; \
+	echo "5. model.dat contains NN layer names (embedding/lstm/dense/output), indicating neural side-model state around fst.dat." | tee -a $$REPORT; \
+	echo "6. Combined with steps 2b-2e, likely runtime chain is: text -> tokenizer/subword IDs -> LM internal token IDs -> fst.dat transitions -> namespaced output IDs -> lemma/class decoding." | tee -a $$REPORT; \
+	echo | tee -a $$REPORT; \
+	echo "[F] Web cross-check pointers used in this step" | tee -a $$REPORT; \
+	echo "- OpenFST binary FST labels are integer IDs; symbol tables are optional metadata: https://openfst.org" | tee -a $$REPORT; \
+	echo "- SentencePiece models map text to integer piece IDs (binary model format): https://github.com/google/sentencepiece" | tee -a $$REPORT
+	@echo "Phase 2 function-path probe complete. Report: Research/phase2-function-path-probe.txt"
+
+## Phase 2 (LM model probe): investigate whether Apple's .lm bundles are mainly
+## prediction/completion language-model artifacts and how fst.dat participates.
+## Output is written to Research/phase2-lm-model-probe.txt
+research-phase2-lm-model-probe:
+	mkdir -p Research
+	python3 Research/tools/lm_model_probe.py > Research/phase2-lm-model-probe.txt
+	@echo "Phase 2 LM model probe complete. Report: Research/phase2-lm-model-probe.txt"
+
+## Phase 2 (role correlation): classify .lm bundle profiles and correlate
+## sidecar composition with likely runtime role (lemma/morph/prediction/search).
+## Output is written to Research/phase2-lm-role-correlation.txt
+research-phase2-lm-role-correlation:
+	mkdir -p Research
+	python3 Research/tools/lm_role_correlation.py > Research/phase2-lm-role-correlation.txt
+	@echo "Phase 2 role-correlation probe complete. Report: Research/phase2-lm-role-correlation.txt"
+
+## Phase 2 (gap analysis): synthesize 2f/2g/2h findings into a concrete
+## minimum-compatibility checklist for a plausible se.lm profile.
+## Output is written to Research/phase2-lm-gap-analysis.txt
+research-phase2-lm-gap-analysis:
+	mkdir -p Research
+	python3 Research/tools/lm_gap_analysis.py > Research/phase2-lm-gap-analysis.txt
+	@echo "Phase 2 gap analysis complete. Report: Research/phase2-lm-gap-analysis.txt"
+
+## Phase 2 (2j): build a first se-subword profile from se base bundle plus
+## pt.lm sidecars, then run phase2-inject against it.
+## Output is written to Research/phase2-se-subword-profile.txt
+research-phase2-se-subword-profile:
+	mkdir -p Research
+	REPORT=Research/phase2-se-subword-profile.txt; \
+	: > $$REPORT; \
+	echo "=== Step 2j: se-subword profile experiment ===" | tee -a $$REPORT; \
+	date -u | tee -a $$REPORT; \
+	echo | tee -a $$REPORT; \
+	echo "[A] Build profile" | tee -a $$REPORT; \
+	python3 Research/tools/build_se_subword_profile.py 2>&1 | tee -a $$REPORT; \
+	echo | tee -a $$REPORT; \
+	echo "[B] Run phase2-inject on Research/assets/se-subword" | tee -a $$REPORT; \
+	swift run DivvunNLResearch phase2-inject Research/assets/se-subword 2>&1 | tee -a $$REPORT; \
+	echo | tee -a $$REPORT; \
+	echo "[C] Quick post-check" | tee -a $$REPORT; \
+	ls -lah Research/assets/se-subword/se.lm 2>&1 | tee -a $$REPORT
+	@echo "Phase 2 se-subword profile experiment complete. Report: Research/phase2-se-subword-profile.txt"
+
+## Phase 2 (2k): test launch-time environment overrides using a staged
+## se-subword profile mapped to locale folder name 'se'.
+## Output is written to Research/phase2-lm-launch-override-probe.txt
+research-phase2-lm-launch-override-probe:
+	mkdir -p Research
+	python3 Research/tools/lm_launch_override_probe.py
+	@echo "Phase 2 launch-time override probe complete. Report: Research/phase2-lm-launch-override-probe.txt"
 
 ## Copy the assembled app to /Applications (requires build-app first).
 install-app: build-app

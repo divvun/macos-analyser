@@ -64,6 +64,28 @@ Outputs:
 - `phase2-token-id-correlation.txt`:
   Correlation probe between Apple FST label IDs and raw 32-bit values in sidecar
   binaries to test whether ID tables are stored directly.
+- `phase2-function-path-probe.txt`:
+  dyld-cache export/import reconnaissance for NaturalLanguage/LanguageModeling/
+  LinguisticData plus sidecar signature hints, used to infer the likely
+  runtime text -> token-ID -> FST -> output-ID pipeline.
+- `phase2-lm-model-probe.txt`:
+  Direct probe of whether `.lm` bundles behave like hybrid language-model
+  artifacts (prediction/completion), including FST weightedness/topology,
+  sidecar model files, and runtime probability/training APIs.
+- `phase2-lm-role-correlation.txt`:
+  Correlates `.lm` bundle profiles (Siri/searchquery/base/inline-completion/
+  morphology) with sidecar composition and FST/runtime traits to infer
+  functional role boundaries.
+- `phase2-lm-gap-analysis.txt`:
+  Consolidated gap matrix from 2f/2g/2h that defines a minimum viable
+  compatibility checklist for an `se.lm` profile beyond `fst.dat` format match.
+- `phase2-se-subword-profile.txt`:
+  First 2j experiment that builds `Research/assets/se-subword` (se base bundle
+  + subword sidecars from `pt.lm`) and runs `phase2-inject` on that profile.
+- `phase2-lm-launch-override-probe.txt`:
+  Step 2k matrix that stages `se-subword` as locale folder `se` and tests
+  process-launch environment overrides (`NL_LANGUAGE_MODEL_PATH`,
+  `LINGUISTIC_DATA_PATH`, plus related path vars) for measurable lemma changes.
 
 ## Tooling map
 
@@ -144,6 +166,12 @@ make research-phase2-fst-io
 make research-phase2-label-probe
 make research-phase2-sidecar-probe
 make research-phase2-token-id-correlation
+make research-phase2-function-probe
+make research-phase2-lm-model-probe
+make research-phase2-lm-role-correlation
+make research-phase2-lm-gap-analysis
+make research-phase2-se-subword-profile
+make research-phase2-lm-launch-override-probe
 ```
 
 Or run subcommands directly:
@@ -191,6 +219,29 @@ Use this interpretation order:
   Shows sparse direct overlap between FST labels and raw sidecar u32 values,
   supporting the hypothesis that mapping is encoded/packed, not stored as plain
   little-endian ID tables.
+12. `phase2-function-path-probe.txt`
+  Maps likely framework call edges (`NaturalLanguage` -> `LanguageModeling` ->
+  `LinguisticData`) and token APIs (`GetTokenIDForUTF8String`,
+  `CreateStringForTokenID`, `LMVocabularyGetTokenIDForLemma`) that support a
+  token-ID protocol interpretation around `fst.dat`.
+13. `phase2-lm-model-probe.txt`
+  Evaluates the weighted-FST language-model hypothesis directly: in sampled
+  Apple bundles, `fst.dat` is typically unweighted/acyclic while sidecars and
+  imported runtime APIs indicate a broader hybrid prediction stack.
+14. `phase2-lm-role-correlation.txt`
+  Splits Apple `.lm` assets into profile families and shows that sidecar
+  combinations, not `fst.dat` alone, best explain which pipeline role a bundle
+  is likely serving.
+15. `phase2-lm-gap-analysis.txt`
+  Turns steps 2f-2h into an actionable engineering checklist and baseline
+  profile candidates for subsequent emulation experiments.
+16. `phase2-se-subword-profile.txt`
+  Executes the first profile-level emulation run (2j) and records whether a
+  subword_nn-style `se` bundle changes observed NL lemma behavior.
+17. `phase2-lm-launch-override-probe.txt`
+  Runs launch-time override tests against a staged `se` locale folder backed by
+  the 2j `se-subword` profile to determine whether path-based process startup
+  configuration alone can unlock `.lemma` for North Sami.
 
 ## Expected baseline findings
 
