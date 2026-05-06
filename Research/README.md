@@ -101,6 +101,9 @@ Outputs:
 - `phase2-lm-private-signature-probe.txt`:
   Step 2o signature-recovery matrix for private LanguageModeling create/get-id/
   to-string calls, executed per candidate signature in isolated subprocesses.
+- `phase2-lm-create-callsite-probe.txt`:
+  Step 2p call-site guided probe that combines dyld import/export hints with
+  NSDictionary-oriented create signature candidates in isolated Swift runs.
 
 ## Tooling map
 
@@ -191,6 +194,7 @@ make research-phase2-lm-token-id-path-probe
 make research-phase2-lm-token-id-path-probe-strict
 make research-phase2-lm-private-roundtrip-probe
 make research-phase2-lm-private-signature-probe
+make research-phase2-lm-create-callsite-probe
 ```
 
 Or run subcommands directly:
@@ -277,6 +281,10 @@ Use this interpretation order:
   Expands 2n into a signature matrix where each create candidate executes
   create+roundtrip in the same subprocess, reducing false negatives from
   cross-process pointer invalidation and identifying any working prototypes.
+22. `phase2-lm-create-callsite-probe.txt`
+  Uses call-site hints from `NaturalLanguage` imports plus focused
+  NSDictionary-style create candidates to narrow likely `LMLanguageModelCreate`
+  prototype expectations before deeper disassembly work.
 
 ## Expected baseline findings
 
