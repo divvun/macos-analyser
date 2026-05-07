@@ -107,6 +107,10 @@ Outputs:
 - `phase2-lm-create-key-recovery-probe.txt`:
   Step 2q key-recovery probe that resolves LM option-key constants at runtime
   and tests create dictionaries built from those keys and value-shape variants.
+- `phase2-lm-header-search-probe.txt`:
+  Step 2r header/prototype search over runtime framework paths, Xcode SDK
+  private framework stubs, and debug metadata signals to recover (or reject)
+  direct prototype visibility for `LMLanguageModelCreate`.
 
 ## Tooling map
 
@@ -199,6 +203,7 @@ make research-phase2-lm-private-roundtrip-probe
 make research-phase2-lm-private-signature-probe
 make research-phase2-lm-create-callsite-probe
 make research-phase2-lm-create-key-recovery-probe
+make research-phase2-lm-header-search-probe
 ```
 
 Or run subcommands directly:
@@ -293,6 +298,10 @@ Use this interpretation order:
   Extends 2p by resolving `kLMLanguageModel*Key` constants dynamically and
   testing structured option dictionaries (locale/app context/adaptation/siri)
   to reduce key-name uncertainty in `LMLanguageModelCreate` calls.
+24. `phase2-lm-header-search-probe.txt`
+  Searches for direct private prototypes/headers in runtime and SDK framework
+  locations, verifies symbol-level visibility via `.tbd` exports, and reports
+  whether prototype recovery is possible without disassembly.
 
 ## Expected baseline findings
 

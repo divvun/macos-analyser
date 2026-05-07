@@ -20,7 +20,7 @@ SWIFT_BIN ?= $(firstword $(wildcard .build/arm64-apple-macosx/release .build/rel
 APP_CONTENTS   := DivvunAnalyser.app/Contents
 APPEX_CONTENTS := $(APP_CONTENTS)/PlugIns/DivvunNLExtension.appex/Contents
 
-.PHONY: all rust swift build-app test test-rust test-swift test-e2e demo probe-nl research-phase1 research-phase2 research-phase2-env research-phase2-real-fst research-phase2-fst-io research-phase2-label-probe research-phase2-sidecar-probe research-phase2-token-id-correlation research-phase2-function-probe research-phase2-lm-model-probe research-phase2-lm-role-correlation research-phase2-lm-gap-analysis research-phase2-se-subword-profile research-phase2-lm-launch-override-probe research-phase2-lm-token-id-path-probe research-phase2-lm-token-id-path-probe-strict research-phase2-lm-private-roundtrip-probe research-phase2-lm-private-signature-probe research-phase2-lm-create-callsite-probe research-phase2-lm-create-key-recovery-probe clean install-app
+.PHONY: all rust swift build-app test test-rust test-swift test-e2e demo probe-nl research-phase1 research-phase2 research-phase2-env research-phase2-real-fst research-phase2-fst-io research-phase2-label-probe research-phase2-sidecar-probe research-phase2-token-id-correlation research-phase2-function-probe research-phase2-lm-model-probe research-phase2-lm-role-correlation research-phase2-lm-gap-analysis research-phase2-se-subword-profile research-phase2-lm-launch-override-probe research-phase2-lm-token-id-path-probe research-phase2-lm-token-id-path-probe-strict research-phase2-lm-private-roundtrip-probe research-phase2-lm-private-signature-probe research-phase2-lm-create-callsite-probe research-phase2-lm-create-key-recovery-probe research-phase2-lm-header-search-probe clean install-app
 
 all: rust swift
 
@@ -461,6 +461,14 @@ research-phase2-lm-create-key-recovery-probe:
 	mkdir -p Research
 	python3 Research/tools/lm_create_key_recovery_probe.py > Research/phase2-lm-create-key-recovery-probe.txt
 	@echo "Phase 2 create key-recovery probe complete. Report: Research/phase2-lm-create-key-recovery-probe.txt"
+
+## Phase 2 (2r): search for private headers/prototypes for LanguageModeling
+## create/get-id/to-string via framework roots, SDK tbd exports, and debug metadata.
+## Output is written to Research/phase2-lm-header-search-probe.txt
+research-phase2-lm-header-search-probe:
+	mkdir -p Research
+	python3 Research/tools/lm_header_search_probe.py > Research/phase2-lm-header-search-probe.txt
+	@echo "Phase 2 header/prototype search complete. Report: Research/phase2-lm-header-search-probe.txt"
 
 ## Copy the assembled app to /Applications (requires build-app first).
 install-app: build-app

@@ -1,0 +1,50 @@
+{
+  "probe_type": "header_search",
+  "phase": "2r",
+  "step_name": "Header/Prototype Search",
+  "total_findings": 6,
+  "findings": [
+    {
+      "category": "header_search",
+      "location": "/System/Library/PrivateFrameworks/LanguageModeling.framework",
+      "content_preview": "(no header files found)",
+      "notes": "No headers shipped in this framework path"
+    },
+    {
+      "category": "header_search",
+      "location": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/PrivateFrameworks/LanguageModeling.framework",
+      "content_preview": "(no header files found)",
+      "notes": "No headers shipped in this framework path"
+    },
+    {
+      "category": "tbd_symbols",
+      "location": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/PrivateFrameworks/LanguageModeling.framework/Versions/A/LanguageModeling.tbd",
+      "content_preview": "Found 78 LMLanguageModel* symbols",
+      "notes": "Create function present: True"
+    },
+    {
+      "category": "tbd_key_symbols",
+      "location": "symbol_analysis",
+      "content_preview": "_LMLanguageModelCreate\n_LMLanguageModelCreateExemplarCharacterStringForLocale\n_LMLanguageModelCreatePredictionEnumerator\n_LMLanguageModelCreateStringForSpecialTokenID\n_LMLanguageModelCreateStringForTokenID\n_LMLanguageModelGetTokenIDForString\n_LMLanguageModelGetTokenIDForUTF8String\n_LMLanguageModelRelease",
+      "notes": "Total key symbols: 8"
+    },
+    {
+      "category": "dwarf_info",
+      "location": "/System/Library/PrivateFrameworks/LanguageModeling.framework/Versions/A/LanguageModeling",
+      "content_preview": "Runtime binary not present as standalone file",
+      "notes": "Likely stored in dyld shared cache on this macOS build"
+    },
+    {
+      "category": "inferred_prototype",
+      "location": "evidence_synthesis",
+      "content_preview": "// Inferred from 2n-2q probe evidence:\ntypedef void* LMLanguageModelRef;\n\n// Most likely signature (based on crashes and key recovery):\nLMLanguageModelRef _LMLanguageModelCreate(\n    CFDictionaryRef options  // or NSDictionary*\n);\n\n// Dictionary keys (from dyld imports):\n- kLMLanguageModelLocaleKey          (CFStringRef)\n- kLMLanguageModelAppContextKey      (CFStringRef or nil)\n- kLMLanguageModelAdaptationEnabledKey (CFBooleanRef)\n- kLMLanguageModelIsSiriModelKey     (CFBooleanRef)\n\n// Possible alternative signatures:\n// 1. _LMLanguageModelCreate(locale, options)\n// 2. _LMLanguageModelCreate(options, callbacks)\n// 3. _LMLanguageModelCreate(dictionary) + setters",
+      "notes": "Based on 2n-2q blocking signals and dyld key recovery"
+    }
+  ],
+  "observed_result": "NO_PUBLIC_HEADERS_FOUND_USING_INFERRED_PROTOTYPE",
+  "next_steps": [
+    "Consider 2r alt: disassembly-based extraction",
+    "Or proceed with 2s: enum/constant probe with inferred prototype",
+    "Or test inferred prototype directly"
+  ]
+}
