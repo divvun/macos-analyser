@@ -20,7 +20,7 @@ SWIFT_BIN ?= $(firstword $(wildcard .build/arm64-apple-macosx/release .build/rel
 APP_CONTENTS   := DivvunAnalyser.app/Contents
 APPEX_CONTENTS := $(APP_CONTENTS)/PlugIns/DivvunNLExtension.appex/Contents
 
-.PHONY: all rust swift build-app test test-rust test-swift test-e2e demo probe-nl research-phase1 research-phase2 research-phase2-env research-phase2-real-fst research-phase2-fst-io research-phase2-label-probe research-phase2-sidecar-probe research-phase2-token-id-correlation research-phase2-function-probe research-phase2-lm-model-probe research-phase2-lm-role-correlation research-phase2-lm-gap-analysis research-phase2-se-subword-profile research-phase2-lm-launch-override-probe research-phase2-lm-token-id-path-probe research-phase2-lm-token-id-path-probe-strict research-phase2-lm-private-roundtrip-probe research-phase2-lm-private-signature-probe research-phase2-lm-create-callsite-probe research-phase2-lm-create-key-recovery-probe research-phase2-lm-header-search-probe research-phase2-lm-disassembly-prototype-probe research-phase2-lm-create-type-matrix-probe research-phase2-lm-create-broad-keyset-probe clean install-app
+.PHONY: all rust swift build-app test test-rust test-swift test-e2e demo probe-nl research-phase1 research-phase2 research-phase2-env research-phase2-real-fst research-phase2-fst-io research-phase2-label-probe research-phase2-sidecar-probe research-phase2-token-id-correlation research-phase2-function-probe research-phase2-lm-model-probe research-phase2-lm-role-correlation research-phase2-lm-gap-analysis research-phase2-se-subword-profile research-phase2-lm-launch-override-probe research-phase2-lm-token-id-path-probe research-phase2-lm-token-id-path-probe-strict research-phase2-lm-private-roundtrip-probe research-phase2-lm-private-signature-probe research-phase2-lm-create-callsite-probe research-phase2-lm-create-key-recovery-probe research-phase2-lm-header-search-probe research-phase2-lm-disassembly-prototype-probe research-phase2-lm-create-type-matrix-probe research-phase2-lm-create-broad-keyset-probe research-phase2-lm-post-create-safety-probe clean install-app
 
 all: rust swift
 
@@ -493,6 +493,14 @@ research-phase2-lm-create-broad-keyset-probe:
 	mkdir -p Research
 	python3 Research/tools/lm_create_broad_keyset_probe.py > Research/phase2-lm-create-broad-keyset-probe.txt
 	@echo "Phase 2 create broad-keyset probe complete. Report: Research/phase2-lm-create-broad-keyset-probe.txt"
+
+## Phase 2 (2v): post-create safety matrix that reuses known-good create
+## profiles and stages get-id/to-string calls under crash isolation.
+## Output is written to Research/phase2-lm-post-create-safety-probe.txt
+research-phase2-lm-post-create-safety-probe:
+	mkdir -p Research
+	python3 Research/tools/lm_post_create_safety_probe.py > Research/phase2-lm-post-create-safety-probe.txt
+	@echo "Phase 2 post-create safety probe complete. Report: Research/phase2-lm-post-create-safety-probe.txt"
 
 ## Copy the assembled app to /Applications (requires build-app first).
 install-app: build-app

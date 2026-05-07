@@ -123,6 +123,10 @@ Outputs:
   Step 2u broad option-keyset probe that expands create dictionaries using 2t
   type signals, testing whether model creation remains stable under wider
   LanguageModeling configuration profiles.
+- `phase2-lm-post-create-safety-probe.txt`:
+  Step 2v staged post-create probe that reuses known-good create profiles and
+  tests `get-id`/`to-string` progression in isolated subprocesses to separate
+  create stability from token roundtrip viability.
 
 ## Tooling map
 
@@ -219,6 +223,7 @@ make research-phase2-lm-header-search-probe
 make research-phase2-lm-disassembly-prototype-probe
 make research-phase2-lm-create-type-matrix-probe
 make research-phase2-lm-create-broad-keyset-probe
+make research-phase2-lm-post-create-safety-probe
 ```
 
 Or run subcommands directly:
@@ -329,6 +334,10 @@ Use this interpretation order:
   Expands from 2t into wider keyset profiles (pipeline flags, resource paths,
   and custom-word hooks) to measure whether create-pointer stability survives
   increased option breadth under the recovered one-arg contract.
+28. `phase2-lm-post-create-safety-probe.txt`
+  Keeps create settings fixed to known working profiles and stages post-create
+  calls (`GetTokenIDFor*`, `CreateStringForTokenID`) to locate whether failure
+  now sits in call-sequence/state handling versus symbol ABI.
 
 ## Expected baseline findings
 
