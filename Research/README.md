@@ -115,6 +115,10 @@ Outputs:
   Step 2s disassembly-driven recovery of `_LMLanguageModelCreate` calling
   contract from arm64e code paths, plus exported option-key inventory used to
   build a tighter runtime call matrix.
+- `phase2-lm-create-type-matrix-probe.txt`:
+  Step 2t controlled type-matrix probe for the 2s inferred one-argument create
+  contract, varying value types per core option key to identify accepted
+  datatype shapes before broad keyset expansion.
 
 ## Tooling map
 
@@ -209,6 +213,7 @@ make research-phase2-lm-create-callsite-probe
 make research-phase2-lm-create-key-recovery-probe
 make research-phase2-lm-header-search-probe
 make research-phase2-lm-disassembly-prototype-probe
+make research-phase2-lm-create-type-matrix-probe
 ```
 
 Or run subcommands directly:
@@ -311,6 +316,10 @@ Use this interpretation order:
   Uses dyld disassembly of `_LMLanguageModelCreate` to infer the effective
   argument contract (`x0` options dictionary), locale normalization behavior,
   and key/type validation signals for subsequent live-create experiments.
+26. `phase2-lm-create-type-matrix-probe.txt`
+  Applies the 2s contract in a narrow matrix that varies datatype choices for
+  locale and core boolean/context keys, then ranks non-crash and best-signal
+  variants for the next broad keyset probe.
 
 ## Expected baseline findings
 
