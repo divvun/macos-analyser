@@ -119,6 +119,10 @@ Outputs:
   Step 2t controlled type-matrix probe for the 2s inferred one-argument create
   contract, varying value types per core option key to identify accepted
   datatype shapes before broad keyset expansion.
+- `phase2-lm-create-broad-keyset-probe.txt`:
+  Step 2u broad option-keyset probe that expands create dictionaries using 2t
+  type signals, testing whether model creation remains stable under wider
+  LanguageModeling configuration profiles.
 
 ## Tooling map
 
@@ -214,6 +218,7 @@ make research-phase2-lm-create-key-recovery-probe
 make research-phase2-lm-header-search-probe
 make research-phase2-lm-disassembly-prototype-probe
 make research-phase2-lm-create-type-matrix-probe
+make research-phase2-lm-create-broad-keyset-probe
 ```
 
 Or run subcommands directly:
@@ -320,6 +325,10 @@ Use this interpretation order:
   Applies the 2s contract in a narrow matrix that varies datatype choices for
   locale and core boolean/context keys, then ranks non-crash and best-signal
   variants for the next broad keyset probe.
+27. `phase2-lm-create-broad-keyset-probe.txt`
+  Expands from 2t into wider keyset profiles (pipeline flags, resource paths,
+  and custom-word hooks) to measure whether create-pointer stability survives
+  increased option breadth under the recovered one-arg contract.
 
 ## Expected baseline findings
 
