@@ -1,0 +1,30 @@
+=== Step 2w: Get/ToString signature matrix probe ===
+Thu May 07 13:03:52 UTC 2026
+
+[A] Signature matrix on stable create profile
+variant=w0 exit=-11 mode=w0_utf8_u64_to_u64 raw=Stack dump: 0.	Program arguments: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -frontend -interpret /var/folders/0h/1qc7g79
+variant=w1 exit=-11 mode=w1_utf8_u32_to_u64 raw=Stack dump: 0.	Program arguments: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -frontend -interpret /var/folders/0h/1qc7g79
+variant=w2 exit=-11 mode=w2_utf8_int_to_u64 raw=Stack dump: 0.	Program arguments: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -frontend -interpret /var/folders/0h/1qc7g79
+variant=w3 exit=0 mode=w3_string_u64_to_u64 create_ptr=46946469856 token=336635 exact_match=1
+variant=w4 exit=0 mode=w4_string_u32_to_u64 create_ptr=39674002912 token=336635 exact_match=1
+variant=w5 exit=0 mode=w5_string_u64_to_u32 create_ptr=35135167760 token=336635 exact_match=1
+variant=w6 exit=0 mode=w6_string_u64_to_unretained create_ptr=49293533680 token=336635 exact_match=1
+
+[B] Decision signal
+variants_total=7
+variants_non_crash=4
+variants_create_nonzero=4
+variants_token_nonzero=4
+variants_roundtrip_exact=4
+roundtrip_variant=w3 mode=w3_string_u64_to_u64 token=336635
+roundtrip_variant=w4 mode=w4_string_u32_to_u64 token=336635
+roundtrip_variant=w5 mode=w5_string_u64_to_u32 token=336635
+roundtrip_variant=w6 mode=w6_string_u64_to_unretained token=336635
+observed_result=SIGNATURE_ROUNDTRIP_WORKING
+
+[C] Interpretation
+- 2w isolates ABI/prototype choices for get-id/to-string while holding create stable.
+- Working string-path with failing utf8-path indicates UTF8 ABI mismatch or call contract mismatch.
+
+[D] JSON appendix
+{"rows": [{"variant": "w0", "mode": "w0_utf8_u64_to_u64", "exit": -11, "raw_preview": "Stack dump: 0.\tProgram arguments: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -frontend -interpret /var/folders/0h/1qc7g79j7tn1cvglh9r4z98w0000gp/T/TemporaryDirectory.LQ3yYd/main.swift -Xllvm -aarch64-use-tbi -enable-objc-interop -stack-check -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.4.sdk -no-color-diagn"}, {"variant": "w1", "mode": "w1_utf8_u32_to_u64", "exit": -11, "raw_preview": "Stack dump: 0.\tProgram arguments: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -frontend -interpret /var/folders/0h/1qc7g79j7tn1cvglh9r4z98w0000gp/T/TemporaryDirectory.wvTXjH/main.swift -Xllvm -aarch64-use-tbi -enable-objc-interop -stack-check -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.4.sdk -no-color-diagn"}, {"variant": "w2", "mode": "w2_utf8_int_to_u64", "exit": -11, "raw_preview": "Stack dump: 0.\tProgram arguments: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-frontend -frontend -interpret /var/folders/0h/1qc7g79j7tn1cvglh9r4z98w0000gp/T/TemporaryDirectory.1KQgQf/main.swift -Xllvm -aarch64-use-tbi -enable-objc-interop -stack-check -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.4.sdk -no-color-diagn"}, {"variant": "w3", "mode": "w3_string_u64_to_u64", "exit": 0, "raw_preview": "{\"has_get_utf8\":1,\"variant\":\"w3\",\"roundtrip\":\"de\",\"has_get_string\":1,\"exact_match\":1,\"sig_status\":\"ok\",\"mode\":\"w3_string_u64_to_u64\",\"create_ptr\":46946469856,\"has_to_string\":1,\"token\":336635}", "has_get_utf8": 1, "roundtrip": "de", "has_get_string": 1, "exact_match": 1, "sig_status": "ok", "create_ptr": 46946469856, "has_to_string": 1, "token": 336635}, {"variant": "w4", "mode": "w4_string_u32_to_u64", "exit": 0, "raw_preview": "{\"mode\":\"w4_string_u32_to_u64\",\"sig_status\":\"ok\",\"has_get_string\":1,\"token\":336635,\"roundtrip\":\"de\",\"variant\":\"w4\",\"exact_match\":1,\"has_get_utf8\":1,\"has_to_string\":1,\"create_ptr\":39674002912}", "sig_status": "ok", "has_get_string": 1, "token": 336635, "roundtrip": "de", "exact_match": 1, "has_get_utf8": 1, "has_to_string": 1, "create_ptr": 39674002912}, {"variant": "w5", "mode": "w5_string_u64_to_u32", "exit": 0, "raw_preview": "{\"create_ptr\":35135167760,\"exact_match\":1,\"has_get_string\":1,\"variant\":\"w5\",\"mode\":\"w5_string_u64_to_u32\",\"sig_status\":\"ok\",\"token\":336635,\"has_get_utf8\":1,\"has_to_string\":1,\"roundtrip\":\"de\"}", "create_ptr": 35135167760, "exact_match": 1, "has_get_string": 1, "sig_status": "ok", "token": 336635, "has_get_utf8": 1, "has_to_string": 1, "roundtrip": "de"}, {"variant": "w6", "mode": "w6_string_u64_to_unretained", "exit": 0, "raw_preview": "{\"token\":336635,\"roundtrip\":\"de\",\"variant\":\"w6\",\"mode\":\"w6_string_u64_to_unretained\",\"has_to_string\":1,\"exact_match\":1,\"has_get_string\":1,\"sig_status\":\"ok\",\"create_ptr\":49293533680,\"has_get_utf8\":1}", "token": 336635, "roundtrip": "de", "has_to_string": 1, "exact_match": 1, "has_get_string": 1, "sig_status": "ok", "create_ptr": 49293533680, "has_get_utf8": 1}]}

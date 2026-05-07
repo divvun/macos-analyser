@@ -127,6 +127,10 @@ Outputs:
   Step 2v staged post-create probe that reuses known-good create profiles and
   tests `get-id`/`to-string` progression in isolated subprocesses to separate
   create stability from token roundtrip viability.
+- `phase2-lm-get-to-string-signature-probe.txt`:
+  Step 2w ABI/signature matrix for `GetTokenIDFor*` and
+  `CreateStringForTokenID`, keeping create profile fixed while testing
+  return-width and ownership/call-shape alternatives.
 
 ## Tooling map
 
@@ -224,6 +228,7 @@ make research-phase2-lm-disassembly-prototype-probe
 make research-phase2-lm-create-type-matrix-probe
 make research-phase2-lm-create-broad-keyset-probe
 make research-phase2-lm-post-create-safety-probe
+make research-phase2-lm-get-to-string-signature-probe
 ```
 
 Or run subcommands directly:
@@ -338,6 +343,10 @@ Use this interpretation order:
   Keeps create settings fixed to known working profiles and stages post-create
   calls (`GetTokenIDFor*`, `CreateStringForTokenID`) to locate whether failure
   now sits in call-sequence/state handling versus symbol ABI.
+29. `phase2-lm-get-to-string-signature-probe.txt`
+  Runs a focused ABI matrix for get-id/to-string on a stable create profile,
+  distinguishing UTF8-path failures from string-path successes and narrowing
+  the likely callable private signatures for direct roundtrip use.
 
 ## Expected baseline findings
 
