@@ -111,6 +111,10 @@ Outputs:
   Step 2r header/prototype search over runtime framework paths, Xcode SDK
   private framework stubs, and debug metadata signals to recover (or reject)
   direct prototype visibility for `LMLanguageModelCreate`.
+- `phase2-lm-disassembly-prototype-probe.txt`:
+  Step 2s disassembly-driven recovery of `_LMLanguageModelCreate` calling
+  contract from arm64e code paths, plus exported option-key inventory used to
+  build a tighter runtime call matrix.
 
 ## Tooling map
 
@@ -204,6 +208,7 @@ make research-phase2-lm-private-signature-probe
 make research-phase2-lm-create-callsite-probe
 make research-phase2-lm-create-key-recovery-probe
 make research-phase2-lm-header-search-probe
+make research-phase2-lm-disassembly-prototype-probe
 ```
 
 Or run subcommands directly:
@@ -302,6 +307,10 @@ Use this interpretation order:
   Searches for direct private prototypes/headers in runtime and SDK framework
   locations, verifies symbol-level visibility via `.tbd` exports, and reports
   whether prototype recovery is possible without disassembly.
+25. `phase2-lm-disassembly-prototype-probe.txt`
+  Uses dyld disassembly of `_LMLanguageModelCreate` to infer the effective
+  argument contract (`x0` options dictionary), locale normalization behavior,
+  and key/type validation signals for subsequent live-create experiments.
 
 ## Expected baseline findings
 

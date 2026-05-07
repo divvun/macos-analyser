@@ -1,0 +1,57 @@
+{
+  "probe_type": "disassembly_prototype_recovery",
+  "phase": "2s",
+  "step_name": "Disassembly-based Prototype Recovery",
+  "total_findings": 6,
+  "findings": [
+    {
+      "category": "symbol_anchors",
+      "location": "/System/Library/PrivateFrameworks/LanguageModeling.framework/Versions/A/LanguageModeling",
+      "content_preview": "0x00001480  _LMLanguageModelCreate\n        0x0004BAF4  _LMLanguageModelCreateStringForTokenID\n        0x0004B9DC  _LMLanguageModelGetTokenIDForUTF8String\n        0x0004D844  _LMLanguageModelRelease",
+      "notes": "Export offsets for create/get-id/to-string/release anchors."
+    },
+    {
+      "category": "create_prologue_window",
+      "location": "_LMLanguageModelCreate",
+      "content_preview": "_LMLanguageModelCreate:\n0x182D7F480   pacibsp\n0x182D7F484   sub      sp, sp, #0x1e0\n0x182D7F488   stp      x28, x27, [sp, #0x180]\n0x182D7F48C   stp      x26, x25, [sp, #0x190]\n0x182D7F490   stp      x24, x23, [sp, #0x1a0]\n0x182D7F494   stp      x22, x21, [sp, #0x1b0]\n0x182D7F498   stp      x20, x19, [sp, #0x1c0]\n0x182D7F49C   stp      x29, x30, [sp, #0x1d0]\n0x182D7F4A0   add      x29, sp, #0x1d0\n0x182D7F4A4   adrp     x8, 403519           ; 0x1e55be000\n0x182D7F4A8   ldr      x8, [x8, #0x440]\n0x182D7F4AC   ldr      x8, [x8]\n0x182D7F4B0   stur     x8, [x29, #-0x58]\n0x182D7F4B4   cbz      x0, 0x182d7f4f8\n0x182D7F4B8   mov      x20, x0\n0x182D7F4BC   bl       _CFRetain\n0x182D7F4C0   adrp     x22, 420778          ; 0x1e9929000\n0x182D7F4C4   ldr      x1, [x22, #0x1a0]    ; _kLMLanguageModelLocaleKey\n0x182D7F4C8   mov      x0, x20\n0x182D7F4CC   bl       _CFDictionaryGetValue\n0x182D7F4D0   cbz      x0, 0x182d7f58c\n0x182D7F4D4   mov      x19, x0\n0x182D7F4D8   bl       _CFGetTypeID\n0x182D7F4DC   mov      x21, x0\n0x182D7F4E0   bl       _CFLocaleGetTypeID\n0x182D7F4E4   cmp      x21, x0\n0x182D7F4E8   b.ne     0x182d7f500\n0x182D7F4EC   mov      x0, x19\n0x182D7F4F0   bl       _CFRetain\n0x182D7F4F4   b        0x182d7f524\n0x182D7F4F8   mov      x21, #0x0\n0x182D7F4FC   b        0x182d7fbc4\n0x182D7F500   mov      x0, x19\n0x182D7F504   bl       _CFGetTypeID\n0x182D7F508   mov      x21, x0\n0x182D7F50C   bl       _CFStringGetTypeID\n0x182D7F510   cmp      x21, x0\n0x182D7F514   b.ne     0x182d7f58c\n0x182D7F518   mov      x0, #0x0\n0x182D7F51C   mov      x1, x19\n0x182D7F520   bl       _CFLocaleCreate\n0x182D7F524   mov      x19, x0\n0x182D7F528   adrp     x1, 437896           ; 0x1edc07000\n0x182D7F52C   add      x1, x1, #0x508\n0x182D7F530   bl       0x182dc48bc\n0x182D7F534   cbz      w0, 0x182d7f58c\n0x182D7F538   adrp     x1, 437896           ; 0x1edc07000\n0x182D7F53C   add      x1, x1, #0x528\n0x182D7F540   mov      x0, x19\n0x182D7F544   bl       0x182dc4904\n0x182D7F548   mov      x21, x0\n0x182D7F54C   str      x0, [sp, #0x60]\n0x182D7F550   mov      x0, #0x0\n0x182D7F554   mov      x1, #0x0\n0x182D7F558   mov      x2, x20\n0x182D7F55C   bl       _CFDictionaryCreateMutableCopy\n0x182D7F560   mov      x19, x0\n0x182D7F564   str      x0, [sp, #0x40]\n0x182D7F568   ldr      x1, [x22, #0x1a0]\n0x182D7F56C   mov      x2, x21\n0x182D7F570   bl       _CFDictionarySetValue\n0x182D7F574   mov      x0, x20\n0x182D7F578   bl       _CFRelease\n0x182D7F57C   cbz      x21, 0x182d7f590\n0x182D7F580   mov      x0, x21\n0x182D7F584   bl       _CFRelease\n0x182D7F588   b        0x182d7f590\n0x182D7F58C   mov      x19, x20\n0x182D7F590   str      x19, [sp, #0x28]\n0x182D7F594   bl       _mach_continuous_time\n0x182D7F598   mov      x22, x0\n0x182D7F59C   mov      x1, #0xfbb8\n0x182D7F5A0   movk     x1, #0xa8c2, lsl #16\n0x182D7F5A4   movk     x1, #0x1c40, lsl #32\n0x182D7F5A8   movk     x1, #0x10e, lsl #48\n0x182D7F5AC   mov      w0, #0x228\n0x182D7F5B0   bl       __ZnwmSt19__type_descriptor_t\n0x182D7F5B4   mov      x20, x0\n0x182D7F5B8   mov      x1, #0x31fb\n0x182D7F5BC   movk     x1, #0xfeaf, lsl #16\n0x182D7F5C0   movk     x1, #0x2c40, lsl #32\n0x182D7F5C4   movk     x1, #0x107, lsl #48\n0x182D7F5C8   mov      w0, #0xa0\n0x182D7F5CC   bl       __ZnwmSt19__type_descriptor_t\n0x182D7F5D0   mov      x23, x0\n0x182D7F5D4   strb     wzr, [sp, #0x60]\n0x182D7F5D8   strb     wzr, [sp, #0x90]\n0x182D7F5DC   add      x2, sp, #0x60\n0x182D7F5E0   mov      x1, x19",
+      "notes": "First 90 non-empty lines from function start."
+    },
+    {
+      "category": "create_contract_signals",
+      "location": "_LMLanguageModelCreate",
+      "content_preview": "{\n  \"x0_null_guard\": true,\n  \"retain_x0\": true,\n  \"locale_key_load\": true,\n  \"dict_get\": true,\n  \"type_check_locale\": true,\n  \"type_check_string\": true,\n  \"string_to_locale\": true,\n  \"dict_mutable_copy\": true,\n  \"dict_set\": true\n}",
+      "notes": "Signals used to infer argument type and option validation behavior."
+    },
+    {
+      "category": "calling_convention_hint",
+      "location": "_LMLanguageModelCreate",
+      "content_preview": "{\n  \"early_x1_register_signal\": false,\n  \"early_x2_register_signal\": false,\n  \"early_x3_register_signal\": false\n}",
+      "notes": "No early input-register dependency beyond x0 indicates 1-arg-style entry contract."
+    },
+    {
+      "category": "exported_option_keys",
+      "location": "LanguageModeling exports",
+      "content_preview": "_kLMLanguageModelAdaptationEnabledKey\n_kLMLanguageModelAdaptationVersionNumberKey\n_kLMLanguageModelAddSystemToCustomResourcesKey\n_kLMLanguageModelAddressBookNamePenaltyKey\n_kLMLanguageModelAppContextKey\n_kLMLanguageModelAppGenreKey\n_kLMLanguageModelBundleNameKey\n_kLMLanguageModelCacheModelWeightKey\n_kLMLanguageModelContextIdentifierKey\n_kLMLanguageModelCustomDynamicResourceDirectoryKey\n_kLMLanguageModelCustomLexiconDeltaNameKey\n_kLMLanguageModelCustomLexiconNameKey\n_kLMLanguageModelCustomResourceDirectoryKey\n_kLMLanguageModelCustomStaticPhraseLexiconPathKey\n_kLMLanguageModelCustomWordsKey\n_kLMLanguageModelDecayExponentKey\n_kLMLanguageModelDidPerformPruningKey\n_kLMLanguageModelDifferentialPrivacyEnabledKey\n_kLMLanguageModelDisableDynamicLanguageModelsKey\n_kLMLanguageModelDynamicLexiconNameKey\n_kLMLanguageModelDynamicModelOrderKey\n_kLMLanguageModelDynamicModelWeightKey\n_kLMLanguageModelDynamicNgramCountThresholdKey\n_kLMLanguageModelDynamicNgramWeightsKey\n_kLMLanguageModelDynamicTokenPenaltyKey\n_kLMLanguageModelDynamicTotalUnigramCountThresholdKey\n_kLMLanguageModelDynamicUnigramCountThresholdKey\n_kLMLanguageModelEnableABTestingKey\n_kLMLanguageModelEnableSearchQueryModelLoadingKey\n_kLMLanguageModelFirstDynamicTokenIDKey\n_kLMLanguageModelGenerateFstPrimingTokenKey\n_kLMLanguageModelIgnoreSystemLanguageModelsKey\n_kLMLanguageModelIsMultilingualModelKey\n_kLMLanguageModelIsSiriModelKey\n_kLMLanguageModelLanguageLikelihoodModelEnabledKey\n_kLMLanguageModelLastDynamicTokenIDKey\n_kLMLanguageModelLegacyGenericNameTokenKey\n_kLMLanguageModelLocaleKey\n_kLMLanguageModelMaxDynamicModelSizeKey\n_kLMLanguageModelMaxMontrealPredictionsKey",
+      "notes": "Detected 69 exported _kLMLanguageModel*Key constants."
+    },
+    {
+      "category": "focus_key_presence",
+      "location": "LanguageModeling exports",
+      "content_preview": "{\n  \"_kLMLanguageModelLocaleKey\": true,\n  \"_kLMLanguageModelAppContextKey\": true,\n  \"_kLMLanguageModelAdaptationEnabledKey\": true,\n  \"_kLMLanguageModelIsSiriModelKey\": true\n}",
+      "notes": "Checks keys previously used in 2p/2q probes."
+    }
+  ],
+  "inferred_prototype": "LMLanguageModelRef _LMLanguageModelCreate(CFDictionaryRef options);",
+  "inferred_behavior": [
+    "options is read immediately via CFDictionaryGetValue using _kLMLanguageModelLocaleKey",
+    "locale value accepts CFLocaleRef directly, or CFStringRef converted via CFLocaleCreate",
+    "function creates mutable copy of options and normalizes locale key before deeper init",
+    "x0 is validated at entry (null-check) and retained/released with CF semantics"
+  ],
+  "observed_result": "PROTOTYPE_RECOVERED_FROM_DISASSEMBLY",
+  "next_steps": [
+    "Use inferred 1-arg CFDictionaryRef prototype for live create probes",
+    "Populate broader exported option-key set beyond 2q minimal keyset",
+    "Add type-accurate value matrix (CFLocale/CFString/CFBoolean/CFNumber) per key"
+  ]
+}
