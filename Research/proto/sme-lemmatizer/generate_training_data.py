@@ -10,7 +10,10 @@ Each training example groups all inflected forms of a single lemma
 into one "sentence", with every token labeled by its lemma.
 
 Usage:
-    python3 generate_training_data.py [--fst PATH] [--out DIR] [--lemmas FILE]
+    python3 generate_training_data.py [--fst PATH] [--out DIR] [--lemmas FILE] [--pos POS]
+
+For parallel make targets, use --pos N / --pos V / --pos A to generate
+one JSON per POS, then merge with merge_training_data.py.
 """
 
 from __future__ import annotations
@@ -114,16 +117,22 @@ PROTOTYPE_LEMMAS: list[tuple[str, str]] = [
 
 
 def lookup_batch(queries: list[str], fst_path: str) -> dict[str, str]:
-    """Run hfst-lookup on a batch of tag strings.
+    """Run hfst-optimized-lookup on a batch of tag strings.
 
-    Returns a dict mapping surface_form → first_input_lemma (without tags).
-    Failed lookups (weight=inf or output ending in +?) are excluded.
+    Returns a dict mapping surface_form → input tag string.
+    Failed lookups (surface ending in +?) are excluded.
+
+    hfst-optimized-lookup outputs 2 columns (input<TAB>surface) without
+    weights, or 3 columns when the FST carries arc weights.  Both formats
+    are handled.  We never pass --show-weights so an unweighted FST always
+    returns 2 columns; a pre-weighted FST would return 3 — the weight is
+    ignored here because we only care about reachability.
     """
     if not queries:
         return {}
     stdin = "\n".join(queries) + "\n"
     proc = subprocess.run(
-        ["hfst-lookup", "-q", fst_path],
+        ["hfst-optimized-lookup", fst_path],
         input=stdin,
         capture_output=True,
         text=True,
@@ -134,14 +143,14 @@ def lookup_batch(queries: list[str], fst_path: str) -> dict[str, str]:
         if not line:
             continue
         parts = line.split("\t")
-        if len(parts) < 3:
+        if len(parts) < 2:
             continue
+        input_str = parts[0].strip()
         surface = parts[1].strip()
-        weight = parts[2].strip()
-        # Skip failed lookups
-        if weight == "inf" or surface.endswith("+?") or not surface:
+        # Skip failed lookups regardless of column count
+        if surface.endswith("+?") or not surface:
             continue
-        results[surface] = parts[0]  # surface → full input tag string
+        results[surface] = input_str  # surface → full input tag string
     return results
 
 
@@ -196,6 +205,10 @@ def main() -> None:
         "--lemmas", default=None,
         help="Optional TSV file with lemma<TAB>POS lines (default: built-in prototype list)"
     )
+    parser.add_argument(
+        "--pos", default=None,
+        help="Only process this POS (N, V or A). Omit to process all POS in the lemma list."
+    )
     args = parser.parse_args()
 
     fst_path = args.fst
@@ -218,16 +231,23 @@ def main() -> None:
     else:
         lemma_list = PROTOTYPE_LEMMAS
 
-    print(f"Generating paradigms for {len(lemma_list)} lemmas...")
-    print(f"FST: {fst_path}")
+    # Optional POS filter (for parallel make targets)
+    if args.pos:
+        pos_filter = args.pos.upper()
+        lemma_list = [(l, p) for l, p in lemma_list if p == pos_filter]
+
+    print(f"Generating paradigms for {len(lemma_list)} lemmas...", file=sys.stderr)
+    print(f"FST: {fst_path}", file=sys.stderr)
 
     examples = build_training_data(lemma_list, fst_path, verbose=True)
 
-    out_file = out_dir / "training_data.json"
+    # Output filename: training_data_<POS>.json when --pos is given, else training_data.json
+    filename = f"training_data_{args.pos.upper()}.json" if args.pos else "training_data.json"
+    out_file = out_dir / filename
     with open(out_file, "w", encoding="utf-8") as f:
         json.dump(examples, f, ensure_ascii=False, indent=2)
 
-    print(f"\nOutput: {out_file}")
+    print(f"\nOutput: {out_file}", file=sys.stderr)
 
 
 if __name__ == "__main__":

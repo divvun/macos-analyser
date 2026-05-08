@@ -20,7 +20,9 @@ SWIFT_BIN ?= $(firstword $(wildcard .build/arm64-apple-macosx/release .build/rel
 APP_CONTENTS   := DivvunAnalyser.app/Contents
 APPEX_CONTENTS := $(APP_CONTENTS)/PlugIns/DivvunNLExtension.appex/Contents
 
-.PHONY: all rust swift build-app test test-rust test-swift test-e2e demo probe-nl research-phase1 research-phase2 research-phase2-env research-phase2-real-fst research-phase2-fst-io research-phase2-label-probe research-phase2-sidecar-probe research-phase2-token-id-correlation research-phase2-function-probe research-phase2-lm-model-probe research-phase2-lm-role-correlation research-phase2-lm-gap-analysis research-phase2-se-subword-profile research-phase2-lm-launch-override-probe research-phase2-lm-token-id-path-probe research-phase2-lm-token-id-path-probe-strict research-phase2-lm-private-roundtrip-probe research-phase2-lm-private-signature-probe research-phase2-lm-create-callsite-probe research-phase2-lm-create-key-recovery-probe research-phase2-lm-header-search-probe research-phase2-lm-disassembly-prototype-probe research-phase2-lm-create-type-matrix-probe research-phase2-lm-create-broad-keyset-probe research-phase2-lm-post-create-safety-probe research-phase2-lm-get-to-string-signature-probe research-phase2-lm-utf8-recovery-probe research-phase2-lm-roundtrip-confirmation-probe research-phase2-lm-direct-api-poc proto-sme-lemmatizer-data proto-sme-lemmatizer-train proto-sme-lemmatizer-test proto-sme-lemmatizer proto-sme-extract-lemmas clean install-app
+.PHONY: all rust swift build-app test test-rust test-swift test-e2e demo probe-nl research-phase1 research-phase2 research-phase2-env research-phase2-real-fst research-phase2-fst-io research-phase2-label-probe research-phase2-sidecar-probe research-phase2-token-id-correlation research-phase2-function-probe research-phase2-lm-model-probe research-phase2-lm-role-correlation research-phase2-lm-gap-analysis research-phase2-se-subword-profile research-phase2-lm-launch-override-probe research-phase2-lm-token-id-path-probe research-phase2-lm-token-id-path-probe-strict research-phase2-lm-private-roundtrip-probe research-phase2-lm-private-signature-probe research-phase2-lm-create-callsite-probe research-phase2-lm-create-key-recovery-probe research-phase2-lm-header-search-probe research-phase2-lm-disassembly-prototype-probe research-phase2-lm-create-type-matrix-probe research-phase2-lm-create-broad-keyset-probe research-phase2-lm-post-create-safety-probe research-phase2-lm-get-to-string-signature-probe research-phase2-lm-utf8-recovery-probe research-phase2-lm-roundtrip-confirmation-probe research-phase2-lm-direct-api-poc proto-sme-lemmatizer-data proto-sme-data-N proto-sme-data-V proto-sme-data-A \
+	proto-sme-lemmatizer-train proto-sme-lemmatizer-test proto-sme-lemmatizer proto-sme-extract-lemmas \
+	clean install-app
 
 all: rust swift
 
@@ -536,16 +538,33 @@ proto-sme-extract-lemmas:
 	mkdir -p $(PROTO_DIR)
 	python3 $(PROTO_DIR)/extract_lemmas.py --stems $(SME_STEMS) --pos N,V,A --out $(PROTO_DIR)/all_lemmas.tsv
 
-## Generate MLWordTagger training data from the lang-sme FST generator.
-## Uses $(PROTO_DIR)/all_lemmas.tsv if present; falls back to built-in prototype list.
-## Output: $(PROTO_DIR)/training_data.json
-proto-sme-lemmatizer-data:
-	mkdir -p $(PROTO_DIR)
-	if [ -f $(PROTO_DIR)/all_lemmas.tsv ]; then \
-		python3 $(PROTO_DIR)/generate_training_data.py --fst $(SME_FST) --out $(PROTO_DIR) --lemmas $(PROTO_DIR)/all_lemmas.tsv; \
-	else \
-		python3 $(PROTO_DIR)/generate_training_data.py --fst $(SME_FST) --out $(PROTO_DIR); \
-	fi
+## Per-POS data generation targets — run with  make -j3 proto-sme-lemmatizer-data
+## to process nouns, verbs and adjectives in parallel via hfst-optimized-lookup.
+proto-sme-data-N: $(PROTO_DIR)/all_lemmas.tsv
+	python3 $(PROTO_DIR)/generate_training_data.py \
+		--fst $(SME_FST) --out $(PROTO_DIR) \
+		--lemmas $(PROTO_DIR)/all_lemmas.tsv --pos N
+
+proto-sme-data-V: $(PROTO_DIR)/all_lemmas.tsv
+	python3 $(PROTO_DIR)/generate_training_data.py \
+		--fst $(SME_FST) --out $(PROTO_DIR) \
+		--lemmas $(PROTO_DIR)/all_lemmas.tsv --pos V
+
+proto-sme-data-A: $(PROTO_DIR)/all_lemmas.tsv
+	python3 $(PROTO_DIR)/generate_training_data.py \
+		--fst $(SME_FST) --out $(PROTO_DIR) \
+		--lemmas $(PROTO_DIR)/all_lemmas.tsv --pos A
+
+## Merge per-POS JSON files into a single training_data.json.
+## Run the three proto-sme-data-* targets first (optionally in parallel):
+##   make -j3 proto-sme-data-N proto-sme-data-V proto-sme-data-A && make proto-sme-lemmatizer-data
+proto-sme-lemmatizer-data: $(PROTO_DIR)/all_lemmas.tsv
+	$(MAKE) -j3 proto-sme-data-N proto-sme-data-V proto-sme-data-A
+	python3 $(PROTO_DIR)/merge_training_data.py \
+		$(PROTO_DIR)/training_data_N.json \
+		$(PROTO_DIR)/training_data_V.json \
+		$(PROTO_DIR)/training_data_A.json \
+		--out $(PROTO_DIR)/training_data.json
 
 ## Train an MLWordTagger model from the generated training data.
 ## Output: $(PROTO_DIR)/SmeLemmatizer.mlmodel
