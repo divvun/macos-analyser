@@ -66,6 +66,55 @@ PARADIGM_TAGS: dict[str, list[str]] = {
         "+A+Pl+Nom", "+A+Pl+Gen", "+A+Pl+Acc",
         "+A+Attr", "+A+Pred",
     ],
+    # ---- Closed classes -------------------------------------------------
+    # Uninflected: single tag → same surface form as lemma
+    "Adv": ["+Adv"],
+    "CC":  ["+CC"],
+    "CS":  ["+CS"],
+    # ---- Pronouns (inflected) -------------------------------------------
+    # Personal: person is encoded in the lemma (mun=Sg1, don=Sg2, son=Sg3).
+    # We try all person-number × case combinations; the FST returns only the
+    # cells that belong to that lemma's person, discarding the rest.
+    "Pron+Pers": [
+        f"+Pron+Pers+{pn}+{c}"
+        for pn in ("Sg1", "Sg2", "Sg3", "Du1", "Du2", "Du3", "Pl1", "Pl2", "Pl3")
+        for c  in ("Nom", "Gen", "Acc", "Ill", "Loc", "Com")
+    ],
+    # Demonstrative: Sg/Pl × cases + Attr + Ess
+    "Pron+Dem": [
+        f"+Pron+Dem+{n}+{c}"
+        for n in ("Sg", "Pl")
+        for c in ("Nom", "Gen", "Acc", "Ill", "Loc", "Com")
+    ] + ["+Pron+Dem+Attr", "+Pron+Dem+Ess"],
+    # Interrogative: Sg/Pl × cases + Ess
+    "Pron+Interr": [
+        f"+Pron+Interr+{n}+{c}"
+        for n in ("Sg", "Pl")
+        for c in ("Nom", "Gen", "Acc", "Ill", "Loc", "Com")
+    ] + ["+Pron+Interr+Ess"],
+    # Relative: same cells as interrogative
+    "Pron+Rel": [
+        f"+Pron+Rel+{n}+{c}"
+        for n in ("Sg", "Pl")
+        for c in ("Nom", "Gen", "Acc", "Ill", "Loc", "Com")
+    ] + ["+Pron+Rel+Ess"],
+    # Indefinite: Sg/Pl × cases
+    "Pron+Indef": [
+        f"+Pron+Indef+{n}+{c}"
+        for n in ("Sg", "Pl")
+        for c in ("Nom", "Gen", "Acc", "Ill", "Loc", "Com")
+    ],
+    # Reflexive: no paradigm in the norm FST; fall back to bare stem tag
+    "Pron+Refl":   ["+Pron+Refl"],
+    # Reciprocal: Sg/Pl × cases
+    "Pron+Recipr": [
+        f"+Pron+Recipr+{n}+{c}"
+        for n in ("Sg", "Pl")
+        for c in ("Nom", "Gen", "Acc", "Ill", "Loc", "Com")
+    ],
+    # ---- Adpositions and particles (uninflected) ------------------------
+    "Po":   ["+Po"],
+    "Pcle": ["+Pcle"],
 }
 
 # Prototype lemma list — diverse N/V/A across declension/conjugation classes.

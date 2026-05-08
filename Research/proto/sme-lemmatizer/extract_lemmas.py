@@ -33,20 +33,32 @@ DEFAULT_STEMS = (
     "/src/fst/morphology/stems"
 )
 
-# Map lexc filename stem → POS tag used in training data
+# Map lexc filename stem → POS tag used in training data.
+# Pronouns are handled separately (sub-type is preserved in the POS field).
 POS_MAP = {
-    "nouns":      "N",
-    "verbs":      "V",
-    "adjectives": "A",
+    "nouns":        "N",
+    "verbs":        "V",
+    "adjectives":   "A",
+    "adverbs":      "Adv",
+    "conjunctions": "CC",
+    "subjunctions": "CS",
+    "adpositions":  "Po",
+    "particles":    "Pcle",
 }
 
-# Tags on the lhs that indicate a sub-entry, not a canonical lemma
+# Tags on the lhs that indicate a sub-entry, not a canonical lemma (N/V/A only)
 _INFLECT_TAGS = re.compile(
     r"\+(Ind|Prs|Prt|Cond|Pot|Imprt|Inf|Sup|VGen|VAbess|Ger|PrfPrc|Actio|ConNeg)\b"
 )
 
 # Bad flags anywhere on the lhs
 _SKIP_FLAGS = re.compile(r"Err/Orth|Err/Dial|Use/NG")
+
+# Pronoun sub-types we want to keep (matches the +Pron+SubType part)
+_PRON_SUBTYPE = re.compile(r"\+Pron\+(Pers|Dem|Interr|Rel|Indef|Refl|Recipr)\b")
+
+# MWE: skip entries with escaped space (%\x20 or just %) or +MWE tag
+_MWE = re.compile(r"% |%#|\+MWE\b")
 
 
 def _lhs(line: str) -> str | None:
@@ -57,10 +69,18 @@ def _lhs(line: str) -> str | None:
     return line[:colon]
 
 
-def extract_lemmas(lexc_path: Path, pos: str) -> list[str]:
-    """Extract canonical lemmas from one lexc file."""
-    lemmas: list[str] = []
-    seen: set[str] = set()
+def extract_lemmas(lexc_path: Path, pos: str) -> list[tuple[str, str]]:
+    """Extract (lemma, POS) pairs from one lexc file.
+
+    For pronouns, *pos* is the placeholder 'Pron'; the actual sub-type
+    (Pron+Pers, Pron+Dem, …) is extracted from the lhs and used instead.
+    """
+    is_pron = (pos == "Pron")
+    # Adv/CC/CS/Po/Pcle entries are uninflected
+    is_uninflected_closed = pos in ("Adv", "CC", "CS", "Po", "Pcle")
+
+    pairs: list[tuple[str, str]] = []
+    seen: set[tuple[str, str]] = set()
 
     with lexc_path.open(encoding="utf-8") as fh:
         for raw in fh:
@@ -77,27 +97,54 @@ def extract_lemmas(lexc_path: Path, pos: str) -> list[str]:
             if "!NOTLEMMA" in line:
                 continue
 
+            # Skip MWE entries (multi-word expressions with space escapes)
+            if _MWE.search(line):
+                continue
+
             lhs = _lhs(line)
             if lhs is None:
                 continue
 
-            # Skip error/dialect variants and inflectional sub-entries
-            if _SKIP_FLAGS.search(lhs) or _INFLECT_TAGS.search(lhs):
+            # Skip error/dialect variants
+            if _SKIP_FLAGS.search(lhs):
                 continue
 
-            # Lemma is the text before the first '+' or ':'
-            plus = lhs.find("+")
-            lemma = lhs[:plus] if plus != -1 else lhs
+            if is_pron:
+                # Extract sub-type from the lhs, e.g. mun+Pron+Pers → Pron+Pers
+                m = _PRON_SUBTYPE.search(lhs)
+                if not m:
+                    continue
+                actual_pos = f"Pron+{m.group(1)}"
+                plus = lhs.find("+")
+                lemma = lhs[:plus] if plus != -1 else lhs
+            elif is_uninflected_closed:
+                # Skip inflectional sub-entries
+                if _INFLECT_TAGS.search(lhs):
+                    continue
+                # For adverbs the POS tag (+Adv) may be absent from the lhs
+                # (entries look like: "dál:dál adv ;").
+                # The lemma is everything before the first '+' or the full form.
+                plus = lhs.find("+")
+                lemma = lhs[:plus] if plus != -1 else lhs
+                actual_pos = pos
+            else:
+                # N / V / A — skip inflectional sub-entries
+                if _INFLECT_TAGS.search(lhs):
+                    continue
+                plus = lhs.find("+")
+                lemma = lhs[:plus] if plus != -1 else lhs
+                actual_pos = pos
 
             # Skip compound-only or empty lemmas
             if not lemma or "#" in lemma:
                 continue
 
-            if lemma not in seen:
-                seen.add(lemma)
-                lemmas.append(lemma)
+            key = (lemma, actual_pos)
+            if key not in seen:
+                seen.add(key)
+                pairs.append(key)
 
-    return lemmas
+    return pairs
 
 
 def main() -> None:
@@ -109,8 +156,8 @@ def main() -> None:
     )
     parser.add_argument(
         "--pos",
-        default="N,V,A",
-        help="Comma-separated POS to include: N, V, A (default: N,V,A)",
+        default="N,V,A,Adv,CC,CS,Po,Pcle,Pron",
+        help="Comma-separated POS to include (default: N,V,A,Adv,CC,CS,Po,Pcle,Pron)",
     )
     parser.add_argument(
         "--out",
@@ -124,17 +171,23 @@ def main() -> None:
         print(f"ERROR: stems dir not found: {stems_dir}", file=sys.stderr)
         sys.exit(1)
 
-    wanted_pos = {p.strip().upper() for p in args.pos.split(",")}
+    wanted_pos = {p.strip() for p in args.pos.split(",")}
 
-    # Process files in N→V→A order so dedup is deterministic
+    # Processing order: open-class first, then closed classes, pronouns last
     file_pos_pairs = [
-        (stems_dir / "nouns.lexc",      "N"),
-        (stems_dir / "verbs.lexc",      "V"),
-        (stems_dir / "adjectives.lexc", "A"),
+        (stems_dir / "nouns.lexc",        "N"),
+        (stems_dir / "verbs.lexc",        "V"),
+        (stems_dir / "adjectives.lexc",   "A"),
+        (stems_dir / "adverbs.lexc",      "Adv"),
+        (stems_dir / "conjunctions.lexc", "CC"),
+        (stems_dir / "subjunctions.lexc", "CS"),
+        (stems_dir / "adpositions.lexc",  "Po"),
+        (stems_dir / "particles.lexc",    "Pcle"),
+        (stems_dir / "pronouns.lexc",     "Pron"),
     ]
 
     lines: list[str] = []
-    global_seen: set[str] = set()
+    global_seen: set[tuple[str, str]] = set()
 
     for lexc_path, pos in file_pos_pairs:
         if pos not in wanted_pos:
@@ -143,22 +196,23 @@ def main() -> None:
             print(f"WARN: not found: {lexc_path}", file=sys.stderr)
             continue
 
-        lemmas = extract_lemmas(lexc_path, pos)
+        pairs = extract_lemmas(lexc_path, pos)
 
         added = 0
-        for lemma in lemmas:
-            if lemma not in global_seen:
-                global_seen.add(lemma)
-                lines.append(f"{lemma}\t{pos}")
+        for lemma, actual_pos in pairs:
+            key = (lemma, actual_pos)
+            if key not in global_seen:
+                global_seen.add(key)
+                lines.append(f"{lemma}\t{actual_pos}")
                 added += 1
 
-        print(f"{lexc_path.name}: {added} lemmas ({pos})", file=sys.stderr)
+        print(f"{lexc_path.name}: {added} entries ({pos})", file=sys.stderr)
 
     output = "\n".join(lines) + ("\n" if lines else "")
 
     if args.out:
         Path(args.out).write_text(output, encoding="utf-8")
-        print(f"Wrote {len(lines)} lemmas → {args.out}", file=sys.stderr)
+        print(f"Wrote {len(lines)} entries → {args.out}", file=sys.stderr)
     else:
         sys.stdout.write(output)
 

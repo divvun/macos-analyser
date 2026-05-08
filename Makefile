@@ -20,7 +20,7 @@ SWIFT_BIN ?= $(firstword $(wildcard .build/arm64-apple-macosx/release .build/rel
 APP_CONTENTS   := DivvunAnalyser.app/Contents
 APPEX_CONTENTS := $(APP_CONTENTS)/PlugIns/DivvunNLExtension.appex/Contents
 
-.PHONY: all rust swift build-app test test-rust test-swift test-e2e demo probe-nl research-phase1 research-phase2 research-phase2-env research-phase2-real-fst research-phase2-fst-io research-phase2-label-probe research-phase2-sidecar-probe research-phase2-token-id-correlation research-phase2-function-probe research-phase2-lm-model-probe research-phase2-lm-role-correlation research-phase2-lm-gap-analysis research-phase2-se-subword-profile research-phase2-lm-launch-override-probe research-phase2-lm-token-id-path-probe research-phase2-lm-token-id-path-probe-strict research-phase2-lm-private-roundtrip-probe research-phase2-lm-private-signature-probe research-phase2-lm-create-callsite-probe research-phase2-lm-create-key-recovery-probe research-phase2-lm-header-search-probe research-phase2-lm-disassembly-prototype-probe research-phase2-lm-create-type-matrix-probe research-phase2-lm-create-broad-keyset-probe research-phase2-lm-post-create-safety-probe research-phase2-lm-get-to-string-signature-probe research-phase2-lm-utf8-recovery-probe research-phase2-lm-roundtrip-confirmation-probe research-phase2-lm-direct-api-poc proto-sme-lemmatizer-data proto-sme-data-N proto-sme-data-V proto-sme-data-A \
+.PHONY: all rust swift build-app test test-rust test-swift test-e2e demo probe-nl research-phase1 research-phase2 research-phase2-env research-phase2-real-fst research-phase2-fst-io research-phase2-label-probe research-phase2-sidecar-probe research-phase2-token-id-correlation research-phase2-function-probe research-phase2-lm-model-probe research-phase2-lm-role-correlation research-phase2-lm-gap-analysis research-phase2-se-subword-profile research-phase2-lm-launch-override-probe research-phase2-lm-token-id-path-probe research-phase2-lm-token-id-path-probe-strict research-phase2-lm-private-roundtrip-probe research-phase2-lm-private-signature-probe research-phase2-lm-create-callsite-probe research-phase2-lm-create-key-recovery-probe research-phase2-lm-header-search-probe research-phase2-lm-disassembly-prototype-probe research-phase2-lm-create-type-matrix-probe research-phase2-lm-create-broad-keyset-probe research-phase2-lm-post-create-safety-probe research-phase2-lm-get-to-string-signature-probe research-phase2-lm-utf8-recovery-probe research-phase2-lm-roundtrip-confirmation-probe research-phase2-lm-direct-api-poc proto-sme-lemmatizer-data proto-sme-data-N proto-sme-data-V proto-sme-data-A proto-sme-data-Closed \
 	proto-sme-lemmatizer-train proto-sme-lemmatizer-test proto-sme-lemmatizer proto-sme-extract-lemmas \
 	clean install-app
 
@@ -533,10 +533,11 @@ SME_STEMS ?= /Users/smo036/langtech/gut/giellalt/lang-sme/src/fst/morphology/ste
 PROTO_DIR := Research/proto/sme-lemmatizer
 
 ## Extract canonical lemmas from lang-sme lexc stem files.
-## Output: $(PROTO_DIR)/all_lemmas.tsv  (lemma<TAB>POS, ~116k entries)
+## Output: $(PROTO_DIR)/all_lemmas.tsv  (lemma<TAB>POS, ~120k entries)
 proto-sme-extract-lemmas:
 	mkdir -p $(PROTO_DIR)
-	python3 $(PROTO_DIR)/extract_lemmas.py --stems $(SME_STEMS) --pos N,V,A --out $(PROTO_DIR)/all_lemmas.tsv
+	python3 $(PROTO_DIR)/extract_lemmas.py --stems $(SME_STEMS) \
+		--pos N,V,A,Adv,CC,CS,Po,Pcle,Pron --out $(PROTO_DIR)/all_lemmas.tsv
 
 ## Per-POS data generation targets — run with  make -j3 proto-sme-lemmatizer-data
 ## to process nouns, verbs and adjectives in parallel via hfst-optimized-lookup.
@@ -555,15 +556,36 @@ proto-sme-data-A: $(PROTO_DIR)/all_lemmas.tsv
 		--fst $(SME_FST) --out $(PROTO_DIR) \
 		--lemmas $(PROTO_DIR)/all_lemmas.tsv --pos A
 
+## Closed uninflected classes (Adv, CC, CS, Po, Pcle) + inflected Pron.
+## These are fast (1 FST call per lemma for uninflected) so grouped in one job.
+proto-sme-data-Closed: $(PROTO_DIR)/all_lemmas.tsv
+	for pos in Adv CC CS Po Pcle Pron+Pers Pron+Dem Pron+Interr Pron+Rel Pron+Indef Pron+Refl Pron+Recipr; do \
+		python3 $(PROTO_DIR)/generate_training_data.py \
+			--fst $(SME_FST) --out $(PROTO_DIR) \
+			--lemmas $(PROTO_DIR)/all_lemmas.tsv --pos $$pos; \
+	done
+
 ## Merge per-POS JSON files into a single training_data.json.
-## Run the three proto-sme-data-* targets first (optionally in parallel):
-##   make -j3 proto-sme-data-N proto-sme-data-V proto-sme-data-A && make proto-sme-lemmatizer-data
+## Run the parallel targets first (optionally):
+##   make -j4 proto-sme-data-N proto-sme-data-V proto-sme-data-A proto-sme-data-Closed
 proto-sme-lemmatizer-data: $(PROTO_DIR)/all_lemmas.tsv
-	$(MAKE) -j3 proto-sme-data-N proto-sme-data-V proto-sme-data-A
+	$(MAKE) -j4 proto-sme-data-N proto-sme-data-V proto-sme-data-A proto-sme-data-Closed
 	python3 $(PROTO_DIR)/merge_training_data.py \
 		$(PROTO_DIR)/training_data_N.json \
 		$(PROTO_DIR)/training_data_V.json \
 		$(PROTO_DIR)/training_data_A.json \
+		$(PROTO_DIR)/training_data_Adv.json \
+		$(PROTO_DIR)/training_data_CC.json \
+		$(PROTO_DIR)/training_data_CS.json \
+		$(PROTO_DIR)/training_data_Po.json \
+		$(PROTO_DIR)/training_data_Pcle.json \
+		$(PROTO_DIR)/training_data_Pron+Pers.json \
+		$(PROTO_DIR)/training_data_Pron+Dem.json \
+		$(PROTO_DIR)/training_data_Pron+Interr.json \
+		$(PROTO_DIR)/training_data_Pron+Rel.json \
+		$(PROTO_DIR)/training_data_Pron+Indef.json \
+		$(PROTO_DIR)/training_data_Pron+Refl.json \
+		$(PROTO_DIR)/training_data_Pron+Recipr.json \
 		--out $(PROTO_DIR)/training_data.json
 
 ## Train an MLWordTagger model from the generated training data.
