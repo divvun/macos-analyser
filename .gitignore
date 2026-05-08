@@ -11,3 +11,14 @@ DerivedData/
 Research/assets-2k-launch/
 Research/assets/se-subword/
 Research/phase2k_probe_tmp.txt
+
+# sme-lemmatizer: generated files
+Research/proto/sme-lemmatizer/__pycache__/
+Research/proto/sme-lemmatizer/train_bin
+Research/proto/sme-lemmatizer/training_data.json
+Research/proto/sme-lemmatizer/training_data_*.json
+Research/proto/sme-lemmatizer/SmeLemmatizer.mlmodel
+
+# Python bytecode (global)
+__pycache__/
+*.pyc
