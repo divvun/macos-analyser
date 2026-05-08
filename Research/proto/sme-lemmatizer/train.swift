@@ -1,20 +1,27 @@
 #!/usr/bin/env swift
 // train.swift — Train an MLWordTagger lemmatizer from FST-generated data.
 //
-// Usage:
+// Usage (interpreted — handy for small datasets):
 //   swift train.swift [training_data.json] [output.mlmodel]
 //
-// Requires macOS 10.15+ with CreateML framework.
-// Run from the repo root or the sme-lemmatizer directory.
+// Usage (compiled — recommended for full ~116k-lemma runs):
+//   swiftc -O -o train_bin train.swift && ./train_bin [data.json] [out.mlmodel]
+//
+// Requires macOS 13+ (Ventura) for TabularData.DataFrame + modern CreateML.
 
-import Foundation
 import CreateML
+import Foundation
+import TabularData
 
 // MARK: - Paths
 
-let args = CommandLine.arguments
-let trainingDataPath = args.count > 1 ? args[1] : "Research/proto/sme-lemmatizer/training_data.json"
-let modelOutputPath  = args.count > 2 ? args[2] : "Research/proto/sme-lemmatizer/SmeLemmatizer.mlmodel"
+let cliArgs = CommandLine.arguments
+let trainingDataPath = cliArgs.count > 1
+    ? cliArgs[1]
+    : "Research/proto/sme-lemmatizer/training_data.json"
+let modelOutputPath = cliArgs.count > 2
+    ? cliArgs[2]
+    : "Research/proto/sme-lemmatizer/SmeLemmatizer.mlmodel"
 
 let trainingDataURL = URL(fileURLWithPath: trainingDataPath)
 let modelOutputURL  = URL(fileURLWithPath: modelOutputPath)
@@ -23,25 +30,27 @@ let modelOutputURL  = URL(fileURLWithPath: modelOutputPath)
 
 print("Loading training data from: \(trainingDataPath)")
 
-guard let data = try? MLDataTable(contentsOf: trainingDataURL) else {
-    fputs("ERROR: Cannot load training data from \(trainingDataPath)\n", stderr)
+let fullTable: DataFrame
+do {
+    fullTable = try DataFrame(contentsOfJSONFile: trainingDataURL)
+} catch {
+    fputs("ERROR: Cannot load \(trainingDataPath): \(error)\n", stderr)
     exit(1)
 }
 
-print("Loaded \(data.rows.count) training sentences.")
-
-// 80/20 split
-let (trainingData, testData) = data.randomSplit(by: 0.8, seed: 42)
-print("Split: \(trainingData.rows.count) train / \(testData.rows.count) test")
+print("Loaded \(fullTable.rows.count) training sentences.")
 
 // MARK: - Train
 
 print("\nTraining MLWordTagger...")
 
+// MLWordTagger.ModelParameters defaults:
+//   - algorithm: CRF (only available option)
+//   - validation: .split(strategy: .automatic) — handled internally
 let wordTagger: MLWordTagger
 do {
     wordTagger = try MLWordTagger(
-        trainingData: trainingData,
+        trainingData: fullTable,
         tokenColumn: "tokens",
         labelColumn: "labels"
     )
@@ -55,18 +64,11 @@ let valAcc   = (1.0 - wordTagger.validationMetrics.taggingError) * 100
 print(String(format: "Training accuracy:   %.1f%%", trainAcc))
 print(String(format: "Validation accuracy: %.1f%%", valAcc))
 
-// MARK: - Evaluate
-
-print("\nEvaluating on held-out test data...")
-let evalMetrics = wordTagger.evaluation(on: testData, tokenColumn: "tokens", labelColumn: "labels")
-let evalAcc = (1.0 - evalMetrics.taggingError) * 100
-print(String(format: "Test accuracy: %.1f%%", evalAcc))
-
 // MARK: - Save
 
 let metadata = MLModelMetadata(
     author: "Divvun",
-    shortDescription: "North Sami (sme) lemmatizer — prototype trained from FST-generated paradigms",
+    shortDescription: "North Sami (sme) lemmatizer — trained from FST-generated paradigms",
     license: nil,
     version: "0.1",
     additional: ["language": "se", "source": "FST generator-gt-norm (lang-sme)"]

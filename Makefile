@@ -567,9 +567,11 @@ proto-sme-lemmatizer-data: $(PROTO_DIR)/all_lemmas.tsv
 		--out $(PROTO_DIR)/training_data.json
 
 ## Train an MLWordTagger model from the generated training data.
+## Compiles train.swift with -O for speed (binary placed next to the source).
 ## Output: $(PROTO_DIR)/SmeLemmatizer.mlmodel
-proto-sme-lemmatizer-train: proto-sme-lemmatizer-data
-	swift $(PROTO_DIR)/train.swift $(PROTO_DIR)/training_data.json $(PROTO_DIR)/SmeLemmatizer.mlmodel
+proto-sme-lemmatizer-train: $(PROTO_DIR)/training_data.json
+	swiftc -O -o $(PROTO_DIR)/train_bin $(PROTO_DIR)/train.swift
+	$(PROTO_DIR)/train_bin $(PROTO_DIR)/training_data.json $(PROTO_DIR)/SmeLemmatizer.mlmodel
 
 ## Test the trained model via NLTagger inference.
 proto-sme-lemmatizer-test: proto-sme-lemmatizer-train
