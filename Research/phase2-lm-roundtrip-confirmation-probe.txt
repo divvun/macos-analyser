@@ -1,0 +1,56 @@
+=== Step 2y: Roundtrip confirmation probe ===
+Fri May 08 06:40:39 UTC 2026
+
+[A] Hardening matrix (word × locale × create-profile)
+variant=y00 word=de locale=pt profile=p0_min token=336635 exact_match=1
+variant=y01 word=de locale=pt profile=p1_core exit=1
+variant=y02 word=de locale=pt profile=p2_wide exit=1
+variant=y03 word=de locale=se profile=p0_min token=0 exact_match=0
+variant=y04 word=de locale=se profile=p1_core exit=1
+variant=y05 word=de locale=se profile=p2_wide exit=1
+variant=y06 word=de locale=en profile=p0_min token=72167 exact_match=1
+variant=y07 word=de locale=en profile=p1_core exit=1
+variant=y08 word=de locale=en profile=p2_wide exit=1
+variant=y09 word=mánáid locale=pt profile=p0_min exit=1
+variant=y10 word=mánáid locale=pt profile=p1_core exit=1
+variant=y11 word=mánáid locale=pt profile=p2_wide exit=1
+variant=y12 word=mánáid locale=se profile=p0_min exit=1
+variant=y13 word=mánáid locale=se profile=p1_core exit=1
+variant=y14 word=mánáid locale=se profile=p2_wide exit=1
+variant=y15 word=mánáid locale=en profile=p0_min exit=1
+variant=y16 word=mánáid locale=en profile=p1_core exit=1
+variant=y17 word=mánáid locale=en profile=p2_wide exit=1
+variant=y18 word=em locale=pt profile=p0_min token=336639 exact_match=1
+variant=y19 word=em locale=pt profile=p1_core exit=1
+variant=y20 word=em locale=pt profile=p2_wide exit=1
+variant=y21 word=em locale=se profile=p0_min token=0 exact_match=0
+variant=y22 word=em locale=se profile=p1_core exit=1
+variant=y23 word=em locale=se profile=p2_wide exit=1
+variant=y24 word=em locale=en profile=p0_min token=0 exact_match=0
+variant=y25 word=em locale=en profile=p1_core exit=1
+variant=y26 word=em locale=en profile=p2_wide exit=1
+variant=y27 word=casa locale=pt profile=p0_min token=336867 exact_match=1
+variant=y28 word=casa locale=pt profile=p1_core exit=1
+variant=y29 word=casa locale=pt profile=p2_wide exit=1
+variant=y30 word=casa locale=se profile=p0_min token=0 exact_match=0
+variant=y31 word=casa locale=se profile=p1_core exit=1
+variant=y32 word=casa locale=se profile=p2_wide exit=1
+variant=y33 word=casa locale=en profile=p0_min token=0 exact_match=0
+variant=y34 word=casa locale=en profile=p1_core exit=1
+variant=y35 word=casa locale=en profile=p2_wide exit=1
+
+[B] Decision signal
+variants_total=36
+variants_non_crash=9
+variants_exact_match=4
+profile=p0_min exact_matches=4
+profile=p1_core exact_matches=0
+profile=p2_wide exact_matches=0
+observed_result=ROUNDTRIP_PARTIAL
+
+[C] Interpretation
+- 2y hardens best-signal variant (w4) across word/locale/profile combinations.
+- Full exactness indicates robust roundtrip ready for direct API integration.
+
+[D] JSON appendix
+{"rows": [{"variant": "y00", "word": "de", "locale": "pt", "profile": "p0_min", "exit": 0, "sig_status": "ok", "probe_word": "de", "exact_match": 1, "roundtrip": "de", "token": 336635}, {"variant": "y01", "word": "de", "locale": "pt", "profile": "p1_core", "exit": 1}, {"variant": "y02", "word": "de", "locale": "pt", "profile": "p2_wide", "exit": 1}, {"variant": "y03", "word": "de", "locale": "se", "profile": "p0_min", "exit": 0, "exact_match": 0, "token": 0, "probe_word": "de", "sig_status": "create_ptr_zero", "roundtrip": ""}, {"variant": "y04", "word": "de", "locale": "se", "profile": "p1_core", "exit": 1}, {"variant": "y05", "word": "de", "locale": "se", "profile": "p2_wide", "exit": 1}, {"variant": "y06", "word": "de", "locale": "en", "profile": "p0_min", "exit": 0, "sig_status": "ok", "probe_word": "de", "roundtrip": "de", "token": 72167, "exact_match": 1}, {"variant": "y07", "word": "de", "locale": "en", "profile": "p1_core", "exit": 1}, {"variant": "y08", "word": "de", "locale": "en", "profile": "p2_wide", "exit": 1}, {"variant": "y09", "word": "m\u00e1n\u00e1id", "locale": "pt", "profile": "p0_min", "exit": 1}, {"variant": "y10", "word": "m\u00e1n\u00e1id", "locale": "pt", "profile": "p1_core", "exit": 1}, {"variant": "y11", "word": "m\u00e1n\u00e1id", "locale": "pt", "profile": "p2_wide", "exit": 1}, {"variant": "y12", "word": "m\u00e1n\u00e1id", "locale": "se", "profile": "p0_min", "exit": 1}, {"variant": "y13", "word": "m\u00e1n\u00e1id", "locale": "se", "profile": "p1_core", "exit": 1}, {"variant": "y14", "word": "m\u00e1n\u00e1id", "locale": "se", "profile": "p2_wide", "exit": 1}, {"variant": "y15", "word": "m\u00e1n\u00e1id", "locale": "en", "profile": "p0_min", "exit": 1}, {"variant": "y16", "word": "m\u00e1n\u00e1id", "locale": "en", "profile": "p1_core", "exit": 1}, {"variant": "y17", "word": "m\u00e1n\u00e1id", "locale": "en", "profile": "p2_wide", "exit": 1}, {"variant": "y18", "word": "em", "locale": "pt", "profile": "p0_min", "exit": 0, "exact_match": 1, "sig_status": "ok", "probe_word": "em", "token": 336639, "roundtrip": "em"}, {"variant": "y19", "word": "em", "locale": "pt", "profile": "p1_core", "exit": 1}, {"variant": "y20", "word": "em", "locale": "pt", "profile": "p2_wide", "exit": 1}, {"variant": "y21", "word": "em", "locale": "se", "profile": "p0_min", "exit": 0, "token": 0, "roundtrip": "", "probe_word": "em", "exact_match": 0, "sig_status": "create_ptr_zero"}, {"variant": "y22", "word": "em", "locale": "se", "profile": "p1_core", "exit": 1}, {"variant": "y23", "word": "em", "locale": "se", "profile": "p2_wide", "exit": 1}, {"variant": "y24", "word": "em", "locale": "en", "profile": "p0_min", "exit": 0, "probe_word": "em", "sig_status": "ok", "token": 0, "roundtrip": "", "exact_match": 0}, {"variant": "y25", "word": "em", "locale": "en", "profile": "p1_core", "exit": 1}, {"variant": "y26", "word": "em", "locale": "en", "profile": "p2_wide", "exit": 1}, {"variant": "y27", "word": "casa", "locale": "pt", "profile": "p0_min", "exit": 0, "roundtrip": "casa", "probe_word": "casa", "exact_match": 1, "sig_status": "ok", "token": 336867}, {"variant": "y28", "word": "casa", "locale": "pt", "profile": "p1_core", "exit": 1}, {"variant": "y29", "word": "casa", "locale": "pt", "profile": "p2_wide", "exit": 1}, {"variant": "y30", "word": "casa", "locale": "se", "profile": "p0_min", "exit": 0, "roundtrip": "", "token": 0, "probe_word": "casa", "sig_status": "create_ptr_zero", "exact_match": 0}, {"variant": "y31", "word": "casa", "locale": "se", "profile": "p1_core", "exit": 1}, {"variant": "y32", "word": "casa", "locale": "se", "profile": "p2_wide", "exit": 1}, {"variant": "y33", "word": "casa", "locale": "en", "profile": "p0_min", "exit": 0, "sig_status": "ok", "token": 0, "roundtrip": "", "exact_match": 0, "probe_word": "casa"}, {"variant": "y34", "word": "casa", "locale": "en", "profile": "p1_core", "exit": 1}, {"variant": "y35", "word": "casa", "locale": "en", "profile": "p2_wide", "exit": 1}]}

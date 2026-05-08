@@ -135,6 +135,10 @@ Outputs:
   Step 2x UTF8 path recovery matrix testing alternative return-types
   (i64/i32/i16/i8/u8/u16) and call-shapes (pair/out-param) for
   `GetTokenIDForUTF8String` to determine if UTF8 is callable.
+- `phase2-lm-roundtrip-confirmation-probe.txt`:
+  Step 2y hardening probe that confirms best-signal variant (w4) across
+  word/locale/create-profile combinations to ensure robust roundtrip
+  before production integration.
 
 ## Tooling map
 
@@ -234,6 +238,7 @@ make research-phase2-lm-create-broad-keyset-probe
 make research-phase2-lm-post-create-safety-probe
 make research-phase2-lm-get-to-string-signature-probe
 make research-phase2-lm-utf8-recovery-probe
+make research-phase2-lm-roundtrip-confirmation-probe
 ```
 
 Or run subcommands directly:
@@ -356,6 +361,10 @@ Use this interpretation order:
   After 2w shows UTF8 crashes, 2x tests alternative return-types and
   calling conventions to determine whether the UTF8 path is recoverable
   or permanently blocked by ABI mismatch.
+31. `phase2-lm-roundtrip-confirmation-probe.txt`
+  Hardens the best-signal string-variant across real word/locale/profile
+  combinations to confirm universal roundtrip exactness and stability
+  before wrapping in a production API.
 
 ## Expected baseline findings
 
