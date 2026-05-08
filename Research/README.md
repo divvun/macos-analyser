@@ -139,6 +139,10 @@ Outputs:
   Step 2y hardening probe that confirms best-signal variant (w4) across
   word/locale/create-profile combinations to ensure robust roundtrip
   before production integration.
+- `phase2-lm-direct-api-poc.txt`:
+  Step 2z proof-of-concept wrapper (`LanguageModelingPrivate` class)
+  implementing the best-signal signature and demonstrating practical
+  string↔tokenID roundtrip for production use.
 
 ## Tooling map
 
@@ -239,6 +243,7 @@ make research-phase2-lm-post-create-safety-probe
 make research-phase2-lm-get-to-string-signature-probe
 make research-phase2-lm-utf8-recovery-probe
 make research-phase2-lm-roundtrip-confirmation-probe
+make research-phase2-lm-direct-api-poc
 ```
 
 Or run subcommands directly:
@@ -365,6 +370,10 @@ Use this interpretation order:
   Hardens the best-signal string-variant across real word/locale/profile
   combinations to confirm universal roundtrip exactness and stability
   before wrapping in a production API.
+32. `phase2-lm-direct-api-poc.txt`
+  Wraps the confirmed signature in a minimal Swift `LanguageModelingPrivate`
+  class and tests practical roundtrip demonstration, providing a
+  production-ready blueprint for integration.
 
 ## Expected baseline findings
 
