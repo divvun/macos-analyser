@@ -165,20 +165,15 @@ PROTOTYPE_LEMMAS: list[tuple[str, str]] = [
 ]
 
 
-def lookup_batch(queries: list[str], fst_path: str) -> dict[str, str]:
-    """Run hfst-optimized-lookup on a batch of tag strings.
+# Maximum number of FST queries per subprocess call.
+# Batching avoids the overhead of spawning one process per lemma.
+_CHUNK_SIZE = 100_000
 
-    Returns a dict mapping surface_form → input tag string.
-    Failed lookups (surface ending in +?) are excluded.
 
-    hfst-optimized-lookup outputs 2 columns (input<TAB>surface) without
-    weights, or 3 columns when the FST carries arc weights.  Both formats
-    are handled.  We never pass --show-weights so an unweighted FST always
-    returns 2 columns; a pre-weighted FST would return 3 — the weight is
-    ignored here because we only care about reachability.
-    """
+def _run_fst_chunk(queries: list[str], fst_path: str) -> list[tuple[str, str]]:
+    """Call hfst-optimized-lookup once for *queries*, return (input, surface) successes."""
     if not queries:
-        return {}
+        return []
     stdin = "\n".join(queries) + "\n"
     proc = subprocess.run(
         ["hfst-optimized-lookup", fst_path],
@@ -186,7 +181,7 @@ def lookup_batch(queries: list[str], fst_path: str) -> dict[str, str]:
         capture_output=True,
         text=True,
     )
-    results: dict[str, str] = {}
+    results: list[tuple[str, str]] = []
     for line in proc.stdout.splitlines():
         line = line.strip()
         if not line:
@@ -196,21 +191,20 @@ def lookup_batch(queries: list[str], fst_path: str) -> dict[str, str]:
             continue
         input_str = parts[0].strip()
         surface = parts[1].strip()
-        # Skip failed lookups regardless of column count
-        if surface.endswith("+?") or not surface:
+        # Successful lookup: 2 columns (input\tsurface).
+        # Failed lookup:    3 columns (input\tsurface\t+?) — surface = input unchanged.
+        if not surface or len(parts) >= 3:
             continue
-        results[surface] = input_str  # surface → full input tag string
+        results.append((input_str, surface))
     return results
 
 
 def generate_paradigm(lemma: str, pos: str, fst_path: str) -> list[tuple[str, str]]:
-    """Generate (surface_form, lemma) pairs for a lemma+POS."""
+    """Generate (surface_form, lemma) pairs for a single lemma+POS (small-scale / testing)."""
     tags = PARADIGM_TAGS.get(pos, [])
     queries = [f"{lemma}{tag}" for tag in tags]
-    all_forms = lookup_batch(queries, fst_path)
-
-    # Return (surface, lemma) pairs, deduplicated by surface form
-    return [(surface, lemma) for surface in sorted(set(all_forms.keys()))]
+    hits = _run_fst_chunk(queries, fst_path)
+    return [(surface, lemma) for _, surface in hits]
 
 
 def build_training_data(
@@ -218,27 +212,78 @@ def build_training_data(
     fst_path: str,
     verbose: bool = True,
 ) -> list[dict]:
-    """Build MLWordTagger training examples from lemma list."""
-    examples = []
+    """Build MLWordTagger training examples from lemma list.
+
+    Uses batched FST lookups (one subprocess call per _CHUNK_SIZE queries)
+    rather than one call per lemma, which is critical for large lexicons.
+    """
+    from collections import defaultdict
+
+    # Group lemmas by POS (preserving order within each POS)
+    pos_lemmas: dict[str, list[str]] = defaultdict(list)
+    for lemma, pos in lemma_list:
+        pos_lemmas[pos].append(lemma)
+
+    examples: list[dict] = []
     total_forms = 0
 
-    for lemma, pos in lemma_list:
-        pairs = generate_paradigm(lemma, pos, fst_path)
-        if not pairs:
-            if verbose:
-                print(f"  WARN no forms: {lemma}+{pos}", file=sys.stderr)
+    for pos, lemmas in pos_lemmas.items():
+        tags = PARADIGM_TAGS.get(pos, [])
+        if not tags:
+            print(f"  WARN: no PARADIGM_TAGS entry for POS '{pos}' — skipping", file=sys.stderr)
             continue
 
-        tokens = [surface for surface, _ in pairs]
-        labels = [lm for _, lm in pairs]
-        examples.append({"tokens": tokens, "labels": labels})
-        total_forms += len(tokens)
-
+        n_queries = len(lemmas) * len(tags)
         if verbose:
-            print(f"  {lemma}+{pos}: {len(tokens)} forms")
+            print(
+                f"\n{pos}: {len(lemmas):,} lemmas × {len(tags)} tags"
+                f" = {n_queries:,} queries …",
+                file=sys.stderr,
+            )
+
+        # Build query list and reverse-map query → lemma
+        query_to_lemma: dict[str, str] = {}
+        all_queries: list[str] = []
+        for lemma in lemmas:
+            for tag in tags:
+                q = f"{lemma}{tag}"
+                query_to_lemma[q] = lemma
+                all_queries.append(q)
+
+        # Chunked FST calls — accumulate surfaces per lemma
+        lemma_surfaces: dict[str, list[str]] = {lemma: [] for lemma in lemmas}
+        for i in range(0, len(all_queries), _CHUNK_SIZE):
+            chunk = all_queries[i : i + _CHUNK_SIZE]
+            for input_str, surface in _run_fst_chunk(chunk, fst_path):
+                lm = query_to_lemma.get(input_str)
+                if lm is not None:
+                    lemma_surfaces[lm].append(surface)
+            if verbose and n_queries > _CHUNK_SIZE:
+                pct = min(100, (i + _CHUNK_SIZE) * 100 // n_queries)
+                print(f"  … {pct}% ({i + len(chunk):,}/{n_queries:,})", file=sys.stderr, flush=True)
+
+        # Build examples
+        no_forms = 0
+        pos_forms = 0
+        for lemma in lemmas:
+            forms = sorted(set(lemma_surfaces[lemma]))
+            if not forms:
+                no_forms += 1
+                continue
+            examples.append({"tokens": forms, "labels": [lemma] * len(forms)})
+            pos_forms += len(forms)
+
+        total_forms += pos_forms
+        if verbose:
+            good = len(lemmas) - no_forms
+            print(
+                f"  → {good:,} lemmas with forms, {no_forms:,} skipped,"
+                f" {pos_forms:,} form tokens",
+                file=sys.stderr,
+            )
 
     if verbose:
-        print(f"\nTotal: {len(examples)} lemmas, {total_forms} forms")
+        print(f"\nTotal: {len(examples):,} lemmas, {total_forms:,} training pairs", file=sys.stderr)
 
     return examples
 
@@ -280,18 +325,20 @@ def main() -> None:
     else:
         lemma_list = PROTOTYPE_LEMMAS
 
-    # Optional POS filter (for parallel make targets)
+    # Optional POS filter (for parallel make targets).
+    # Comparison is case-insensitive so "--pos adv", "--pos Adv", "--pos ADV" all work.
     if args.pos:
-        pos_filter = args.pos.upper()
-        lemma_list = [(l, p) for l, p in lemma_list if p == pos_filter]
+        pos_filter = args.pos
+        lemma_list = [(l, p) for l, p in lemma_list if p.upper() == pos_filter.upper()]
 
     print(f"Generating paradigms for {len(lemma_list)} lemmas...", file=sys.stderr)
     print(f"FST: {fst_path}", file=sys.stderr)
 
     examples = build_training_data(lemma_list, fst_path, verbose=True)
 
-    # Output filename: training_data_<POS>.json when --pos is given, else training_data.json
-    filename = f"training_data_{args.pos.upper()}.json" if args.pos else "training_data.json"
+    # Output filename preserves the --pos casing supplied by the caller
+    # (e.g.  --pos Adv  ->  training_data_Adv.json)
+    filename = f"training_data_{args.pos}.json" if args.pos else "training_data.json"
     out_file = out_dir / filename
     with open(out_file, "w", encoding="utf-8") as f:
         json.dump(examples, f, ensure_ascii=False, indent=2)
