@@ -1,5 +1,6 @@
 /target/
 /.build/
+.venv311/
 DivvunAnalyser.app/
 .vscode/
 *.xcuserstate
@@ -15,9 +16,13 @@ Research/phase2k_probe_tmp.txt
 # sme-lemmatizer: generated files
 Research/proto/sme-lemmatizer/__pycache__/
 Research/proto/sme-lemmatizer/train_bin
+Research/proto/sme-lemmatizer/test_coreml_bin
 Research/proto/sme-lemmatizer/training_data.json
 Research/proto/sme-lemmatizer/training_data_*.json
 Research/proto/sme-lemmatizer/SmeLemmatizer.mlmodel
+Research/proto/sme-lemmatizer/SmeLemmatizer.sample*.mlmodel
+Research/proto/sme-lemmatizer/SmeLemmatizer.coreml.mlmodel
+Research/proto/sme-lemmatizer/SmeLemmatizer.coreml.mlpackage
 
 # Python bytecode (global)
 __pycache__/
