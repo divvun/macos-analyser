@@ -21,7 +21,7 @@ APP_CONTENTS   := DivvunAnalyser.app/Contents
 APPEX_CONTENTS := $(APP_CONTENTS)/PlugIns/DivvunNLExtension.appex/Contents
 
 .PHONY: all rust swift build-app test test-rust test-swift test-e2e demo probe-nl research-phase1 research-phase2 research-phase2-env research-phase2-real-fst research-phase2-fst-io research-phase2-label-probe research-phase2-sidecar-probe research-phase2-token-id-correlation research-phase2-function-probe research-phase2-lm-model-probe research-phase2-lm-role-correlation research-phase2-lm-gap-analysis research-phase2-se-subword-profile research-phase2-lm-launch-override-probe research-phase2-lm-token-id-path-probe research-phase2-lm-token-id-path-probe-strict research-phase2-lm-private-roundtrip-probe research-phase2-lm-private-signature-probe research-phase2-lm-create-callsite-probe research-phase2-lm-create-key-recovery-probe research-phase2-lm-header-search-probe research-phase2-lm-disassembly-prototype-probe research-phase2-lm-create-type-matrix-probe research-phase2-lm-create-broad-keyset-probe research-phase2-lm-post-create-safety-probe research-phase2-lm-get-to-string-signature-probe research-phase2-lm-utf8-recovery-probe research-phase2-lm-roundtrip-confirmation-probe research-phase2-lm-direct-api-poc proto-sme-lemmatizer-data proto-sme-data-N proto-sme-data-V proto-sme-data-A proto-sme-data-Closed \
-	proto-sme-lemmatizer-train proto-sme-lemmatizer-test proto-sme-coreml-venv proto-sme-coreml-train proto-sme-coreml-test proto-sme-lemmatizer proto-sme-extract-lemmas \
+	proto-sme-lemmatizer-train proto-sme-lemmatizer-test proto-sme-coreml-venv proto-sme-coreml-train proto-sme-coreml-test proto-sme-coreml-test-only proto-sme-lemmatizer proto-sme-extract-lemmas \
 	clean install-app
 
 all: rust swift
@@ -627,6 +627,11 @@ proto-sme-coreml-train: proto-sme-coreml-venv $(PROTO_DIR)/training_data.json
 
 ## Test CoreML model directly through MLModel prediction API.
 proto-sme-coreml-test: proto-sme-coreml-train
+	swiftc -O -o $(PROTO_DIR)/test_coreml_bin $(PROTO_DIR)/test_coreml.swift
+	$(PROTO_DIR)/test_coreml_bin $(PROTO_DIR)/SmeLemmatizer.coreml.mlmodel
+
+## Test existing CoreML model without triggering retraining.
+proto-sme-coreml-test-only:
 	swiftc -O -o $(PROTO_DIR)/test_coreml_bin $(PROTO_DIR)/test_coreml.swift
 	$(PROTO_DIR)/test_coreml_bin $(PROTO_DIR)/SmeLemmatizer.coreml.mlmodel
 
