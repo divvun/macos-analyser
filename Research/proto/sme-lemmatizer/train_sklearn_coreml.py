@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import hashlib
 import random
 import time
 from collections import Counter
@@ -20,6 +21,7 @@ from sklearn.feature_extraction import DictVectorizer
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
+from sklearn.linear_model import SGDClassifier
 from sklearn.svm import LinearSVC
 
 
@@ -35,8 +37,21 @@ def compute_edit(surface: str, lemma: str) -> str:
     return f"{strip_count}:{suffix}"
 
 
+FEATURE_BUCKETS = 2048
+
+
+def _feature_bucket(text: str, buckets: int = FEATURE_BUCKETS) -> int:
+    digest = hashlib.blake2b(text.encode("utf-8"), digest_size=8).digest()
+    return int.from_bytes(digest, "big") % buckets
+
+
 def char_ngrams(word: str, n_min: int = 2, n_max: int = 4) -> Dict[str, float]:
-    """Character n-gram dictionary compatible with DictVectorizer input."""
+    """Character n-gram dictionary with a fixed hash bucket space.
+
+    A dense unbounded n-gram vocabulary makes the CoreML classifier spec too
+    large to serialize once we reach thousands of edit labels. Hashing keeps
+    the feature space stable and small enough for conversion.
+    """
     wrapped = f"^{word}$"
     feats: Dict[str, float] = {}
     for n in range(n_min, n_max + 1):
@@ -44,7 +59,7 @@ def char_ngrams(word: str, n_min: int = 2, n_max: int = 4) -> Dict[str, float]:
             continue
         for i in range(len(wrapped) - n + 1):
             gram = wrapped[i : i + n]
-            key = f"c{n}={gram}"
+            key = f"c{n}={_feature_bucket(gram)}"
             feats[key] = feats.get(key, 0.0) + 1.0
     return feats
 
@@ -88,12 +103,14 @@ def build_pipeline(c: float, max_iter: int, tol: float) -> Pipeline:
             ("vectorizer", DictVectorizer(sparse=True)),
             (
                 "classifier",
-                LinearSVC(
-                    C=c,
+                SGDClassifier(
+                    loss="hinge",
+                    alpha=1.0 / (c * 559424),  # match LinearSVC C scaling
                     class_weight="balanced",
                     random_state=42,
                     max_iter=max_iter,
                     tol=tol,
+                    n_jobs=-1,
                     verbose=0,
                 ),
             ),
@@ -184,8 +201,27 @@ def main() -> None:
         print(f"Train size: {len(X_train):,}  Test size: 0")
 
     pipeline = build_pipeline(c=args.c, max_iter=args.max_iter, tol=args.tol)
-    print("Training LinearSVC...")
+    print("Training SGDClassifier...")
     pipeline.fit(X_train, y_train)
+
+    # SGDClassifier is not supported by ct.converters.sklearn.convert.
+    # Copy the learned weights into a LinearSVC stub so CoreML conversion works.
+    print("Copying SGD weights into LinearSVC stub for CoreML conversion...")
+    sgd: SGDClassifier = pipeline.named_steps["classifier"]
+    import numpy as _np
+    coef = _np.nan_to_num(sgd.coef_, nan=0.0, posinf=1e6, neginf=-1e6)
+    intercept = _np.nan_to_num(sgd.intercept_, nan=0.0, posinf=1e6, neginf=-1e6)
+    stub = LinearSVC()
+    stub.coef_ = coef
+    stub.intercept_ = intercept
+    stub.classes_ = sgd.classes_
+    stub.n_features_in_ = coef.shape[1]
+    stub.multi_class = "ovr"
+    from sklearn.pipeline import Pipeline as _Pipeline
+    coreml_pipeline = _Pipeline([
+        ("vectorizer", pipeline.named_steps["vectorizer"]),
+        ("classifier", stub),
+    ])
 
     if X_test:
         pred = pipeline.predict(X_test)
@@ -196,7 +232,7 @@ def main() -> None:
 
     print("Converting sklearn pipeline to CoreML...")
     mlmodel = ct.converters.sklearn.convert(
-        pipeline,
+        coreml_pipeline,
         input_features="word_ngrams",
         output_feature_names="editLabel",
     )
